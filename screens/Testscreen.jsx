@@ -2,9 +2,24 @@ import React, { useState, useEffect } from 'react';
 import { collection, getDocs, addDoc } from 'firebase/firestore';
 
 import {
-  View, Text, Button, TextInput,
+  View, Text, Button, TextInput, SafeAreaView, ScrollView, StyleSheet, StatusBar,
+
 } from 'react-native';
 import { db } from '../firebase';
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    paddingTop: StatusBar.currentHeight,
+  },
+  scrollView: {
+    backgroundColor: 'pink',
+    marginHorizontal: 20,
+  },
+  text: {
+    fontSize: 42,
+  },
+});
 
 function Testscreen() {
   const [newName, setNewName] = useState('');
@@ -27,19 +42,26 @@ function Testscreen() {
   }, []);
 
   return (
-    <View>
-      <TextInput placeholder="Name.." onChange={(e) => { setNewName(e.target.value); }} />
-      <TextInput placeholder="Username.." onChange={(e) => { setNewUsername(e.target.value); }} />
-      <Button onPress={createUser} title="Create user" />
-      {users.map((user) => (
-        <View key={user.id}>
-          <Text>{user.name}</Text>
-          <Text>{user.username}</Text>
-          {/* <Text>{user.preferred_sports[0]}</Text>
+
+    <SafeAreaView style={styles.container}>
+      <ScrollView style={styles.scrollView}>
+        <View>
+
+          <TextInput placeholder="Name.." onChange={(e) => { setNewName(e.target.value); }} />
+          <TextInput placeholder="Username.." onChange={(e) => { setNewUsername(e.target.value); }} />
+          <Button onPress={createUser} title="Create User" /> 
+          {users.map((user) => (
+            <View key={user.id}>
+              <Text>{user.name}</Text>
+              <Text>{user.username}</Text>
+              {/* <Text>{user.preferred_sports[0]}</Text>
           <Text>{user.date_joined.toString()}</Text> */}
+            </View>
+          ))}
+
         </View>
-      ))}
-    </View>
+      </ScrollView>
+    </SafeAreaView>
   );
 }
 
