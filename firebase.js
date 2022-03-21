@@ -2,8 +2,6 @@ import {
   apiKey, authDomain, projectId, storageBucket, messagingSenderId, appId, measurementId,
 } from '@env';
 import { initializeApp } from 'firebase/app';
-import { getFirestore } from 'firebase/firestore';
-import {getAuth} from 'firebase/auth';
 import {initializeFirestore} from 'firebase/firestore';
 
 const firebaseConfig = {
@@ -16,12 +14,10 @@ const firebaseConfig = {
   measurementId,
 };
 
-
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
 const db = initializeFirestore(app, {
   experimentalForceLongPolling: true,
 });
 
-export {auth, db};
+export {db};
