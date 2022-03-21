@@ -3,6 +3,7 @@ import { collection, getDocs, addDoc } from 'firebase/firestore';
 
 import {
   View, Text, Button, TextInput, SafeAreaView, ScrollView, StyleSheet, StatusBar,
+
 } from 'react-native';
 import { db } from '../firebase';
 
@@ -41,13 +42,14 @@ function Testscreen() {
   }, []);
 
   return (
+
     <SafeAreaView style={styles.container}>
       <ScrollView style={styles.scrollView}>
         <View>
 
           <TextInput placeholder="Name.." onChange={(e) => { setNewName(e.target.value); }} />
           <TextInput placeholder="Username.." onChange={(e) => { setNewUsername(e.target.value); }} />
-          <Button onPress={createUser} title="Create User"> </Button>
+          <Button onPress={createUser} title="Create User" /> 
           {users.map((user) => (
             <View key={user.id}>
               <Text>{user.name}</Text>
