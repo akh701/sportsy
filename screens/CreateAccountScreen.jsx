@@ -1,24 +1,16 @@
-import React from 'react';
-import {
-  View, Text, Button, StyleSheet,
-} from 'react-native';
+import * as React from 'react';
+import { View, Text } from 'react-native';
 
-function CreateAccountScreen({ navigation }) {
+export default function CreateAccountScreen({ navigation }) {
   return (
-    <View style={styles.container}>
-      <Text>Create Account Screen</Text>
-      <Button title="Click Here" onPress={() => alert('Button Clicked!')} />
+    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+      <Text
+        onPress={() => navigation.navigate('Home')}
+        style={{ fontSize: 26, fontWeight: 'bold' }}
+      >
+        Create Account
+
+      </Text>
     </View>
   );
 }
-
-export default CreateAccountScreen;
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: '#8fcbbc',
-  },
-});

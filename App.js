@@ -24,17 +24,16 @@
 //     justifyContent: 'center',
 //   },
 // });
-import React from 'react';
+import * as React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
-import Tabs from './navigation/tabs';
 import Header from './screens/globalScreens/Header';
+import MainContainer from './navigation/MainContainer';
 
 function App() {
   return (
 
-    <NavigationContainer>
-      <Tabs />
-    </NavigationContainer>
+    <MainContainer />
+
   );
 }
 
