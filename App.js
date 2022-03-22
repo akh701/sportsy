@@ -3,8 +3,8 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import * as React from 'react';
 import LoginScreen from './screens/LoginScreen';
-import UserProfile from './screens/UserProfile';
-import Header from './screens/globalScreens/Header';
+import UserProfileScreen from './screens/UserProfileScreen';
+import HeaderComponent from './screens/globalScreens/HeaderComponent';
 import MainContainer from './navigation/MainContainer';
 
 const Stack = createNativeStackNavigator();
@@ -20,7 +20,9 @@ export default function App() {
           <Stack.Screen name="Profile" component={UserProfile} />
         </Stack.Navigator>
       </NavigationContainer> */}
+      <HeaderComponent />
       <MainContainer />
+
     </>
   );
 }

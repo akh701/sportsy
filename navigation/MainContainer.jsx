@@ -6,15 +6,25 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 // Screens
 import LoginScreen from '../screens/LoginScreen';
 import LandingScreen from '../screens/LandingScreen';
+import HomeScreen from '../screens/HomeScreen';
+import FindEventsScreen from '../screens/FindEventsScreen';
+import MyEventsScreen from '../screens/MyEventsScreen';
+import CreateEventScreen from '../screens/CreateEventScreen';
+import UserProfileScreen from '../screens/UserProfileScreen';
 
-// Screen names
+// Screen names, will be used as text for the buttons
 const landingName = 'Home';
 const loginRegisterName = 'Login/Register';
-const registerName = 'Register';
+const homeName = 'Home';
+const findEventsName = 'Find Event';
+const myEventsName = 'My Events';
+const createEventName = 'Create Event';
+const myProfileName = 'Profile';
 
 const Tab = createBottomTabNavigator();
 
 function MainContainer() {
+  // if (something) {
   return (
     <NavigationContainer>
       <Tab.Navigator
@@ -50,5 +60,4 @@ function MainContainer() {
     </NavigationContainer>
   );
 }
-
 export default MainContainer;

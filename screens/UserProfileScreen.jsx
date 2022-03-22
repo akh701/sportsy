@@ -6,7 +6,7 @@ import { StyleSheet, Text, TouchableOpacity, View,FlatList,
 import { auth } from '../firebase'
 import { db } from '../firebase';
 
-const UserProfile = () => {
+const UserProfileScreen = () => {
   const [userData, setUserData] = useState(null);
   const [isloading, setLoading] = useState(true);
   const navigation = useNavigation()
@@ -43,6 +43,7 @@ if(isloading){ return  <Text>Loading</Text>}
 //---------------return ---------------------------
 
 if(userData !== null){
+  console.log(userData, "userData")
   return (
   
     <SafeAreaView style={styles.container} >
@@ -120,7 +121,7 @@ if(userData !== null){
 
 }
 //we are here
-export default UserProfile;
+export default UserProfileScreen;
 
 const styles = StyleSheet.create({
   container: {
