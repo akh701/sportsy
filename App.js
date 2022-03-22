@@ -9,6 +9,8 @@ import MainContainer from './navigation/MainContainer';
 
 const Stack = createNativeStackNavigator();
 
+// fixed minor issue
+
 export default function App() {
   return (
     <>
