@@ -39,7 +39,7 @@ if(isloading){ return  <Text>Loading</Text>}
     navigation.navigate("editProfile")
   }
 
-console.log(userData);
+
 //---------------return ---------------------------
 
 if(userData !== null){
@@ -97,7 +97,7 @@ if(userData !== null){
     <Text>Location: {userData.location}</Text>
 
      <Text>Email: {auth.currentUser?.email}</Text>
-
+        <View style={styles.buttonContainer}>
      <TouchableOpacity
        onPress={handleSignOut}
        style={styles.button}
@@ -111,7 +111,7 @@ if(userData !== null){
      >
        <Text style={styles.buttonText}>Edit</Text>
      </TouchableOpacity>
-      
+     </View>
      
     </SafeAreaView>
 
@@ -128,11 +128,18 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center'
   },
+  buttonContainer:{
+    width:'100%',
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+
    button: {
     backgroundColor: '#0782F9',
     width: '60%',
     padding: 15,
-    borderRadius: 10,
+    borderRadius: 0,
     alignItems: 'center',
     marginTop: 40,
   },
