@@ -1,40 +1,31 @@
-// import { StatusBar } from 'expo-status-bar';
-// import { StyleSheet, Text, View } from 'react-native';
-// import Testscreen from './screens/Testscreen';
-// import Header from './screens/globalScreens/Header';
-// import NavBar from './screens/globalScreens/NavBar';
 
-// export default function App() {
-//   return (
-//     <View>
-//       <Header />
-//       {/* <Testscreen /> */}
-//       <Text>Open up App.js to start working on your app!</Text>
-//       <StatusBar style="auto" />
-//       <NavBar />
-//     </View>
-//   );
-// }
 
-// const styles = StyleSheet.create({
-//   container: {
-//     flex: 1,
-//     backgroundColor: '#fff',
-//     alignItems: 'center',
-//     justifyContent: 'center',
-//   },
-// });
-import * as React from 'react';
+import { StyleSheet, Text, View } from "react-native"
 import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import LoginScreen from './screens/LoginScreen';
+import UserProfile from './screens/UserProfile';
+import * as React from 'react';
 import Header from './screens/globalScreens/Header';
 import MainContainer from './navigation/MainContainer';
 
-function App() {
-  return (
+const Stack = createNativeStackNavigator();
 
-    <MainContainer />
 
-  );
+
+export default function App() {
+	return (
+    <>
+		<NavigationContainer>
+      		<Stack.Navigator>
+        		<Stack.Screen name="Login" options={{ headerShown: false }} component={LoginScreen} />
+        		<Stack.Screen name="Profile" component={UserProfile} />
+      		</Stack.Navigator>
+    	</NavigationContainer>
+  <MainContainer />
+       </>
+	)
+
 }
 
 export default App;
