@@ -15,7 +15,7 @@ const styles = StyleSheet.create({
     resizeMode: 'contain',
     alignSelf: 'center',
     position: 'relative',
-    top: -350,
+    top: -265,
     left: 0,
     // borderWidth: 1,
     // borderRadius: 20,

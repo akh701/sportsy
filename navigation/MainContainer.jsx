@@ -5,7 +5,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 
 // Screens
 import CreateAccountScreen from '../screens/CreateAccountScreen';
-import LoginScreen from '../screens/LoginScreen';
+import LoginScreen from '../screens/LoginScreenDavidFaduma';
 import LandingScreen from '../screens/LandingScreen';
 
 // Screen names
@@ -23,6 +23,7 @@ function MainContainer() {
         screenOptions={({ route }) => ({
           tabBarIcon: ({ focused, color, size }) => {
             let iconName;
+
             const rn = route.name;
 
             if (rn === landingName) {
@@ -45,9 +46,9 @@ function MainContainer() {
         }}
       >
 
-        <Tab.Screen name={landingName} component={LandingScreen} />
-        <Tab.Screen name={loginName} component={LoginScreen} />
-        <Tab.Screen name={registerName} component={CreateAccountScreen} />
+        <Tab.Screen name={landingName} component={LandingScreen} options={{ headerShown: false }} />
+        <Tab.Screen name={loginName} component={LoginScreen} options={{ headerShown: false }} />
+        <Tab.Screen name={registerName} component={CreateAccountScreen} options={{ headerShown: false }} />
 
       </Tab.Navigator>
     </NavigationContainer>
