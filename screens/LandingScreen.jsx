@@ -11,7 +11,7 @@ export default function LandingScreen({ navigation }) {
         onPress={() => alert('This is the "landing" screen.')}
         style={{ fontSize: 26, fontWeight: 'bold' }}
       >
-        Landing Screen
+        Hello and Welcome to Sportsy! The best app ever to find friends to play sport with!
 
       </Text>
     </View>

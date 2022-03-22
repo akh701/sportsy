@@ -4,13 +4,12 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 // Screens
-import CreateAccountScreen from '../screens/CreateAccountScreen';
-import LoginScreen from '../screens/LoginScreenDavidFaduma';
+import LoginScreen from '../screens/LoginScreen';
 import LandingScreen from '../screens/LandingScreen';
 
 // Screen names
-const landingName = 'Landing';
-const loginName = 'Login';
+const landingName = 'Home';
+const loginRegisterName = 'Login/Register';
 const registerName = 'Register';
 
 const Tab = createBottomTabNavigator();
@@ -28,10 +27,8 @@ function MainContainer() {
 
             if (rn === landingName) {
               iconName = focused ? 'home' : 'home-outline';
-            } else if (rn === loginName) {
+            } else if (rn === loginRegisterName) {
               iconName = focused ? 'log-in' : 'log-in-outline';
-            } else if (rn === registerName) {
-              iconName = focused ? 'create' : 'create-outline';
             }
 
             // You can return any component that you like here!
@@ -47,8 +44,7 @@ function MainContainer() {
       >
 
         <Tab.Screen name={landingName} component={LandingScreen} options={{ headerShown: false }} />
-        <Tab.Screen name={loginName} component={LoginScreen} options={{ headerShown: false }} />
-        <Tab.Screen name={registerName} component={CreateAccountScreen} options={{ headerShown: false }} />
+        <Tab.Screen name={loginRegisterName} component={LoginScreen} options={{ headerShown: false }} />
 
       </Tab.Navigator>
     </NavigationContainer>
