@@ -1,4 +1,6 @@
 {
+
+
   "name": "sportsy",
   "version": "1.0.0",
   "main": "node_modules/expo/AppEntry.js",
@@ -11,6 +13,8 @@
     "lint": "./node_modules/.bin/eslint"
   },
   "dependencies": {
+    	"@expo/vector-icons": "^12.0.5",
+		"@react-navigation/bottom-tabs": "^6.2.0",
     "@react-navigation/native": "^6.0.8",
     "@react-navigation/native-stack": "^6.5.0",
     "expo": "~44.0.0",
@@ -34,4 +38,5 @@
     "eslint-plugin-react-hooks": "^4.3.0"
   },
   "private": true
+
 }

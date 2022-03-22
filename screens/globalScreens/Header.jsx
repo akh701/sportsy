@@ -1,29 +1,36 @@
-import React, { useState, useEffect } from 'react';
-
+import React from 'react';
 import {
-  View, SafeAreaView, StyleSheet, StatusBar,
-
+  View, Image, StyleSheet, Dimensions,
 } from 'react-native';
+
+const win = Dimensions.get('window');
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    paddingTop: StatusBar.currentHeight,
+
   },
-  text: {
-    fontSize: 42,
+  headerLogo: {
+    width: win.width,
+    height: win.width / 2,
+    resizeMode: 'contain',
+    alignSelf: 'center',
+    position: 'relative',
+    top: -265,
+    left: 0,
+    // borderWidth: 1,
+    // borderRadius: 20,
   },
 });
 
 function Header() {
   return (
-
-    <SafeAreaView style={styles.container}>
-
-      <View />
-
-    </SafeAreaView>
+    <View style={styles.container}>
+      <Image
+        style={styles.headerLogo}
+        source={require('./sportslogo2.png')}
+      />
+    </View>
   );
 }
 
-export default Testscreen;
+export default Header;
