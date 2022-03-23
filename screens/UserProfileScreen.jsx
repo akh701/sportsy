@@ -3,10 +3,10 @@ import React,{useState, useEffect} from 'react'
 import { StyleSheet, Text, TouchableOpacity, View,FlatList,
   SafeAreaView,Image } from 'react-native'
   import { getDoc, doc} from 'firebase/firestore';
-import { auth } from '../firebase'
+import { auth } from '../firebase' //// IMPORT THIS TO CHECK USER AND CHECK auth.currentUser
 import { db } from '../firebase';
 
-const UserProfile = () => {
+const UserProfileScreen = () => {
   const [userData, setUserData] = useState(null);
   const [isloading, setLoading] = useState(true);
   const navigation = useNavigation()
@@ -30,7 +30,7 @@ if(isloading){ return  <Text>Loading</Text>}
     auth
       .signOut()
       .then(() => {
-        navigation.replace("Login")
+        navigation.navigate("Login/Register")
       })
       .catch(error => alert(error.message))
   }
@@ -43,6 +43,7 @@ if(isloading){ return  <Text>Loading</Text>}
 //---------------return ---------------------------
 
 if(userData !== null){
+  console.log(userData, "userData")
   return (
   
     <SafeAreaView style={styles.container} >
@@ -120,7 +121,7 @@ if(userData !== null){
 
 }
 //we are here
-export default UserProfile;
+export default UserProfileScreen;
 
 const styles = StyleSheet.create({
   container: {

@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-  View, Image, StyleSheet, Dimensions,
+  View, Image, StyleSheet, Dimensions, Text,
 } from 'react-native';
 
 const win = Dimensions.get('window');
@@ -10,19 +10,23 @@ const styles = StyleSheet.create({
 
   },
   headerLogo: {
-    width: win.width,
-    height: win.width / 2,
+    height: '100%',
+    width: '100%',
+    flexDirection: 'row',
     resizeMode: 'contain',
     alignSelf: 'center',
-    position: 'relative',
-    top: -265,
-    left: 0,
+    position: 'absolute',
+    // top: 0,
+    // left: 0,
     // borderWidth: 1,
     // borderRadius: 20,
   },
 });
 
-function Header() {
+function HeaderComponent() {
+  // return (
+  //   <View><Text style={{ fontSize: 45, fontWeight: 'bold', alignSelf: 'center' }}>Sportsy</Text></View>
+  // );
   return (
     <View style={styles.container}>
       <Image
@@ -33,4 +37,4 @@ function Header() {
   );
 }
 
-export default Header;
+export default HeaderComponent;
