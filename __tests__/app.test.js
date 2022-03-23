@@ -1,16 +1,16 @@
 const { mockGoogleCloudFirestore } = require('firestore-jest-mock');
-
+import { doc, setDoc, updateDoc } from "firebase/firestore";
 mockGoogleCloudFirestore({
   database: {
     users: [
       {
-        id: 1, DOB: 'October 14, 1981', name: 'Félix Schultheiss', avatar: 'https://cdn.pixabay.com/photo/2021/02/04/12/03/superhero-5981125__340.png', dateJoined: '22 March 2022 at 10:10:00 UTC', location: 'AL8 7TD', preferredSports: ['Rugby', 'Cricket'], username: 'Schulty23',
+        id: '1', DOB: 'October 14, 1981', name: 'Félix Schultheiss', avatar: 'https://cdn.pixabay.com/photo/2021/02/04/12/03/superhero-5981125__340.png', dateJoined: '22 March 2022 at 10:10:00 UTC', location: 'AL8 7TD', preferredSports: ['Rugby', 'Cricket'], username: 'Schulty23',
       },
       {
-        id: 2, DOB: 'December 29, 1994', name: 'Aeneas Sheenan', avatar: 'https://cdn.pixabay.com/photo/2016/04/01/12/11/avatar-1300582__340.png', dateJoined: '22 March 2022 at 10:13:00 UTC', location: 'SR7 7UG', preferredSports: ['Football', 'Tennis'], username: 'Aenan90',
+        id: '2', DOB: 'December 29, 1994', name: 'Aeneas Sheenan', avatar: 'https://cdn.pixabay.com/photo/2016/04/01/12/11/avatar-1300582__340.png', dateJoined: '22 March 2022 at 10:13:00 UTC', location: 'SR7 7UG', preferredSports: ['Football', 'Tennis'], username: 'Aenan90',
       },
       {
-        id: 3, DOB: 'September 29, 1994', name: 'David Renwick', avatar: 'https://cdn.pixabay.com/photo/2016/09/01/08/25/smiley-1635464__340.png', dateJoined: '22 March 2022 at 10:17:00 UTC', location: 'L25 2SE', preferredSports: ['Football', 'Tennis'], username: 'BritHorv56546764565',
+        id: '3', DOB: 'September 29, 1994', name: 'David Renwick', avatar: 'https://cdn.pixabay.com/photo/2016/09/01/08/25/smiley-1635464__340.png', dateJoined: '22 March 2022 at 10:17:00 UTC', location: 'L25 2SE', preferredSports: ['Football', 'Tennis'], username: 'BritHorv56546764565',
       },
     ],
   },
@@ -18,7 +18,7 @@ mockGoogleCloudFirestore({
 
 beforeEach(() => jest.clearAllMocks());
 
-const { mockCollection, mockWhere, mockLimit, mockOrderBy } = require('firestore-jest-mock/mocks/firestore');
+const { mockCollection, mockWhere, mockLimit, mockOrderBy, mockAdd } = require('firestore-jest-mock/mocks/firestore');
 
 describe('testing get requests to users table', () => {
   test('expect users collection to be returned from firestore', () => {
@@ -155,3 +155,49 @@ describe('testing get requests to users table', () => {
     });
   });
 });
+describe.only('testing post requests to users table', () => {
+  test('can post a user to the table', () => {
+    const { Firestore } = require('@google-cloud/firestore');
+    const firestore = new Firestore();
+    
+    const newUser = {
+      DOB: 'October 27, 1945', name: 'Bob the builder', avatar: 'https://cdn.pixabay.com/photo/2021/02/04/12/03/superhero-5981125__340.png', dateJoined: '22 March 2022 at 10:10:00 UTC', location: 'AL8 7TD', preferredSports: ['Tennis', 'Football'], username: 'Bobsy5',
+    }
+    return firestore.collection('users').add(newUser).then((userDocs) =>{
+      expect(mockCollection).toHaveBeenCalledWith('users');
+      expect(mockAdd).toHaveBeenCalled();
+    })
+  })
+  test('can update a user\'s details', () => {
+    const { Firestore } = require('@google-cloud/firestore')
+    const firestore = new Firestore();
+
+    const frankDocRef = doc(firestore, "users", "frank");
+
+    async function addFrank() {
+      
+    }
+
+    await setDoc(frankDocRef, {
+      name: "Frank",
+      favorites: { food: "Pizza", color: "Blue", subject: "recess" },
+      age: 12
+  });
+  
+
+    await updateDoc(frankDocRef, {
+      "age": 13,
+      "favorites.color": "Red"
+  });
+    return firestore.collection('users').get().then((data) => {
+      console.log(data.docs[3].data())
+    })
+    // const newData = {
+    //   newKey: 'February 16 1965'
+    // }
+    // return firestore.collection('users').doc('1').update(newData).then((userDocs) => {
+    //   return firestore.collection('users').get().then((data) => {
+    //     console.log(data.docs[0].data())
+    //   })
+    })
+})
