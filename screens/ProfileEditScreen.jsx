@@ -20,34 +20,24 @@ function ProfileEditScreen() {
 //   const [image, setImage] = useState(null);
 //   const [uploading, setUploading] = useState(false);
 //   const [transferred, setTransferred] = useState(0);
-  const { userData } = useContext(UserContext);
-  // const docRef = doc(db, 'users', auth.currentUser.uid);
+  const { loggedInUser } = useContext(UserContext);
 
-  // useEffect(() => {
-  //   setLoading(true);
-
-  //   getDoc(docRef).then((userInfo) => {
-  //     setUserData(userInfo.data());
-  //     setLoading(false);
-  //   })
-  //     .catch((error) => alert(error.message));
-  // }, []);
-  console.log(userData);
+  console.log(loggedInUser, 'we are in editscreen');
 
   const handleUpdate = async () => {
     // let imgUrl = await uploadImage();
 
-    // if( imgUrl == null && userData.userImg ) {
-    //   imgUrl = userData.userImg;
+    // if( imgUrl == null && loggedInUser.userImg ) {
+    //   imgUrl = loggedInUser.userImg;
     // }
 
     getDoc(docRef)
       .update({
-        name: userData.name,
-        username: userData.name,
-        DOB: userData.DOB,
-        location: userData.location,
-        avatar: userData.avatar,
+        name: loggedInUser.name,
+        username: loggedInUser.name,
+        DOB: loggedInUser.DOB,
+        location: loggedInUser.location,
+        avatar: loggedInUser.avatar,
       })
       .then(() => {
         console.log('User Updated!');
@@ -214,8 +204,8 @@ function ProfileEditScreen() {
                 source={{
                   uri: image
                     ? image
-                    : userData
-                    ? userData.userImg ||
+                    : loggedInUser
+                    ? loggedInUser.userImg ||
                       'https://lh5.googleusercontent.com/-b0PKyNuQv5s/AAAAAAAAAAI/AAAAAAAAAAA/AMZuuclxAM4M1SCBGAO7Rp-QP6zgBEUkOQ/s96-c/photo.jpg'
                     : 'https://lh5.googleusercontent.com/-b0PKyNuQv5s/AAAAAAAAAAI/AAAAAAAAAAA/AMZuuclxAM4M1SCBGAO7Rp-QP6zgBEUkOQ/s96-c/photo.jpg',
                 }}
@@ -245,9 +235,9 @@ function ProfileEditScreen() {
           </View>
         </TouchableOpacity>
         <Text style={{ marginTop: 10, fontSize: 18, fontWeight: 'bold' }}>
-          {userData ? userData.name : ''}
+          {loggedInUser ? loggedInUser.name : ''}
           {' '}
-          {userData ? userData.username : ''}
+          {loggedInUser ? loggedInUser.username : ''}
         </Text>
         {/* <Text>{user.uid}</Text> */}
       </View>
@@ -258,8 +248,8 @@ function ProfileEditScreen() {
           placeholder="First Name"
           placeholderTextColor="#666666"
           autoCorrect={false}
-          value={userData ? userData.name : ''}
-          onChangeText={(txt) => setUserData({ ...userData, name: txt })}
+          value={loggedInUser ? loggedInUser.name : ''}
+          onChangeText={(txt) => setloggedInUser({ ...loggedInUser, name: txt })}
           style={styles.textInput}
         />
       </View>
@@ -268,8 +258,8 @@ function ProfileEditScreen() {
         <TextInput
           placeholder="Last Name"
           placeholderTextColor="#666666"
-          value={userData ? userData.username : ''}
-          onChangeText={(txt) => setUserData({ ...userData, username: txt })}
+          value={loggedInUser ? loggedInUser.username : ''}
+          onChangeText={(txt) => setloggedInUser({ ...loggedInUser, username: txt })}
           autoCorrect={false}
           style={styles.textInput}
         />
@@ -281,8 +271,8 @@ function ProfileEditScreen() {
           numberOfLines={3}
           placeholder="DOB"
           placeholderTextColor="#666666"
-          value={userData ? userData.DOB : ''}
-          onChangeText={(txt) => setUserData({ ...userData, DOB: txt })}
+          value={loggedInUser ? loggedInUser.DOB : ''}
+          onChangeText={(txt) => setloggedInUser({ ...loggedInUser, DOB: txt })}
           autoCorrect
           style={[styles.textInput, { height: 40 }]}
         />
@@ -294,8 +284,8 @@ function ProfileEditScreen() {
           placeholderTextColor="#666666"
           keyboardType="number-pad"
           autoCorrect={false}
-          value={userData ? userData.avatar : ''}
-          onChangeText={(txt) => setUserData({ ...userData, avatar: txt })}
+          value={loggedInUser ? loggedInUser.avatar : ''}
+          onChangeText={(txt) => setloggedInUser({ ...loggedInUser, avatar: txt })}
           style={styles.textInput}
         />
       </View>
@@ -310,8 +300,8 @@ function ProfileEditScreen() {
           placeholder="location"
           placeholderTextColor="#666666"
           autoCorrect={false}
-          value={userData ? userData.location : ''}
-          onChangeText={(txt) => setUserData({ ...userData, location: txt })}
+          value={loggedInUser ? loggedInUser.location : ''}
+          onChangeText={(txt) => setloggedInUser({ ...loggedInUser, location: txt })}
           style={styles.textInput}
         />
       </View>

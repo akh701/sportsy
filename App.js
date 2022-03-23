@@ -1,33 +1,22 @@
 import { View, SafeAreaView } from 'react-native';
-import { NavigationContainer } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import React, { useState } from 'react';
 import HeaderComponent from './screens/globalScreens/HeaderComponent';
 import MainContainer from './navigation/MainContainer';
-import ProfileEditScreen from './screens/ProfileEditScreen';
 import { UserContext } from './contexts/UserContext';
-
-const Stack = createNativeStackNavigator();
+import GlobalStack from './navigation/GlobalStack';
 
 // fixed minor issue
 
 export default function App() {
-  const [userData, setUserData] = useState({});
+  const [loggedInUser, setLoggedInUser] = useState({});
   return (
-    <UserContext.Provider value={{ userData, setUserData }}>
-
-      <NavigationContainer>
-        <Stack.Navigator>
-          <Stack.Screen name="editProfile" component={ProfileEditScreen} />
-        </Stack.Navigator>
-      </NavigationContainer>
-
+    <UserContext.Provider value={{ loggedInUser, setLoggedInUser }}>
       <SafeAreaView>
         <View fixed="top">
           <HeaderComponent />
         </View>
       </SafeAreaView>
-
+      {/* <GlobalStack /> */}
       <MainContainer />
 
     </UserContext.Provider>

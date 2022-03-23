@@ -8,23 +8,26 @@ import { db } from '../firebase';
 import { UserContext } from '../contexts/UserContext';
 
 const UserProfileScreen = () => {
-  // const { loggedInUser, setLoggedInUser } = useContext(UserContext)
-  const [userData, setUserData] = useContext(UserContext);
+  const { setLoggedInUser } = useContext(UserContext)
+  const [userData, setUserData] = useState(null);
   const [isloading, setLoading] = useState(true);
   const navigation = useNavigation()
   const docRef = doc(db, "users", auth.currentUser.uid);
   
+  console.log(auth.currentUser.uid, 'we are in profile');
   useEffect(() => {
     setLoading(true)
     
       getDoc(docRef).then(userInfo =>{
         setUserData(userInfo.data())
         setLoading(false)
-        
+        setLoggedInUser(userData)
       }).catch(error => alert(error.message))
    
   
   }, []);
+
+
 if(isloading){ return  <Text>Loading</Text>} 
 
 
@@ -46,7 +49,7 @@ if(isloading){ return  <Text>Loading</Text>}
 //---------------return ---------------------------
 
 if(userData !== null){
-  console.log(userData, "userData")
+ 
   return (
   
     <SafeAreaView style={styles.container} >
