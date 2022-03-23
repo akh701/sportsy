@@ -26,7 +26,6 @@ function LoginScreen() {
     createUserWithEmailAndPassword(auth, email, password)
       .then((userCredentials) => {
         const { user } = userCredentials;
-        console.log('Registered with:', user.email);
       })
       .catch((error) => alert(error.message));
   };
@@ -35,7 +34,6 @@ function LoginScreen() {
     signInWithEmailAndPassword(auth, email, password)
       .then((userCredentials) => {
         const { user } = userCredentials;
-        console.log('Logged in with:', user.email);
       })
       .catch((error) => alert(error.message));
   };
