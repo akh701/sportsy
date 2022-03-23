@@ -22,8 +22,6 @@ function ProfileEditScreen() {
 //   const [transferred, setTransferred] = useState(0);
   const { loggedInUser } = useContext(UserContext);
 
-  console.log(loggedInUser, 'we are in editscreen');
-
   const handleUpdate = async () => {
     // let imgUrl = await uploadImage();
 

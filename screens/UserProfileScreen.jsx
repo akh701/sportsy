@@ -8,23 +8,24 @@ import { db } from '../firebase';
 import { UserContext } from '../contexts/UserContext';
 
 const UserProfileScreen = () => {
-  const { setLoggedInUser } = useContext(UserContext)
+  const { loggedInUser,setLoggedInUser } = useContext(UserContext)
   const [userData, setUserData] = useState(null);
   const [isloading, setLoading] = useState(true);
   const navigation = useNavigation()
   const docRef = doc(db, "users", auth.currentUser.uid);
   
-  console.log(auth.currentUser.uid, 'we are in profile');
+  
   useEffect(() => {
     setLoading(true)
     
       getDoc(docRef).then(userInfo =>{
         setUserData(userInfo.data())
         setLoading(false)
-        setLoggedInUser(userData)
+        return userInfo.data()
+        
+      }).then(data =>{
+        setLoggedInUser(data)
       }).catch(error => alert(error.message))
-   
-  
   }, []);
 
 
@@ -42,7 +43,7 @@ if(isloading){ return  <Text>Loading</Text>}
   }
 
   const navigateToEdit = ()=>{
-    navigation.navigate("editProfile")
+    navigation.navigate("GlobalStack")
   }
 
 

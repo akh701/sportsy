@@ -9,7 +9,7 @@ export default function GlobalStack() {
   return (
 
     <Stack.Navigator>
-      <Stack.Screen name="editProfile" component={ProfileEditScreen} />
+      <Stack.Screen name="editProfile" component={ProfileEditScreen} options={{ headerShown: false }} />
     </Stack.Navigator>
 
   );
