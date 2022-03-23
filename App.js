@@ -20,7 +20,9 @@ export default function App() {
           <Stack.Screen name="Profile" component={UserProfile} />
         </Stack.Navigator>
       </NavigationContainer> */}
-      <HeaderComponent />
+      <View fixed="top">
+        <HeaderComponent />
+      </View>
       <MainContainer />
 
     </>

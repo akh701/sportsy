@@ -24,17 +24,17 @@ const styles = StyleSheet.create({
 });
 
 function HeaderComponent() {
-  return (
-    <View><Text style={{ fontSize: 45, fontWeight: 'bold', alignSelf: 'center' }}>Sportsy</Text></View>
-  );
   // return (
-  //   <View style={styles.container}>
-  //     <Image
-  //       style={styles.headerLogo}
-  //       source={require('./sportslogo2.png')}
-  //     />
-  //   </View>
+  //   <View><Text style={{ fontSize: 45, fontWeight: 'bold', alignSelf: 'center' }}>Sportsy</Text></View>
   // );
+  return (
+    <View style={styles.container}>
+      <Image
+        style={styles.headerLogo}
+        source={require('./sportslogo2.png')}
+      />
+    </View>
+  );
 }
 
 export default HeaderComponent;

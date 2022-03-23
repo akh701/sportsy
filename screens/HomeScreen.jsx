@@ -10,7 +10,7 @@ export default function HomeScreen({ navigation }) {
         onPress={() => alert('This is the "home" screen.')}
         style={{ fontSize: 26, fontWeight: 'bold' }}
       >
-        Home page for logged in users3
+        Home page for logged in users
 
       </Text>
     </View>
