@@ -1,4 +1,6 @@
-import { StyleSheet, Text, View } from 'react-native';
+import {
+  StyleSheet, Text, View, SafeAreaView,
+} from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import React, { useState, useEffect } from 'react';
@@ -20,9 +22,12 @@ export default function App() {
           <Stack.Screen name="Profile" component={UserProfile} />
         </Stack.Navigator>
       </NavigationContainer> */}
-      <View fixed="top">
-        <HeaderComponent />
-      </View>
+      <SafeAreaView>
+        <View fixed="top">
+          <HeaderComponent />
+        </View>
+      </SafeAreaView>
+
       <MainContainer />
 
     </>
