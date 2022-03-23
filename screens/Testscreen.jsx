@@ -35,7 +35,6 @@ function Testscreen() {
     const getUsers = () => {
       getDocs(usersCollectionRef).then((data) => {
         setUsers(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
-        console.log(data);
       });
     };
     getUsers();
@@ -49,7 +48,7 @@ function Testscreen() {
 
           <TextInput placeholder="Name.." onChange={(e) => { setNewName(e.target.value); }} />
           <TextInput placeholder="Username.." onChange={(e) => { setNewUsername(e.target.value); }} />
-          <Button onPress={createUser} title="Create User" /> 
+          <Button onPress={createUser} title="Create User" />
           {users.map((user) => (
             <View key={user.id}>
               <Text>{user.name}</Text>

@@ -43,7 +43,6 @@ if(isloading){ return  <Text>Loading</Text>}
 //---------------return ---------------------------
 
 if(userData !== null){
-  console.log(userData, "userData")
   return (
   
     <SafeAreaView style={styles.container} >
