@@ -3,7 +3,7 @@ import React,{useState, useEffect} from 'react'
 import { StyleSheet, Text, TouchableOpacity, View,FlatList,
   SafeAreaView,Image } from 'react-native'
   import { getDoc, doc} from 'firebase/firestore';
-import { auth } from '../firebase'
+import { auth } from '../firebase' //// IMPORT THIS TO CHECK USER AND CHECK auth.currentUser
 import { db } from '../firebase';
 
 const UserProfileScreen = () => {
@@ -30,7 +30,7 @@ if(isloading){ return  <Text>Loading</Text>}
     auth
       .signOut()
       .then(() => {
-        navigation.replace("Login")
+        navigation.navigate("Login/Register")
       })
       .catch(error => alert(error.message))
   }
