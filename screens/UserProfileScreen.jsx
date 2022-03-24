@@ -1,16 +1,19 @@
 import { useNavigation } from '@react-navigation/core'
-import React,{useState, useEffect} from 'react'
+import React,{useState, useEffect, useContext} from 'react'
 import { StyleSheet, Text, TouchableOpacity, View,FlatList,
   SafeAreaView,Image } from 'react-native'
   import { getDoc, doc} from 'firebase/firestore';
 import { auth } from '../firebase' //// IMPORT THIS TO CHECK USER AND CHECK auth.currentUser
 import { db } from '../firebase';
+import { UserContext } from '../contexts/UserContext';
 
 const UserProfileScreen = () => {
+  const { loggedInUser,setLoggedInUser } = useContext(UserContext)
   const [userData, setUserData] = useState(null);
   const [isloading, setLoading] = useState(true);
   const navigation = useNavigation()
   const docRef = doc(db, "users", auth.currentUser.uid);
+  
   
   useEffect(() => {
     setLoading(true)
@@ -18,12 +21,16 @@ const UserProfileScreen = () => {
       getDoc(docRef).then(userInfo =>{
         setUserData(userInfo.data())
         setLoading(false)
+        return userInfo.data()
         
+      }).then(data =>{
+        setLoggedInUser(data)
       }).catch(error => alert(error.message))
-   
-  
   }, []);
+
+
 if(isloading){ return  <Text>Loading</Text>} 
+console.log(userData.uid, 'we are in id');
 
 //signOut functionality
   const handleSignOut = () => {
@@ -36,13 +43,14 @@ if(isloading){ return  <Text>Loading</Text>}
   }
 
   const navigateToEdit = ()=>{
-    navigation.navigate("editProfile")
+    navigation.navigate("GlobalStack")
   }
 
 
 //---------------return ---------------------------
 
 if(userData !== null){
+ 
   return (
   
     <SafeAreaView style={styles.container} >
@@ -62,8 +70,8 @@ if(userData !== null){
         <View style={styles.userBtnWrapper}>
       
             <>
-              <TouchableOpacity style={styles.userBtn} onPress={() => {}}>
-                <Text style={styles.userBtnTxt}>Message</Text>
+              <TouchableOpacity style={styles.userBtn} onPress={navigateToEdit}>
+                <Text style={styles.userBtnTxt}>Edit</Text>
               </TouchableOpacity>
             </>
         </View>
@@ -105,12 +113,6 @@ if(userData !== null){
        <Text style={styles.buttonText}>Sign out</Text>
      </TouchableOpacity>
      
-     <TouchableOpacity
-       onPress={navigateToEdit}
-       style={styles.button}
-     >
-       <Text style={styles.buttonText}>Edit</Text>
-     </TouchableOpacity>
      </View>
      
     </SafeAreaView>

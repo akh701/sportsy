@@ -1,35 +1,24 @@
-import {
-  StyleSheet, Text, View, SafeAreaView,
-} from 'react-native';
-import { NavigationContainer } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import React, { useState, useEffect } from 'react';
-import LoginScreen from './screens/LoginScreen';
-import UserProfileScreen from './screens/UserProfileScreen';
+import { View, SafeAreaView } from 'react-native';
+import React, { useState } from 'react';
 import HeaderComponent from './screens/globalScreens/HeaderComponent';
 import MainContainer from './navigation/MainContainer';
-
-const Stack = createNativeStackNavigator();
+import { UserContext } from './contexts/UserContext';
+import GlobalStack from './navigation/GlobalStack';
 
 // fixed minor issue
 
 export default function App() {
+  const [loggedInUser, setLoggedInUser] = useState({});
   return (
-    <>
-      {/* <NavigationContainer>
-        <Stack.Navigator>
-          <Stack.Screen name="Login" options={{ headerShown: false }} component={LoginScreen} />
-          <Stack.Screen name="Profile" component={UserProfile} />
-        </Stack.Navigator>
-      </NavigationContainer> */}
+    <UserContext.Provider value={{ loggedInUser, setLoggedInUser }}>
       <SafeAreaView>
         <View fixed="top">
           <HeaderComponent />
         </View>
       </SafeAreaView>
-
+      {/* <GlobalStack /> */}
       <MainContainer />
 
-    </>
+    </UserContext.Provider>
   );
 }

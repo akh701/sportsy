@@ -14,6 +14,7 @@ import FindEventsScreen from '../screens/FindEventsScreen';
 import MyEventsScreen from '../screens/MyEventsScreen';
 import CreateEventScreen from '../screens/CreateEventScreen';
 import UserProfileScreen from '../screens/UserProfileScreen';
+import GlobalStack from './GlobalStack';
 
 // Screen names, will be used as text for the buttons
 const landingName = 'Home';
@@ -113,6 +114,7 @@ function MainContainer() {
         <Tab.Screen name={myEventsName} component={MyEventsScreen} options={{ headerShown: false }} />
         <Tab.Screen name={createEventName} component={CreateEventScreen} options={{ headerShown: false }} />
         <Tab.Screen name="Profile" component={UserProfileScreen} options={{ headerShown: false }} />
+        <Tab.Screen name="GlobalStack" component={GlobalStack} options={{ headerShown: false, tabBarButton: () => null }} />
 
       </Tab.Navigator>
     </NavigationContainer>

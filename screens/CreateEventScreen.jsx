@@ -6,7 +6,7 @@ export default function CreateEventScreen({ navigation }) {
   return (
 
     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-      <Header />
+
       <Text
         onPress={() => alert('This is the create event screen.')}
         style={{ fontSize: 26, fontWeight: 'bold' }}
