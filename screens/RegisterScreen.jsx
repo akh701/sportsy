@@ -7,6 +7,7 @@ import { useNavigation } from '@react-navigation/core';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { setDoc, doc, Timestamp } from 'firebase/firestore';
 import { auth, db } from '../firebase';
+const items = require('../globalVariables')
 
 export default function RegisterScreen() {
   const [email, setEmail] = useState('');
@@ -16,9 +17,13 @@ export default function RegisterScreen() {
   const [DOB, setDOB] = useState('');
   const [avatar, setAvatar] = useState('');
   const [location, setLocation] = useState('');
-  const [isSelected, setSelection] = useState(false);
+  const [sport1, setSport1] = useState('');
+  const [sport2, setSport2] = useState('');
+  const [sport3, setSport3] = useState('');
 
   const navigation = useNavigation();
+
+  const preferredSports = [];
 
   //   useEffect(() => {
   //     const unsubscribe = auth.onAuthStateChanged((user) => {
@@ -32,9 +37,10 @@ export default function RegisterScreen() {
   const handleSignUp = () => {
     createUserWithEmailAndPassword(auth, email, password)
       .then((userCredentials) => {
+        preferredSports.push(sport1, sport2, sport3);
         const { user } = userCredentials;
         setDoc(doc(db, 'users', user.uid), {
-          name, username, DOB, location, dateJoined: Timestamp.fromDate(new Date('December 10, 1815')), avatar,
+          name, username, DOB, location, dateJoined: Timestamp.fromDate(new Date()), avatar, preferredSports,
         });
       })
       .catch((error) => alert(error.message));
@@ -93,12 +99,18 @@ export default function RegisterScreen() {
           style={styles.input}
         />
         <RNPickerSelect
-          onValueChange={(value) => console.log(value)}
-          items={[
-            { label: 'Football', value: 'football' },
-            { label: 'Baseball', value: 'baseball' },
-            { label: 'Hockey', value: 'hockey' },
-          ]}
+          onValueChange={(value) => value==='Select an item...'? setSport1(''): setSport1(value)}
+          items={items}
+        />
+
+        <RNPickerSelect
+          onValueChange={(value) => value==='Select an item...'? setSport2(''): setSport2(value)}
+          items={items}
+        />
+
+        <RNPickerSelect
+          onValueChange={(value) => value==='Select an item...'? setSport3(''): setSport3(value)}
+          items={items}
         />
 
       </View>

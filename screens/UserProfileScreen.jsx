@@ -90,17 +90,17 @@ if(userData !== null){
             <Text style={styles.userInfoSubTitle}>Following</Text>
           </View>
         </View>
-        {/* <FlatList
+        <FlatList
         data={[
           {key: userData.preferredSports[0]},
           {key: userData.preferredSports[1]},
-          {key: userData.preferredSports[3]},
+          {key: userData.preferredSports[2]},
         
         ]}
         
         renderItem={({item}) => <Text style={styles.item}>{item.key}</Text>}
         keyExtractor={(item, index) => index.toString()}
-      /> */}
+      />
 
     <Text>Location: {userData.location}</Text>
 
