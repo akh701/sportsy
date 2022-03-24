@@ -8,7 +8,7 @@ import {
   StyleSheet,
   Alert,
 } from 'react-native';
-import { getDoc, doc } from 'firebase/firestore';
+import { getDoc, doc, updateDoc } from 'firebase/firestore';
 import { UserContext } from '../contexts/UserContext';
 
 // import ImagePicker from 'react-native-image-crop-picker';
@@ -23,153 +23,16 @@ function ProfileEditScreen() {
   const { loggedInUser } = useContext(UserContext);
 
   const handleUpdate = async () => {
-    // let imgUrl = await uploadImage();
-
-    // if( imgUrl == null && loggedInUser.userImg ) {
-    //   imgUrl = loggedInUser.userImg;
-    // }
-
-    getDoc(docRef)
-      .update({
-        name: loggedInUser.name,
-        username: loggedInUser.name,
-        DOB: loggedInUser.DOB,
-        location: loggedInUser.location,
-        avatar: loggedInUser.avatar,
-      })
-      .then(() => {
-        console.log('User Updated!');
-        Alert.alert(
-          'Profile Updated!',
-          'Your profile has been updated successfully.',
-        );
-      });
+    const docRef = doc(db, 'users', auth.currentUser.uid);
+    const fieldsToUpdate = {
+      name: loggedInUser.name,
+      username: loggedInUser.name,
+      DOB: loggedInUser.DOB,
+      location: loggedInUser.location,
+      avatar: loggedInUser.avatar,
+    };
+    updateDoc(docRef, fieldsToUpdate);
   };
-
-  //   const uploadImage = async () => {
-  //     if( image == null ) {
-  //       return null;
-  //     }
-  //     const uploadUri = image;
-  //     let filename = uploadUri.substring(uploadUri.lastIndexOf('/') + 1);
-
-  //     // Add timestamp to File Name
-  //     const extension = filename.split('.').pop();
-  //     const name = filename.split('.').slice(0, -1).join('.');
-  //     filename = name + Date.now() + '.' + extension;
-
-  //     setUploading(true);
-  //     setTransferred(0);
-
-  //     const storageRef = storage().ref(`photos/${filename}`);
-  //     const task = storageRef.putFile(uploadUri);
-
-  //     // Set transferred state
-  //     task.on('state_changed', (taskSnapshot) => {
-  //       console.log(
-  //         `${taskSnapshot.bytesTransferred} transferred out of ${taskSnapshot.totalBytes}`,
-  //       );
-
-  //       setTransferred(
-  //         Math.round(taskSnapshot.bytesTransferred / taskSnapshot.totalBytes) *
-  //           100,
-  //       );
-  //     });
-
-  //     try {
-  //       await task;
-
-  //       const url = await storageRef.getDownloadURL();
-
-  //       setUploading(false);
-  //       setImage(null);
-
-  //       // Alert.alert(
-  //       //   'Image uploaded!',
-  //       //   'Your image has been uploaded to the Firebase Cloud Storage Successfully!',
-  //       // );
-  //       return url;
-
-  //     } catch (e) {
-  //       console.log(e);
-  //       return null;
-  //     }
-
-  //   };
-
-  //   useEffect(() => {
-  //     getUser();
-  //   }, []);
-
-  //   const takePhotoFromCamera = () => {
-  //     ImagePicker.openCamera({
-  //       compressImageMaxWidth: 300,
-  //       compressImageMaxHeight: 300,
-  //       cropping: true,
-  //       compressImageQuality: 0.7,
-  //     }).then((image) => {
-  //       console.log(image);
-  //       const imageUri = Platform.OS === 'ios' ? image.sourceURL : image.path;
-  //       setImage(imageUri);
-  //       this.bs.current.snapTo(1);
-  //     });
-  //   };
-
-  //   const choosePhotoFromLibrary = () => {
-  //     ImagePicker.openPicker({
-  //       width: 300,
-  //       height: 300,
-  //       cropping: true,
-  //       compressImageQuality: 0.7,
-  //     }).then((image) => {
-  //       console.log(image);
-  //       const imageUri = Platform.OS === 'ios' ? image.sourceURL : image.path;
-  //       setImage(imageUri);
-  //       this.bs.current.snapTo(1);
-  //     });
-  //   };
-
-  // renderInner = function () {
-  //   return (
-  //     <View style={styles.panel}>
-  //       <View style={{ alignItems: 'center' }}>
-  //         <Text style={styles.panelTitle}>Upload Photo</Text>
-  //         <Text style={styles.panelSubtitle}>Choose Your Profile Picture</Text>
-  //       </View>
-  //       <TouchableOpacity
-  //         style={styles.panelButton}
-  //         onPress={takePhotoFromCamera}
-  //       >
-  //         <Text style={styles.panelButtonTitle}>Take Photo</Text>
-  //       </TouchableOpacity>
-  //       <TouchableOpacity
-  //         style={styles.panelButton}
-  //         onPress={choosePhotoFromLibrary}
-  //       >
-  //         <Text style={styles.panelButtonTitle}>Choose From Library</Text>
-  //       </TouchableOpacity>
-  //       <TouchableOpacity
-  //         style={styles.panelButton}
-  //         onPress={() => this.bs.current.snapTo(1)}
-  //       >
-  //         <Text style={styles.panelButtonTitle}>Cancel</Text>
-  //       </TouchableOpacity>
-  //     </View>
-  //   );
-  // };
-
-  // renderHeader = function () {
-  //   return (
-  //     <View style={styles.header}>
-  //       <View style={styles.panelHeader}>
-  //         <View style={styles.panelHandle} />
-  //       </View>
-  //     </View>
-  //   );
-  // };
-
-  // bs = React.createRef();
-  // fall = new Animated.Value(1);
 
   return (
     <View style={styles.container}>
@@ -188,50 +51,6 @@ function ProfileEditScreen() {
           opalocation: Animated.add(0.1, Animated.multiply(this.fall, 1.0)),
         }}> */}
       <View style={{ alignItems: 'center' }}>
-        <TouchableOpacity onPress={() => this.bs.current.snapTo(0)}>
-          <View
-            style={{
-              height: 100,
-              width: 100,
-              borderRadius: 15,
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}
-          >
-            {/* <ImageBackground
-                source={{
-                  uri: image
-                    ? image
-                    : loggedInUser
-                    ? loggedInUser.userImg ||
-                      'https://lh5.googleusercontent.com/-b0PKyNuQv5s/AAAAAAAAAAI/AAAAAAAAAAA/AMZuuclxAM4M1SCBGAO7Rp-QP6zgBEUkOQ/s96-c/photo.jpg'
-                    : 'https://lh5.googleusercontent.com/-b0PKyNuQv5s/AAAAAAAAAAI/AAAAAAAAAAA/AMZuuclxAM4M1SCBGAO7Rp-QP6zgBEUkOQ/s96-c/photo.jpg',
-                }}
-                style={{height: 100, width: 100}}
-                imageStyle={{borderRadius: 15}}>
-                <View
-                  style={{
-                    flex: 1,
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                  }}>
-                  <MaterialCommunityIcons
-                    name="camera"
-                    size={35}
-                    color="#fff"
-                    style={{
-                      opalocation: 0.7,
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      borderWidth: 1,
-                      borderColor: '#fff',
-                      borderRadius: 10,
-                    }}
-                  />
-                </View>
-              </ImageBackground> */}
-          </View>
-        </TouchableOpacity>
         <Text style={{ marginTop: 10, fontSize: 18, fontWeight: 'bold' }}>
           {loggedInUser ? loggedInUser.name : ''}
           {' '}

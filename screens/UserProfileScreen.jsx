@@ -30,7 +30,7 @@ const UserProfileScreen = () => {
 
 
 if(isloading){ return  <Text>Loading</Text>} 
-
+console.log(userData.uid, 'we are in id');
 
 //signOut functionality
   const handleSignOut = () => {
