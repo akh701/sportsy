@@ -8,12 +8,11 @@ import { db } from '../firebase';
 import { UserContext } from '../contexts/UserContext';
 
 const UserProfileScreen = () => {
-  const { loggedInUser,setLoggedInUser } = useContext(UserContext)
-  const [userData, setUserData] = useState(null);
+  const { loggedInUser,setLoggedInUser, userData, setUserData } = useContext(UserContext)
+  // const [userData, setUserData] = useState(null);
   const [isloading, setLoading] = useState(true);
   const navigation = useNavigation()
   const docRef = doc(db, "users", auth.currentUser.uid);
-  
   
   useEffect(() => {
     setLoading(true)
@@ -30,7 +29,6 @@ const UserProfileScreen = () => {
 
 
 if(isloading){ return  <Text>Loading</Text>} 
-console.log(userData.uid, 'we are in id');
 
 //signOut functionality
   const handleSignOut = () => {
