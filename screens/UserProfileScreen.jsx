@@ -43,7 +43,7 @@ console.log(userData.uid, 'we are in id');
   }
 
   const navigateToEdit = ()=>{
-    navigation.navigate("GlobalStack")
+    navigation.navigate("globalStack")
   }
 
 
@@ -90,7 +90,7 @@ if(userData !== null){
             <Text style={styles.userInfoSubTitle}>Following</Text>
           </View>
         </View>
-        <FlatList
+        {/* <FlatList
         data={[
           {key: userData.preferredSports[0]},
           {key: userData.preferredSports[1]},
@@ -100,7 +100,7 @@ if(userData !== null){
         
         renderItem={({item}) => <Text style={styles.item}>{item.key}</Text>}
         keyExtractor={(item, index) => index.toString()}
-      />
+      /> */}
 
     <Text>Location: {userData.location}</Text>
 

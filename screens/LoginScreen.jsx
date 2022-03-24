@@ -22,20 +22,16 @@ function LoginScreen() {
     return unsubscribe;
   }, []);
 
-  const handleSignUp = () => {
-    createUserWithEmailAndPassword(auth, email, password)
-      .then((userCredentials) => {
-        const { user } = userCredentials;
-      })
-      .catch((error) => alert(error.message));
-  };
-
   const handleLogin = () => {
     signInWithEmailAndPassword(auth, email, password)
       .then((userCredentials) => {
         const { user } = userCredentials;
       })
       .catch((error) => alert(error.message));
+  };
+
+  const navigateToRegister = () => {
+    navigation.navigate('register');
   };
 
   return (
@@ -67,7 +63,7 @@ function LoginScreen() {
           <Text style={styles.buttonText}>Login</Text>
         </TouchableOpacity>
         <TouchableOpacity
-          onPress={handleSignUp}
+          onPress={navigateToRegister}
           style={[styles.button, styles.buttonOutline]}
         >
           <Text style={styles.buttonOutlineText}>Register</Text>
