@@ -1,5 +1,5 @@
 const { mockGoogleCloudFirestore } = require('firestore-jest-mock');
-import { doc, setDoc, updateDoc } from "firebase/firestore";
+
 mockGoogleCloudFirestore({
   database: {
     users: [
@@ -14,11 +14,18 @@ mockGoogleCloudFirestore({
       },
     ],
   },
+  options: {
+    includeIdsInData: true,
+    mutable: true,
+    simulateQueryFilters: true,
+  },
 });
 
 beforeEach(() => jest.clearAllMocks());
 
-const { mockCollection, mockWhere, mockLimit, mockOrderBy, mockAdd } = require('firestore-jest-mock/mocks/firestore');
+const {
+  mockCollection, mockWhere, mockLimit, mockOrderBy, mockAdd, mockUpdate, mockDelete, mockArrayUnionFieldValue,
+} = require('firestore-jest-mock/mocks/firestore');
 
 describe('testing get requests to users table', () => {
   test('expect users collection to be returned from firestore', () => {
@@ -116,8 +123,8 @@ describe('testing get requests to users table', () => {
       if (name) {
         query = query.where('name', '==', name);
       }
-      if(sports) {
-        query = query.where('preferredSports', 'array-contains-any', sports)
+      if (sports) {
+        query = query.where('preferredSports', 'array-contains-any', sports);
       }
       if (limit) {
         query = query.limit(limit);
@@ -129,7 +136,7 @@ describe('testing get requests to users table', () => {
     }
     return getUser(['Football', 'Tennis']).then((userDocs) => {
       expect(mockCollection).toHaveBeenCalledWith('users');
-      expect(mockWhere).toHaveBeenCalled();
+      expect(mockWhere).toHaveBeenCalledTimes(1);
       expect(mockLimit).not.toHaveBeenCalled();
       expect(mockOrderBy).not.toHaveBeenCalled();
     });
@@ -142,8 +149,8 @@ describe('testing get requests to users table', () => {
       if (name) {
         query = query.where('name', '==', name);
       }
-      if(username) {
-        query = query.where('username', '==', username)
+      if (username) {
+        query = query.where('username', '==', username);
       }
       return query.get();
     }
@@ -155,49 +162,48 @@ describe('testing get requests to users table', () => {
     });
   });
 });
-describe.only('testing post requests to users table', () => {
+describe('testing post requests to users table', () => {
   test('can post a user to the table', () => {
     const { Firestore } = require('@google-cloud/firestore');
     const firestore = new Firestore();
-    
+
     const newUser = {
       DOB: 'October 27, 1945', name: 'Bob the builder', avatar: 'https://cdn.pixabay.com/photo/2021/02/04/12/03/superhero-5981125__340.png', dateJoined: '22 March 2022 at 10:10:00 UTC', location: 'AL8 7TD', preferredSports: ['Tennis', 'Football'], username: 'Bobsy5',
-    }
-    return firestore.collection('users').add(newUser).then((userDocs) =>{
+    };
+    return firestore.collection('users').add(newUser).then((userDocs) => {
       expect(mockCollection).toHaveBeenCalledWith('users');
       expect(mockAdd).toHaveBeenCalled();
-    })
-  })
+    });
+  });
   test('can update a user\'s details', () => {
-    const { Firestore } = require('@google-cloud/firestore')
+    const { Firestore } = require('@google-cloud/firestore');
     const firestore = new Firestore();
 
-    const frankDocRef = doc(firestore, "users", "frank");
-
-    async function addFrank() {
-      
-    }
-
-    await setDoc(frankDocRef, {
-      name: "Frank",
-      favorites: { food: "Pizza", color: "Blue", subject: "recess" },
-      age: 12
+    return firestore.collection('users').doc('1').update({ name: 'Frank' }).then(() => firestore.collection('users').get().then(() => {
+      expect(mockCollection).toHaveBeenCalledWith('users');
+      expect(mockUpdate).toHaveBeenCalled();
+    }));
   });
-  
+  test('can add to a user\'s details in nested array', () => {
+    const { Firestore } = require('@google-cloud/firestore');
+    const firestore = new Firestore();
 
-    await updateDoc(frankDocRef, {
-      "age": 13,
-      "favorites.color": "Red"
+    return firestore.collection('users').doc('1').update({ preferredSports: mockArrayUnionFieldValue('Basketball', 'Ice Hockey') }).then(() => firestore.collection('users').get().then(() => {
+      expect(mockCollection).toHaveBeenCalledWith('users');
+      expect(mockUpdate).toHaveBeenCalledTimes(1);
+      expect(mockArrayUnionFieldValue).toHaveBeenCalledTimes(1);
+    }));
   });
-    return firestore.collection('users').get().then((data) => {
-      console.log(data.docs[3].data())
-    })
-    // const newData = {
-    //   newKey: 'February 16 1965'
-    // }
-    // return firestore.collection('users').doc('1').update(newData).then((userDocs) => {
-    //   return firestore.collection('users').get().then((data) => {
-    //     console.log(data.docs[0].data())
-    //   })
-    })
-})
+});
+
+describe('delete', () => {
+  test('can delete field from a user from the database', () => {
+    const { Firestore } = require('@google-cloud/firestore');
+    const firestore = new Firestore();
+    const userRef = firestore.collection('users').doc('1');
+    return userRef.delete().then(() => {
+      expect(mockCollection).toHaveBeenCalledWith('users');
+      expect(mockDelete).toHaveBeenCalled();
+    });
+  });
+});
