@@ -30,7 +30,7 @@ const UserProfileScreen = () => {
 
 
 if(isloading){ return  <Text>Loading</Text>} 
-console.log(userData.uid, 'we are in id');
+
 
 //signOut functionality
   const handleSignOut = () => {
@@ -43,7 +43,7 @@ console.log(userData.uid, 'we are in id');
   }
 
   const navigateToEdit = ()=>{
-    navigation.navigate("GlobalStack")
+    navigation.navigate("editProfile")
   }
 
 
@@ -94,7 +94,7 @@ if(userData !== null){
         data={[
           {key: userData.preferredSports[0]},
           {key: userData.preferredSports[1]},
-          {key: userData.preferredSports[3]},
+          {key: userData.preferredSports[2]},
         
         ]}
         
@@ -138,12 +138,13 @@ const styles = StyleSheet.create({
   },
 
    button: {
-    backgroundColor: '#0782F9',
+    backgroundColor: '#63CDAB',
     width: '60%',
     padding: 15,
-    borderRadius: 0,
     alignItems: 'center',
-    marginTop: 40,
+    marginTop: 20,
+    marginBottom: 5,
+    borderRadius: 10,
   },
   buttonText: {
     color: 'white',
@@ -156,6 +157,7 @@ const styles = StyleSheet.create({
     height: 150,
     width: 150,
     borderRadius: 75,
+    marginTop:10,
   },
   userName: {
     fontSize: 18,
@@ -178,15 +180,15 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   userBtn: {
-    borderColor: '#2e64e5',
+    borderColor: '#63CDAB',
     borderWidth: 2,
-    borderRadius: 3,
+    borderRadius: 5,
     paddingVertical: 8,
     paddingHorizontal: 12,
     marginHorizontal: 5,
   },
   userBtnTxt: {
-    color: '#2e64e5',
+    color: '#232A31',
   },
   userInfoWrapper: {
     flexDirection: 'row',
