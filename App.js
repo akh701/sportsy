@@ -9,8 +9,12 @@ import GlobalStack from './navigation/GlobalStack';
 
 export default function App() {
   const [loggedInUser, setLoggedInUser] = useState({});
+  const [userData, setUserData] = useState(null);
   return (
-    <UserContext.Provider value={{ loggedInUser, setLoggedInUser }}>
+    <UserContext.Provider value={{
+      loggedInUser, setLoggedInUser, userData, setUserData,
+    }}
+    >
       <SafeAreaView>
         <View fixed="top">
           <HeaderComponent />

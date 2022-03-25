@@ -11,7 +11,7 @@ const styles = StyleSheet.create({
   },
   headerLogo: {
     width: win.width,
-    height: 95,
+    height: 60,
     // padding: 150,
     // top: 0,
     // left: 0,
