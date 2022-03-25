@@ -7,7 +7,8 @@ import { useNavigation } from '@react-navigation/core';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { setDoc, doc, Timestamp } from 'firebase/firestore';
 import { auth, db } from '../firebase';
-const items = require('../globalVariables')
+
+const items = require('../globalVariables');
 
 export default function RegisterScreen() {
   const [email, setEmail] = useState('');
@@ -15,7 +16,7 @@ export default function RegisterScreen() {
   const [name, setName] = useState('');
   const [username, setUserName] = useState('');
   const [DOB, setDOB] = useState('');
-  const [avatar, setAvatar] = useState('');
+  const [avatar, setAvatar] = useState('https://firebasestorage.googleapis.com/v0/b/sportsy-c79d8.appspot.com/o/sportsyDefaultPhoto.png?alt=media&token=b13b51bc-cd6d-4d2e-b442-a6547a4e2add');
   const [location, setLocation] = useState('');
   const [sport1, setSport1] = useState('');
   const [sport2, setSport2] = useState('');
@@ -98,21 +99,63 @@ export default function RegisterScreen() {
           onChangeText={(text) => setLocation(text)}
           style={styles.input}
         />
-        <RNPickerSelect
-          onValueChange={(value) => value==='Select an item...'? setSport1(''): setSport1(value)}
-          items={items}
-        />
-
-        <RNPickerSelect
-          onValueChange={(value) => value==='Select an item...'? setSport2(''): setSport2(value)}
-          items={items}
-        />
-
-        <RNPickerSelect
-          onValueChange={(value) => value==='Select an item...'? setSport3(''): setSport3(value)}
-          items={items}
-        />
-
+        <View style={styles.select}>
+          <RNPickerSelect
+            placeholder={{ label: 'Select you favourite sport', value: '' }}
+            onValueChange={(value) => (value === 'Select an item...' ? setSport1('') : setSport1(value))}
+            items={items}
+            style={{
+              inputIOS: {
+                fontSize: 14,
+                paddingVertical: 10,
+                paddingHorizontal: 12,
+                borderWidth: 1,
+                borderColor: '#63CDAB',
+                borderRadius: 8,
+                color: 'black',
+                paddingRight: 30, // to ensure the text is never behind the icon
+              },
+            }}
+          />
+        </View>
+        <View style={styles.select}>
+          <RNPickerSelect
+            placeholder={{ label: 'Select you favourite sport', value: '' }}
+            onValueChange={(value) => (value === 'Select an item...' ? setSport2('') : setSport2(value))}
+            items={items}
+            style={{
+              inputIOS: {
+                fontSize: 14,
+                paddingVertical: 10,
+                paddingHorizontal: 12,
+                borderWidth: 1,
+                borderColor: '#63CDAB',
+                borderRadius: 8,
+                color: 'black',
+                paddingRight: 30, // to ensure the text is never behind the icon
+              },
+            }}
+          />
+        </View>
+        <View style={styles.select}>
+          <RNPickerSelect
+            placeholder={{ label: 'Select you favourite sport', value: '' }}
+            onValueChange={(value) => (value === 'Select an item...' ? setSport3('') : setSport3(value))}
+            items={items}
+            style={{
+              inputIOS: {
+                fontSize: 14,
+                paddingVertical: 10,
+                paddingHorizontal: 12,
+                borderWidth: 1,
+                borderColor: '#63CDAB',
+                borderRadius: 8,
+                color: 'black',
+                paddingRight: 30, // to ensure the text is never behind the icon
+              },
+            }}
+          />
+        </View>
       </View>
 
       <View style={styles.buttonContainer}>
@@ -151,7 +194,7 @@ const styles = StyleSheet.create({
     marginTop: 40,
   },
   button: {
-    backgroundColor: '#0782F9',
+    backgroundColor: '#63CDAB',
     width: '100%',
     padding: 15,
     borderRadius: 10,
@@ -160,7 +203,7 @@ const styles = StyleSheet.create({
   buttonOutline: {
     backgroundColor: 'white',
     marginTop: 5,
-    borderColor: '#0782F9',
+    borderColor: '#63CDAB',
     borderWidth: 2,
   },
   buttonText: {
@@ -169,18 +212,27 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   buttonOutlineText: {
-    color: '#0782F9',
+    color: '#63CDAB',
     fontWeight: '700',
     fontSize: 16,
   },
-  checkboxContainer: {
-    flexDirection: 'row',
-    marginBottom: 20,
-  },
-  checkbox: {
-    alignSelf: 'center',
-  },
   label: {
     margin: 8,
+  },
+  select: {
+    marginTop: 5,
+  },
+  inputIOS: {
+    fontSize: 14,
+    paddingVertical: 10,
+    paddingHorizontal: 12,
+    borderWidth: 1,
+    borderColor: 'green',
+    borderRadius: 8,
+    color: 'black',
+    paddingRight: 30, // to ensure the text is never behind the icon
+  },
+  selectIOS: {
+    backgroundColor: 'black',
   },
 });
