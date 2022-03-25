@@ -26,6 +26,9 @@ export default function CreateEventScreen({ navigation }) {
 
   { /* function to handle submit event button click: */ }
   const postEvent = () => {
+    if (eventDetails.title === '' || eventDetails.description === '' || eventDetails.location === '' || eventDetails.category === '' || eventDetails.spotsAvailable === '' || eventDetails.eventTime === '' || eventDetails.eventDate === '') {
+      return alert('Please fill out all fields to create an event');
+    }
     const eventPost = { ...eventDetails, createdAt: serverTimestamp() };
     return addDoc(collection(db, 'events'), eventPost);
   };
@@ -81,11 +84,20 @@ export default function CreateEventScreen({ navigation }) {
           Select the sport for the event:
         </Text>
         <Picker
+          placeholder="Select Sport"
           selectedValue={eventDetails.category}
           onValueChange={(value) => setEventDetails({ ...eventDetails, category: value })}
         >
-          <Picker.Item label="Football" value="Football" />
+          <Picker.Item label="" value="" />
           <Picker.Item label="Badminton" value="Badminton" />
+          <Picker.Item label="Basketball" value="Basketball" />
+          <Picker.Item label="Climbing" value="Climbing" />
+          <Picker.Item label="Cricket" value="Cricket" />
+          <Picker.Item label="Darts" value="Darts" />
+          <Picker.Item label="Football" value="Football" />
+          <Picker.Item label="Golf" value="Golf" />
+          <Picker.Item label="Snooker" value="Snooker" />
+          <Picker.Item label="Squash" value="Squash" />
           <Picker.Item label="Tennis" value="Tennis" />
         </Picker>
 
