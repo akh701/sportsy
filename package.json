@@ -1,7 +1,6 @@
 {
   "name": "sportsy",
 
-
   "version": "1.0.0",
 
 
@@ -40,21 +39,11 @@
 
     "@google-cloud/firestore": "^5.0.2",
 
-
     "@react-native-community/datetimepicker": "^6.1.0",
-
-
     "@react-native-community/slider": "^4.2.1",
-
-
     "@react-native-firebase/firestore": "^14.7.0",
-
-
     "@react-native-picker/picker": "^2.4.0",
-
-
     "@react-navigation/bottom-tabs": "^6.2.0",
-
     "@react-navigation/core": "^6.1.1",
     "@react-navigation/native": "^6.0.8",
 
@@ -73,32 +62,16 @@
 
     "firestore-jest-mock": "^0.17.0",
 
-
     "link": "^0.1.5",
-
-
     "moment": "^2.29.1",
-
 
     "react": "17.0.1",
 
 
     "react-dom": "17.0.1",
-
-
-
-
     "react-native-calendar-picker": "^7.1.2",
-
-
     "react-native-datepicker": "^1.7.2",
-
-
-
-
-
     "react-native-numeric-input": "^1.9.1",
-
 
     "react-native": "0.64.3",
     "react-native-date-picker": "^4.2.0",
@@ -108,17 +81,9 @@
 
 
     "react-native-screens": "~3.10.1",
-
-
     "react-native-vector-icons": "^9.1.0",
-
-
     "react-native-web": "0.17.1",
-
-
     "react-time-picker": "^4.5.0"
-
-
   },
 
 

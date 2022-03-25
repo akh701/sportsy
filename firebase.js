@@ -2,6 +2,7 @@ import {
   apiKey, authDomain, projectId, storageBucket, messagingSenderId, appId, measurementId,
 } from '@env';
 import { initializeApp } from 'firebase/app';
+
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import { initializeFirestore } from 'firebase/firestore';
 
