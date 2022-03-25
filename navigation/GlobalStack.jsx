@@ -1,15 +1,15 @@
-import * as React from 'react';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import ProfileEditScreen from '../screens/ProfileEditScreen';
+// import * as React from 'react';
+// import { createNativeStackNavigator } from '@react-navigation/native-stack';
+// import ProfileEditScreen from '../screens/ProfileEditScreen';
 
-const Stack = createNativeStackNavigator();
+// const Stack = createNativeStackNavigator();
 
-export default function GlobalStack() {
-  return (
+// export default function GlobalStack() {
+//   return (
 
-    <Stack.Navigator>
-      <Stack.Screen name="editProfile" component={ProfileEditScreen} options={{ headerShown: false }} />
-    </Stack.Navigator>
+//     <Stack.Navigator>
+//       <Stack.Screen name="editProfile" component={ProfileEditScreen} options={{ headerShown: false }} />
+//     </Stack.Navigator>
 
-  );
-}
+//   );
+// }
