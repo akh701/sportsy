@@ -37,9 +37,9 @@ export default function CreateEventScreen({ navigation }) {
     <ScrollView>
       {/* User selects title here: */}
       <View style={styles.action}>
-        {/* <FontAwesome name="user-o" color="#333333" size={20} /> */}
+
         <TextInput
-          placeholder="Title"
+          placeholder="Event Title"
           placeholderTextColor="#666666"
           autoCorrect={false}
           value={eventDetails.title}
@@ -49,7 +49,7 @@ export default function CreateEventScreen({ navigation }) {
       </View>
       {/* User writes description here: */}
       <View style={styles.action}>
-        {/* <FontAwesome name="user-o" color="#333333" size={20} /> */}
+
         <TextInput
           placeholder="Write a description of your event here!"
           placeholderTextColor="#666666"
@@ -64,7 +64,7 @@ export default function CreateEventScreen({ navigation }) {
       </View>
       {/* User enter postcode here: */}
       <View style={styles.action}>
-        {/* <FontAwesome name="user-o" color="#333333" size={20} /> */}
+
         <TextInput
           placeholder="Type your postcode here"
           placeholderTextColor="#666666"
@@ -76,8 +76,8 @@ export default function CreateEventScreen({ navigation }) {
         />
       </View>
       {/* User enters sport here: */}
-      <View>
-        <Text>
+      <View style={styles.eventDateSelector}>
+        <Text style={styles.textInput}>
           Select the sport for the event:
         </Text>
         <Picker
@@ -91,12 +91,8 @@ export default function CreateEventScreen({ navigation }) {
 
       </View>
       {/* User selects number of spots here: */}
-      <View>
+      <View style={styles.eventDateSelector}>
         <View>
-
-          <Text>
-            Please select the number of spots available
-          </Text>
           <Slider
             step={1}
             minimumValue={0}
@@ -107,18 +103,29 @@ export default function CreateEventScreen({ navigation }) {
             maximumTrackTintColor="#d3d3d3"
             thumbTintColor="#b9e4c9"
           />
-          <Text>
+          <Text style={styles.textInput}>
             Spots Available:
             {' '}
             {eventDetails.spotsAvailable}
 
           </Text>
         </View>
+        <Text>
+          Select the time of the event:
+        </Text>
       </View>
       {/* User selects time here: */}
-      <TimePicker disableClock onChange={(value) => setEventDetails({ ...eventDetails, eventTime: value })} />
-      {/* User selects date here: */}
-      <View style={styles.container}>
+      {' '}
+      <View style={styles.eventDateSelector}>
+        <TimePicker disableClock onChange={(value) => setEventDetails({ ...eventDetails, eventTime: value })} />
+        {/* User selects date here: */}
+      </View>
+      <View style={styles.eventDateSelector}>
+        <Text>
+          Select the date for the event:
+        </Text>
+      </View>
+      <View style={styles.eventDateSelector}>
         <CalendarPicker
           startFromMonday
           allowRangeSelection={false}
@@ -241,6 +248,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     marginHorizontal: 5,
   },
+  eventDateSelector:
+  { margin: 20 },
   userBtnTxt: {
     color: '#2e64e5',
   },
