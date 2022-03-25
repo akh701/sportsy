@@ -1,6 +1,4 @@
 {
-
-
   "name": "sportsy",
 
 
@@ -57,7 +55,7 @@
 
     "@react-navigation/bottom-tabs": "^6.2.0",
 
-
+    "@react-navigation/core": "^6.1.1",
     "@react-navigation/native": "^6.0.8",
 
 
@@ -88,7 +86,6 @@
     "react-dom": "17.0.1",
 
 
-    "react-native": "^0.64.3",
 
 
     "react-native-calendar-picker": "^7.1.2",
@@ -97,12 +94,16 @@
     "react-native-datepicker": "^1.7.2",
 
 
-    "react-native-dotenv": "^3.3.1",
+
 
 
     "react-native-numeric-input": "^1.9.1",
 
 
+    "react-native": "0.64.3",
+    "react-native-date-picker": "^4.2.0",
+    "react-native-dotenv": "^3.3.1",
+    "react-native-picker-select": "^8.0.4",
     "react-native-safe-area-context": "3.3.2",
 
 
