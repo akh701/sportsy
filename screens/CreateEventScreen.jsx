@@ -37,7 +37,7 @@ export default function CreateEventScreen({ navigation }) {
     <ScrollView>
       {/* User selects title here: */}
       <View style={styles.action}>
-        {/* <FontAwesome name="user-o" color="#333333" size={20} /> */}
+
         <TextInput
           placeholder="Event Title"
           placeholderTextColor="#666666"
@@ -49,7 +49,7 @@ export default function CreateEventScreen({ navigation }) {
       </View>
       {/* User writes description here: */}
       <View style={styles.action}>
-        {/* <FontAwesome name="user-o" color="#333333" size={20} /> */}
+
         <TextInput
           placeholder="Write a description of your event here!"
           placeholderTextColor="#666666"
@@ -64,7 +64,7 @@ export default function CreateEventScreen({ navigation }) {
       </View>
       {/* User enter postcode here: */}
       <View style={styles.action}>
-        {/* <FontAwesome name="user-o" color="#333333" size={20} /> */}
+
         <TextInput
           placeholder="Type your postcode here"
           placeholderTextColor="#666666"
