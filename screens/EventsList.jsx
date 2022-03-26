@@ -4,6 +4,7 @@ import {
 import React, { useEffect, useState } from 'react';
 import { collection, getDocs } from 'firebase/firestore';
 import { db } from '../firebase';
+import EventCardComponent from './eventScreens/EventCardComponent';
 
 export default function EventsList({ result, setResult }) {
   const eventsCollectionRef = collection(db, 'events');
@@ -17,31 +18,13 @@ export default function EventsList({ result, setResult }) {
     });
   }, []);
 
-  if (loading) return <Text style={styles.loading}>Loading...</Text>
+  if (loading) return <Text style={styles.loading}>Loading...</Text>;
 
   return (
 
     <SafeAreaView style={styles.container}>
       <View style={styles.eventContainer}>
-        <FlatList
-          data={result}
-          renderItem={({ item }) => (
-            <View style={[styles.eventCard, styles.cardOutline]}>
-              <Text style={styles.item}>{item.title}</Text>
-              <Text style={styles.item}>{item.category}</Text>
-              <Text style={styles.item}>{item.spotsAvailable}</Text>
-              <Text
-                onPress={() => []}
-                style={{ fontSize: 11, fontWeight: 'bold', float: 'right' }}
-              >
-                more...
-
-              </Text>
-            </View>
-          )}
-          keyExtractor={(item, index) => index}
-          showsVerticalScrollIndicator={false}
-        />
+        <EventCardComponent result={result} />
       </View>
     </SafeAreaView>
 
