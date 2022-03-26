@@ -1,12 +1,20 @@
+import { NavigationRouteContext, useNavigation } from '@react-navigation/core';
 import React from 'react';
 import {
   View, Text, StyleSheet, FlatList, SafeAreaView, ScrollView,
 } from 'react-native';
+import { TouchableOpacity } from 'react-native-web';
 
 export default function EventCardComponent(props) {
   const eventDate = (new Intl.DateTimeFormat('en-US', {
     year: 'numeric', month: '2-digit', day: '2-digit',
   }).format(props.data.eventDate));
+
+  const navigation = useNavigation();
+
+  const navigateToSinglePage = (event) => {
+    navigation.navigate('singleEvent', event);
+  };
 
   return (
     <FlatList
@@ -31,13 +39,16 @@ export default function EventCardComponent(props) {
           </Text>
           <Text style={styles.item}>{item.location}</Text>
           <Text style={styles.item} />
-          <Text
-            onPress={() => []}
-            style={{ fontSize: 11, fontWeight: 'bold', float: 'right' }}
-          >
-            more...
+          <TouchableOpacity>
+            <Text
+              onPress={() => { navigateToSinglePage(item); }}
+              style={{ fontSize: 11, fontWeight: 'bold', float: 'right' }}
+            >
+              more...
 
-          </Text>
+            </Text>
+          </TouchableOpacity>
+
         </View>
       )}
       keyExtractor={(item, index) => index}
