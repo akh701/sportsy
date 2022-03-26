@@ -104,11 +104,13 @@ const styles = StyleSheet.create({
     margin: '23%',
   },
   eventCounter: {
-    marginBottom: 15,
+    marginBottom: 10,
     textAlign: 'center',
     fontSize: 20,
     color: '#20232a',
     fontWeight: 'bold',
+    flex: 1,
+    marginTop: 30,
   },
 
 });

@@ -13,8 +13,8 @@ import { ScreenStackHeaderConfig } from 'react-native-screens';
 export default function Searchbar({
   setToggleSubmit, style, setSearch, search, toggleSubmit,
 }) {
-  const [query, setQuery] = useState();
-  const [error, setError] = useState();
+  const [query, setQuery] = useState('');
+  const [error, setError] = useState(null);
 
   return (
     <View style={[styles.container, style]}>
@@ -46,7 +46,9 @@ export default function Searchbar({
                       )
                       : <View style={styles.vwClear} />
                 }
-        <Button style={styles.subBtn} onPress={() => setToggleSubmit(!toggleSubmit)}>Submit</Button>
+      </View>
+      <View>
+        <Button title="Submit search" color="#008080" onPress={() => setToggleSubmit(!toggleSubmit)}>Submit</Button>
       </View>
       {
                 error
@@ -63,7 +65,9 @@ const styles = StyleSheet.create({
   txtError: {
     marginTop: '2%',
     width: '89%',
-    color: 'white',
+    color: 'black',
+    textAlign: 'center',
+    flex: 1,
 
   },
   vwClear: {
@@ -92,14 +96,10 @@ const styles = StyleSheet.create({
       width: '75%',
       height: 40,
       flexDirection: 'row',
-
+      marginBottom: 5,
     },
   container: {
     height: 80,
     alignItems: 'center',
-  },
-  subBtn: {
-    width: '20%',
-    color: 'white',
   },
 });
