@@ -1,104 +1,105 @@
+import { sendSignInLinkToEmail } from 'firebase/auth';
 import React, { useState, useEffect } from 'react';
 import {
-    StyleSheet,
-    View,
-    Text,
-    TouchableOpacity,
-    TextInput,
-    Button,
+  StyleSheet,
+  View,
+  Text,
+  TouchableOpacity,
+  TextInput,
+  Button,
 } from 'react-native';
 import { ScreenStackHeaderConfig } from 'react-native-screens';
 
-export default function Searchbar({ setToggleSubmit, style, setSearch, search, toggleSubmit }) {
+export default function Searchbar({
+  setToggleSubmit, style, setSearch, search, toggleSubmit,
+}) {
+  const [query, setQuery] = useState();
+  const [error, setError] = useState();
 
-    const [query, setQuery] = useState();
-    const [error, setError] = useState()
+  return (
+    <View style={[styles.container, style]}>
+      <View style={styles.searchContainer}>
+        <View style={styles.vwSearch} />
 
+        <TextInput
+          value={search}
+          placeholder="Filter by sport"
+          style={styles.textInput}
+          onChangeText={(text) => {
+            const letters = /^$|^[a-zA-Z._\b ]+$/;
+            if (text.length > 12) {
+              setError('Query too long.');
+            } else if (text.match(letters)) {
+              setSearch(text);
 
-    return (
-        <View style={[styles.container, style]}>
-            <View style={styles.searchContainer}>
-                <View style={styles.vwSearch}>
-
-                </View>
-
-                <TextInput
-                    value={search}
-                    placeholder="Search"
-                    style={styles.textInput}
-                    onChangeText={(text) => {
-                        const letters = /^$|^[a-zA-Z._\b ]+$/;
-                        if (text.length > 12)
-                            setError("Query too long.")
-                        else if (text.match(letters)) {
-                            setSearch(text)
-
-                            if (error)
-                                setError(false)
-                        }
-                        else setError("Please only enter alphanumeric characters")
-                    }}
-                />
-                {
-                    query ?
+              if (error) { setError(false); }
+            } else setError('Please only enter alphanumeric characters');
+          }}
+        />
+        {
+                    query
+                      ? (
                         <TouchableOpacity
-                            onPress={() => setQuery('')}
-                            style={styles.vwClear}>
-                        </TouchableOpacity>
-                        : <View style={styles.vwClear} />
+                          onPress={() => setQuery('')}
+                          style={styles.vwClear}
+                        />
+                      )
+                      : <View style={styles.vwClear} />
                 }
-                <Button style={styles.submitBtn} onPress={() => setToggleSubmit(!toggleSubmit)}>Submit</Button>
-            </View>
-            {
-                error &&
+        <Button style={styles.subBtn} onPress={() => setToggleSubmit(!toggleSubmit)}>Submit</Button>
+      </View>
+      {
+                error
+                && (
                 <Text style={styles.txtError}>
-                    {error}
+                  {error}
                 </Text>
+                )
             }
-        </View >
-    )
+    </View>
+  );
 }
 const styles = StyleSheet.create({
-    txtError: {
-        marginTop: '2%',
-        width: '89%',
-        color: 'white',
+  txtError: {
+    marginTop: '2%',
+    width: '89%',
+    color: 'white',
 
-    },
-    vwClear: {
-        flex: 0.2,
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    textInput: {
-        // backgroundColor: 'green',
-        flex: 1,
-    },
+  },
+  vwClear: {
+    flex: 0.2,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  textInput: {
+    // backgroundColor: 'green',
+    flex: 1,
+  },
 
-    vwSearch: {
-        flex: 0.2,
-        justifyContent: 'center',
-        alignItems: 'center',
-        // width: 40,
-        // backgroundColor: 'red'
-    },
-    icSearch: {
-        height: 18, width: 18
-    },
-    searchContainer:
+  vwSearch: {
+    flex: 0.2,
+    justifyContent: 'center',
+    alignItems: 'center',
+    // width: 40,
+    // backgroundColor: 'red'
+  },
+  icSearch: {
+    height: 18, width: 18,
+  },
+  searchContainer:
     {
-        backgroundColor: 'white',
-        width: '75%',
-        height: 40,
-        flexDirection: 'row'
+      backgroundColor: 'white',
+      width: '75%',
+      height: 40,
+      flexDirection: 'row',
 
     },
-    container: {
-        height: 80,
-        alignItems: 'center',
-    },
-    submitBtn: {
-        width: '20%',
-        color: 'white',
-    },
+  container: {
+    height: 80,
+    alignItems: 'center',
+  },
+  subBtn: {
+    width: '20%',
+    color: 'white',
+  },
 });
