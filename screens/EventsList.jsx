@@ -24,7 +24,7 @@ export default function EventsList({ result, setResult }) {
 
     <SafeAreaView style={styles.container}>
       <View style={styles.eventContainer}>
-        <EventCardComponent result={result} />
+        <EventCardComponent data={result} />
       </View>
     </SafeAreaView>
 
