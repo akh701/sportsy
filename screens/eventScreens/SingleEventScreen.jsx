@@ -11,10 +11,8 @@ import {
 } from 'firebase/firestore';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import SingleEventAttendees from './SingleEventAttendees';
-
-// import ImagePicker from 'react-native-image-crop-picker';
 import { db } from '../../firebase';
-// import storage from '@react-native-firebase/storage';
+
 
 function SingleEventScreen({ route: { params }, navigation }) {
   const [attendees, setAttendees] = useState([]);

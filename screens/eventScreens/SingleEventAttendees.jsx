@@ -6,7 +6,6 @@ import {
 } from 'react-native';
 
 export default function SingleEventAttendees(props) {
-  console.log(props.data);
   return (
     props.data.map((i) => <Text style={styles.attendee} key={i.stringValue}>{i.stringValue}</Text>)
   );
