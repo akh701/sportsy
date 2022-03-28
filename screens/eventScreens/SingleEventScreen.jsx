@@ -23,8 +23,6 @@ function SingleEventScreen({ route: { params }, navigation }) {
   const eventCreatedDate = moment(params.createdAt.milliseconds).format('MMMM Do YYYY, h:mm:ss a');
   const eventDate = moment(params.eventDate.seconds * 1000).format('MMMM Do YYYY');
 
-  console.log(attendees);
-
   const requestData = (array) => {
     setLoading(true);
     const attendeeUsernames = [];
@@ -53,6 +51,13 @@ function SingleEventScreen({ route: { params }, navigation }) {
   }, [refresh]);
 
   useEffect(() => {
+    const unsubscribe = navigation.addListener('blur', () => {
+      setAttendees([]);
+    });
+    return unsubscribe;
+  }, [navigation]);
+
+  useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
       setRefresh((currValue) => currValue + 1);
     });
@@ -60,12 +65,29 @@ function SingleEventScreen({ route: { params }, navigation }) {
   }, [navigation]);
 
   const handlePress = () => {
-    updateDoc(doc(db, 'events', params.id), {
-      attendees: arrayUnion(auth.currentUser.uid),
-    }).then(() => {
-      params.attendees.push(auth.currentUser.uid);
-      setRefresh((currValue) => currValue + 1);
-    });
+    if (params.attendees.indexOf(auth.currentUser.uid) < 0) {
+      if (params.attendees.length < params.spotsAvailable) {
+        updateDoc(doc(db, 'events', params.id), {
+          attendees: arrayUnion(auth.currentUser.uid),
+        }).then(() => {
+          params.attendees.push(auth.currentUser.uid);
+          setAttendees(params.attendees);
+          setRefresh((currValue) => currValue + 1);
+        });
+      } else {
+        alert('This event is full');
+      }
+    } else {
+      updateDoc(doc(db, 'events', params.id), {
+        attendees: arrayRemove(auth.currentUser.uid),
+      }).then(() => {
+        console.log(params.attendees);
+        console.log(auth.currentUser.uid);
+        params.attendees = params.attendees.filter((id) => id !== auth.currentUser.uid);
+        setAttendees(params.attendees);
+        setRefresh((currValue) => currValue + 1);
+      });
+    }
   };
 
   if (loading) { return <Text>Loading...</Text>; }
@@ -109,8 +131,9 @@ function SingleEventScreen({ route: { params }, navigation }) {
         <TouchableOpacity
           onPress={handlePress}
           style={[styles.button, styles.buttonOutline]}
+          disable
         >
-          <Text style={styles.buttonOutlineText}>Join Event</Text>
+          <Text style={styles.buttonOutlineText}>{params.attendees.indexOf(auth.currentUser.uid) >= 0 ? 'Leave Event' : 'Join Event'}</Text>
         </TouchableOpacity>
       </View>
       <Text style={styles.attendeeLabel}>Currently attending:</Text>
