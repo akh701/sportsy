@@ -1,31 +1,36 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import {
   View,
   Text,
   KeyboardAvoidingView,
   StyleSheet,
+  TouchableOpacity,
 } from 'react-native';
 import moment from 'moment';
 import {
-  getDoc, doc,
+  getDoc, doc, updateDoc, arrayUnion, arrayRemove,
 } from 'firebase/firestore';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import SingleEventAttendees from './SingleEventAttendees';
-import { db } from '../../firebase';
+import { db, auth } from '../../firebase';
+import { UserContext } from '../../contexts/UserContext';
 
 function SingleEventScreen({ route: { params }, navigation }) {
+  const { userData } = useContext(UserContext);
   const [attendees, setAttendees] = useState([]);
   const [loading, setLoading] = useState(true);
   const [refresh, setRefresh] = useState(0);
   const eventCreatedDate = moment(params.createdAt.milliseconds).format('MMMM Do YYYY, h:mm:ss a');
   const eventDate = moment(params.eventDate.seconds * 1000).format('MMMM Do YYYY');
 
-  useEffect(() => {
+  console.log(attendees);
+
+  const requestData = (array) => {
     setLoading(true);
     const attendeeUsernames = [];
     let counter = 0;
-    if (params.attendees.length > 0) {
-      params.attendees.forEach((id) => {
+    if (array.length > 0) {
+      array.forEach((id) => {
         const q = doc(db, 'users', id);
         getDoc(q)
           .then((data) => {
@@ -35,20 +40,17 @@ function SingleEventScreen({ route: { params }, navigation }) {
           })
           .then((attendeeUsernames) => {
             setAttendees(attendeeUsernames);
-            if (counter === params.attendees.length) setLoading(false);
+            if (counter === array.length) setLoading(false);
           });
       });
     } else {
       setLoading(false);
     }
-  }, [refresh]);
+  };
 
   useEffect(() => {
-    const unsubscribe = navigation.addListener('blur', () => {
-      setAttendees([]);
-    });
-    return unsubscribe;
-  }, [navigation]);
+    requestData(params.attendees);
+  }, [refresh]);
 
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
@@ -56,6 +58,15 @@ function SingleEventScreen({ route: { params }, navigation }) {
     });
     return unsubscribe;
   }, [navigation]);
+
+  const handlePress = () => {
+    updateDoc(doc(db, 'events', params.id), {
+      attendees: arrayUnion(auth.currentUser.uid),
+    }).then(() => {
+      params.attendees.push(auth.currentUser.uid);
+      setRefresh((currValue) => currValue + 1);
+    });
+  };
 
   if (loading) { return <Text>Loading...</Text>; }
 
@@ -94,6 +105,14 @@ function SingleEventScreen({ route: { params }, navigation }) {
         {' '}
         available spots at this event have been taken.
       </Text>
+      <View style={styles.joinLeaveEventBtn}>
+        <TouchableOpacity
+          onPress={handlePress}
+          style={[styles.button, styles.buttonOutline]}
+        >
+          <Text style={styles.buttonOutlineText}>Join Event</Text>
+        </TouchableOpacity>
+      </View>
       <Text style={styles.attendeeLabel}>Currently attending:</Text>
       {/* <SafeAreaView>
         <FlatList
@@ -106,7 +125,7 @@ function SingleEventScreen({ route: { params }, navigation }) {
       </SafeAreaView> */}
       <SafeAreaView>
         <View style={styles.attendeesContainer}>
-          <SingleEventAttendees data={attendees} keyExtractor={(result) => result.stringValue} />
+          <SingleEventAttendees attendees={attendees} keyExtractor={(result) => result.stringValue} />
         </View>
       </SafeAreaView>
 
@@ -177,5 +196,34 @@ const styles = StyleSheet.create({
   },
   container: {
     border: 'solid',
+  },
+  button: {
+    backgroundColor: '#63CDAB',
+    width: '40%',
+    padding: 5,
+    borderRadius: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  buttonOutline: {
+    backgroundColor: 'white',
+    marginTop: 5,
+    borderColor: '#63CDAB',
+    borderWidth: 2,
+  },
+  buttonText: {
+    color: 'white',
+    fontWeight: '700',
+    fontSize: 16,
+  },
+  buttonOutlineText: {
+    color: '#63CDAB',
+    fontWeight: '700',
+    fontSize: 16,
+  },
+  joinLeaveEventBtn: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: 5,
   },
 });
