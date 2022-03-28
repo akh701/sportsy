@@ -32,6 +32,7 @@ function SingleEventScreen({ route: { params }, navigation }) {
         const q = doc(db, 'users', id);
         getDoc(q)
           .then((data) => {
+            console.log(data, 'singlevent');
             attendeeUsernames.push(data._document.data.value.mapValue.fields.username);
             counter++;
             return attendeeUsernames;
@@ -235,10 +236,10 @@ const styles = StyleSheet.create({
   },
   attendeesContainer: {
     marginTop: 5,
-    margnLeft: 25,
+    marginLeft: 25,
   },
   container: {
-    border: 'solid',
+
   },
   button: {
     backgroundColor: '#63CDAB',
