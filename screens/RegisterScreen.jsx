@@ -26,35 +26,30 @@ export default function RegisterScreen() {
 
   const preferredSports = [];
 
+  const apiString = 'https://api.postcodes.io/postcodes';
+  const FetchPostcode = (query) => fetch(`${apiString}/${query}`, {
+    method: 'GET',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
 
-  const handleSignUp = () => {
- 
-    const apiString = "https://api.postcodes.io/postcodes"
-      const FetchPostcode = (query) => {
-        return fetch(`${apiString}/${query}`, {
-          method: 'GET',
-          headers: {
-            Accept: 'application/json',
-            'Content-Type': 'application/json'
-          },
+  })
+    .then((res) => {
+      const apiResult = res.json();
+      return apiResult;
+    })
+    .then((data) => {
+      const userPostcode = data.result.postcode;
+      const { latitude } = data.result;
+      const { longitude } = data.result;
+      const region = data.result.nuts;
+      const userLocation = [userPostcode, latitude, longitude, region];
+      return userLocation;
+    });
 
-        })
-        .then((res) => {
-          const apiResult = res.json()
-          return apiResult;
-        })
-        .then((data)=> {
-          const userPostcode = data.result.postcode
-          const latitude = data.result.latitude
-          const longitude = data.result.longitude
-          const region = data.result.nuts
-          const userLocation = [userPostcode, latitude, longitude, region]
-          return userLocation
-        })
-    }
-
-    const handleSignUp = async () => {
-    const locationArray = await FetchPostcode(location)
+  const handleSignUp = async () => {
+    const locationArray = await FetchPostcode(location);
 
     createUserWithEmailAndPassword(auth, email, password)
       .then((userCredentials) => {
