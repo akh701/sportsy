@@ -81,8 +81,6 @@ function SingleEventScreen({ route: { params }, navigation }) {
       updateDoc(doc(db, 'events', params.id), {
         attendees: arrayRemove(auth.currentUser.uid),
       }).then(() => {
-        console.log(params.attendees);
-        console.log(auth.currentUser.uid);
         params.attendees = params.attendees.filter((id) => id !== auth.currentUser.uid);
         setAttendees(params.attendees);
         setRefresh((currValue) => currValue + 1);
