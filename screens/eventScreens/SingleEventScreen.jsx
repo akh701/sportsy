@@ -13,7 +13,6 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import SingleEventAttendees from './SingleEventAttendees';
 import { db } from '../../firebase';
 
-
 function SingleEventScreen({ route: { params }, navigation }) {
   const [attendees, setAttendees] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -25,19 +24,25 @@ function SingleEventScreen({ route: { params }, navigation }) {
     setLoading(true);
     const attendeeUsernames = [];
     let counter = 0;
-    params.attendees.forEach((id) => {
-      const q = doc(db, 'users', id);
-      getDoc(q)
-        .then((data) => {
-          attendeeUsernames.push(data._document.data.value.mapValue.fields.username);
-          counter++;
-          return attendeeUsernames;
-        })
-        .then((attendeeUsernames) => {
-          setAttendees(attendeeUsernames);
-          if (counter === params.attendees.length) setLoading(false);
-        });
-    });
+    if (params.attendees.length > 0) {
+      params.attendees.forEach((id) => {
+        console.log(id, '<<<<<<<<<<<<<<<<<<<<<<<<<<<<<');
+        const q = doc(db, 'users', id);
+        getDoc(q)
+          .then((data) => {
+            console.log(data);
+            attendeeUsernames.push(data._document.data.value.mapValue.fields.username);
+            counter++;
+            return attendeeUsernames;
+          })
+          .then((attendeeUsernames) => {
+            setAttendees(attendeeUsernames);
+            if (counter === params.attendees.length) setLoading(false);
+          });
+      });
+    } else {
+      setLoading(false);
+    }
   }, [refresh]);
 
   useEffect(() => {
