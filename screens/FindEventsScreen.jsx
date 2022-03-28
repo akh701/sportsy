@@ -104,13 +104,14 @@ const styles = StyleSheet.create({
     margin: '23%',
   },
   eventCounter: {
-    marginBottom: 10,
-    textAlign: 'center',
     fontSize: 20,
     color: '#20232a',
     fontWeight: 'bold',
-    flex: 1,
-    marginTop: 30,
+  },
+  textcontainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 10,
   },
 
 });
