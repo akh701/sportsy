@@ -1,7 +1,7 @@
 import {
   KeyboardAvoidingView, StyleSheet, Text, TextInput, TouchableOpacity, View,
 } from 'react-native';
-import RNPickerSelect from 'react-native-picker-select';
+// import RNPickerSelect from 'react-native-picker-select';
 import React, { useEffect, useState } from 'react';
 import { useNavigation } from '@react-navigation/core';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
@@ -99,7 +99,7 @@ export default function RegisterScreen() {
           onChangeText={(text) => setLocation(text)}
           style={styles.input}
         />
-        <View style={styles.select}>
+        {/* <View style={styles.select}>
           <RNPickerSelect
             placeholder={{ label: 'Select you favourite sport', value: '' }}
             onValueChange={(value) => (value === 'Select an item...' ? setSport1('') : setSport1(value))}
@@ -155,7 +155,7 @@ export default function RegisterScreen() {
               },
             }}
           />
-        </View>
+        </View> */}
       </View>
 
       <View style={styles.buttonContainer}>

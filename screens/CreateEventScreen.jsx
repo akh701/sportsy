@@ -9,8 +9,6 @@ import {
 } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import Slider from '@react-native-community/slider';
-// import CalendarPicker from 'react-native-calendar-picker';
-// import TimePicker from 'react-time-picker';
 import {
   serverTimestamp, addDoc, collection,
 } from 'firebase/firestore';
@@ -22,9 +20,6 @@ export default function CreateEventScreen({ navigation }) {
     loggedInUser, setLoggedInUser, userData, setUserData,
   } = useContext(UserContext);
 
-  console.log(new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate()), 'min date ');
-
-  { /* function to handle submit event button click: */ }
   const postEvent = () => {
     if (eventDetails.title === '' || eventDetails.description === '' || eventDetails.location === '' || eventDetails.category === '' || eventDetails.spotsAvailable === '' || eventDetails.eventTime === '' || eventDetails.eventDate === '') {
       return alert('Please fill out all fields to create an event');
@@ -38,7 +33,6 @@ export default function CreateEventScreen({ navigation }) {
   });
   return (
     <ScrollView>
-      {/* User selects title here: */}
       <View style={styles.action}>
 
         <TextInput
@@ -50,7 +44,6 @@ export default function CreateEventScreen({ navigation }) {
           style={styles.textInput}
         />
       </View>
-      {/* User writes description here: */}
       <View style={styles.action}>
 
         <TextInput
@@ -65,7 +58,6 @@ export default function CreateEventScreen({ navigation }) {
 
         />
       </View>
-      {/* User enter postcode here: */}
       <View style={styles.action}>
 
         <TextInput
@@ -78,7 +70,6 @@ export default function CreateEventScreen({ navigation }) {
 
         />
       </View>
-      {/* User enters sport here: */}
       <View style={styles.eventDateSelector}>
         <Text style={styles.textInput}>
           Select the sport for the event:
@@ -102,7 +93,6 @@ export default function CreateEventScreen({ navigation }) {
         </Picker>
 
       </View>
-      {/* User selects number of spots here: */}
       <View style={styles.eventDateSelector}>
         <View>
           <Slider
@@ -126,31 +116,12 @@ export default function CreateEventScreen({ navigation }) {
           Select the time of the event:
         </Text>
       </View>
-      {/* User selects time here: */}
-      {' '}
-      {/* <View style={styles.eventDateSelector}>
-        <TimePicker disableClock onChange={(value) => setEventDetails({ ...eventDetails, eventTime: value })} />
-        User selects date here:
-      </View> */}
+
       <View style={styles.eventDateSelector}>
         <Text>
           Select the date for the event:
         </Text>
       </View>
-      {/* <View style={styles.eventDateSelector}>
-        <CalendarPicker
-          startFromMonday
-          allowRangeSelection={false}
-          // minDate={minDate}
-          // maxDate={maxDate}
-          todayBackgroundColor="#f2e6ff"
-          minDate={new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate())}
-          selectedDayColor="#7300e6"
-          selectedDayTextColor="#FFFFFF"
-          onDateChange={(value) => setEventDetails({ ...eventDetails, eventDate: value._d })}
-        />
-      </View> */}
-      {/* User submits event to database here: */}
 
       <View style={styles.userBtnWrapper}>
 
