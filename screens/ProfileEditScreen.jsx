@@ -28,13 +28,38 @@ function ProfileEditScreen() {
     },
   ]);
 
+  const apiString = "https://api.postcodes.io/postcodes"
+      const FetchPostcode = (query) => {
+        return fetch(`${apiString}/${query}`, {
+          method: 'GET',
+          headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json'
+          },
+
+        })
+        .then((res) => {
+          const apiResult = res.json()
+          return apiResult;
+        })
+        .then((data)=> {
+          const userPostcode = data.result.postcode
+          const latitude = data.result.latitude
+          const longitude = data.result.longitude
+          const region = data.result.nuts
+          const userLocation = [userPostcode, latitude, longitude, region]
+          return userLocation
+        })
+    }
+
   const handleUpdate = async () => {
     const docRef = doc(db, 'users', auth.currentUser.uid);
+    const locationArray = await FetchPostcode(loggedInUser.location)
     const fieldsToUpdate = {
       name: loggedInUser.name,
       username: loggedInUser.username,
       DOB: loggedInUser.DOB,
-      location: loggedInUser.location,
+      locationArray: locationArray,
       avatar: loggedInUser.avatar,
     };
     updateDoc(docRef, fieldsToUpdate).then((data) => {

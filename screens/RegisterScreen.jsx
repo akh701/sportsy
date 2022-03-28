@@ -17,7 +17,7 @@ export default function RegisterScreen() {
   const [username, setUserName] = useState('');
   const [DOB, setDOB] = useState('');
   const [avatar, setAvatar] = useState('https://firebasestorage.googleapis.com/v0/b/sportsy-c79d8.appspot.com/o/sportsyDefaultPhoto.png?alt=media&token=b13b51bc-cd6d-4d2e-b442-a6547a4e2add');
-  const [location, setLocation] = useState('');
+  const [location, setLocation] = useState([]);
   const [sport1, setSport1] = useState('');
   const [sport2, setSport2] = useState('');
   const [sport3, setSport3] = useState('');
@@ -34,14 +34,38 @@ export default function RegisterScreen() {
   //     });
   //     return unsubscribe;
   //   }, []);
+    const apiString = "https://api.postcodes.io/postcodes"
+      const FetchPostcode = (query) => {
+        return fetch(`${apiString}/${query}`, {
+          method: 'GET',
+          headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json'
+          },
 
-  const handleSignUp = () => {
+        })
+        .then((res) => {
+          const apiResult = res.json()
+          return apiResult;
+        })
+        .then((data)=> {
+          const userPostcode = data.result.postcode
+          const latitude = data.result.latitude
+          const longitude = data.result.longitude
+          const region = data.result.nuts
+          const userLocation = [userPostcode, latitude, longitude, region]
+          return userLocation
+        })
+    }
+
+    const handleSignUp = async () => {
+    const locationArray = await FetchPostcode(location)
     createUserWithEmailAndPassword(auth, email, password)
       .then((userCredentials) => {
         preferredSports.push(sport1, sport2, sport3);
         const { user } = userCredentials;
         setDoc(doc(db, 'users', user.uid), {
-          name, username, DOB, location, dateJoined: Timestamp.fromDate(new Date()), avatar, preferredSports,
+          name, username, DOB, locationArray, dateJoined: Timestamp.fromDate(new Date()), avatar, preferredSports,
         });
       })
       .catch((error) => alert(error.message));
