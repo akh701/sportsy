@@ -23,8 +23,8 @@ export default function CreateEventScreen({ navigation }) {
   const {
     loggedInUser, setLoggedInUser, userData, setUserData,
   } = useContext(UserContext);
-  const [eventDetails, setEventDetails] = useState({
-    attendees: [], category: '', createdAt: '', creator: userData.username, creatorId: auth.currentUser.uid, description: '', eventDate: new Date(1598051730000), locationArray: [], spotsAvailable: 0, title: '',
+    const [eventDetails, setEventDetails] = useState({
+    attendees: [], category: '', createdAt: '', creator: userData.username, creatorId: auth.currentUser.uid, description: '', eventDate: '', eventTime: '', location: '', spotsAvailable: 0, title: '', cancelled: false,
   });
 
   const apiString = 'https://api.postcodes.io/postcodes';
