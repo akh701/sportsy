@@ -34,7 +34,7 @@ export default function CreateEventScreen({ navigation }) {
   };
 
   const [eventDetails, setEventDetails] = useState({
-    attendees: [], category: '', createdAt: '', creator: userData.username, creatorId: auth.currentUser.uid, description: '', eventDate: '', eventTime: '', location: '', spotsAvailable: 0, title: '',
+    attendees: [], category: '', createdAt: '', creator: userData.username, creatorId: auth.currentUser.uid, description: '', eventDate: '', eventTime: '', location: '', spotsAvailable: 0, title: '', cancelled: false,
   });
   return (
     <ScrollView>
