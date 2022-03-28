@@ -26,11 +26,9 @@ function SingleEventScreen({ route: { params }, navigation }) {
     let counter = 0;
     if (params.attendees.length > 0) {
       params.attendees.forEach((id) => {
-        console.log(id, '<<<<<<<<<<<<<<<<<<<<<<<<<<<<<');
         const q = doc(db, 'users', id);
         getDoc(q)
           .then((data) => {
-            console.log(data);
             attendeeUsernames.push(data._document.data.value.mapValue.fields.username);
             counter++;
             return attendeeUsernames;
