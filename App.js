@@ -1,4 +1,6 @@
-import { View, SafeAreaView } from 'react-native';
+import {
+  View, SafeAreaView,
+} from 'react-native';
 import React, { useState } from 'react';
 import HeaderComponent from './screens/globalScreens/HeaderComponent';
 import MainContainer from './navigation/MainContainer';

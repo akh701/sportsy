@@ -9,8 +9,8 @@ import {
 } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import Slider from '@react-native-community/slider';
-import CalendarPicker from 'react-native-calendar-picker';
-import TimePicker from 'react-time-picker';
+// import CalendarPicker from 'react-native-calendar-picker';
+// import TimePicker from 'react-time-picker';
 import {
   serverTimestamp, addDoc, collection,
 } from 'firebase/firestore';
@@ -128,16 +128,16 @@ export default function CreateEventScreen({ navigation }) {
       </View>
       {/* User selects time here: */}
       {' '}
-      <View style={styles.eventDateSelector}>
+      {/* <View style={styles.eventDateSelector}>
         <TimePicker disableClock onChange={(value) => setEventDetails({ ...eventDetails, eventTime: value })} />
-        {/* User selects date here: */}
-      </View>
+        User selects date here:
+      </View> */}
       <View style={styles.eventDateSelector}>
         <Text>
           Select the date for the event:
         </Text>
       </View>
-      <View style={styles.eventDateSelector}>
+      {/* <View style={styles.eventDateSelector}>
         <CalendarPicker
           startFromMonday
           allowRangeSelection={false}
@@ -149,7 +149,7 @@ export default function CreateEventScreen({ navigation }) {
           selectedDayTextColor="#FFFFFF"
           onDateChange={(value) => setEventDetails({ ...eventDetails, eventDate: value._d })}
         />
-      </View>
+      </View> */}
       {/* User submits event to database here: */}
 
       <View style={styles.userBtnWrapper}>
@@ -188,7 +188,7 @@ const styles = StyleSheet.create({
     shadowColor: '#333333',
     shadowOffset: { width: -1, height: -3 },
     shadowRadius: 2,
-    shadowOpalocation: 0.4,
+    // shadowOpalocation: 0.4,
     paddingTop: 20,
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
