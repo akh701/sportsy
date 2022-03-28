@@ -40,7 +40,7 @@ export default function EventCardComponent(props) {
             {' '}
             signed up
           </Text>
-          <Text style={styles.item}>{item.location}</Text>
+          <Text style={styles.item}>{item.locationArray[0]}</Text>
           <Text style={styles.item} />
           <TouchableOpacity>
             <Text

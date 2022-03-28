@@ -13,22 +13,22 @@ const UserProfileScreen = () => {
   const [isloading, setLoading] = useState(true);
   const navigation = useNavigation()
   const docRef = doc(db, "users", auth.currentUser.uid);
-  
+
   useEffect(() => {
     setLoading(true)
-    
+
       getDoc(docRef).then(userInfo =>{
         setUserData(userInfo.data())
         setLoading(false)
         return userInfo.data()
-        
+
       }).then(data =>{
         setLoggedInUser(data)
       }).catch(error => alert(error.message))
   }, []);
 
 
-if(isloading){ return  <Text>Loading</Text>} 
+if(isloading){ return  <Text>Loading</Text>}
 
 
 //signOut functionality
@@ -49,11 +49,11 @@ if(isloading){ return  <Text>Loading</Text>}
 //---------------return ---------------------------
 
 if(userData !== null){
- 
+
   return (
-  
+
     <SafeAreaView style={styles.container} >
-     
+
         <Image
           style={styles.userImg}
           source={{uri: userData.avatar}}
@@ -61,13 +61,13 @@ if(userData !== null){
         <Text style={styles.userName}>
           {userData.username}
         </Text>
-      
+
         <Text style={styles.aboutUser}>
-      
+
         {userData.name}
         </Text>
         <View style={styles.userBtnWrapper}>
-      
+
             <>
               <TouchableOpacity style={styles.userBtn} onPress={navigateToEdit}>
                 <Text style={styles.userBtnTxt}>Edit</Text>
@@ -94,14 +94,14 @@ if(userData !== null){
           {key: userData.preferredSports[0]},
           {key: userData.preferredSports[1]},
           {key: userData.preferredSports[2]},
-        
+
         ]}
-        
+
         renderItem={({item}) => <Text style={styles.item}>{item.key}</Text>}
         keyExtractor={(item, index) => index.toString()}
       />
 
-    <Text>Location: {userData.location}</Text>
+    <Text>Location: {userData.locationArray[3]}</Text>
 
      <Text>Email: {auth.currentUser?.email}</Text>
         <View style={styles.buttonContainer}>
@@ -111,9 +111,9 @@ if(userData !== null){
      >
        <Text style={styles.buttonText}>Sign out</Text>
      </TouchableOpacity>
-     
+
      </View>
-     
+
     </SafeAreaView>
 
   )
@@ -151,7 +151,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   userImg: {
-    justifyContent: 'center', 
+    justifyContent: 'center',
     alignItems: 'center',
     height: 150,
     width: 150,

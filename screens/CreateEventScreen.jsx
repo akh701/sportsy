@@ -23,15 +23,47 @@ export default function CreateEventScreen({ navigation }) {
   const {
     loggedInUser, setLoggedInUser, userData, setUserData,
   } = useContext(UserContext);
+  const [eventDetails, setEventDetails] = useState({
+    attendees: [], category: '', createdAt: '', creator: userData.username, creatorId: auth.currentUser.uid, description: '', eventDate: '', locationArray: [], spotsAvailable: 0, title: '',
+  });
+
+  const apiString = "https://api.postcodes.io/postcodes"
+      const FetchPostcode = (query) => {
+        return fetch(`${apiString}/${query}`, {
+          method: 'GET',
+          headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json'
+          },
+
+        })
+        .then((res) => {
+          const apiResult = res.json()
+          return apiResult;
+        })
+        .then((data)=> {
+          const eventPostcode = data.result.postcode
+          const latitude = data.result.latitude
+          const longitude = data.result.longitude
+          const region = data.result.nuts
+          const eventLocation = [eventPostcode, latitude, longitude, region]
+          return eventLocation
+        })
+    }
 
   { /* function to handle submit event button click: */ }
-  const postEvent = () => {
-    if (eventDetails.title === '' || eventDetails.description === '' || eventDetails.location === '' || eventDetails.category === '' || eventDetails.spotsAvailable === '' || eventDetails.eventDate === '') {
+
+  const postEvent = async () => {
+    const locationArray = await FetchPostcode(eventDetails.locationArray)
+  
+
+    if (eventDetails.title === '' || eventDetails.description === '' || eventDetails.locationArray === '' || eventDetails.category === '' || eventDetails.spotsAvailable === '' || eventDetails.eventDate === '') {
       return alert('Please fill out all fields to create an event');
     }
-    const eventPost = { ...eventDetails, createdAt: serverTimestamp() };
+    const eventPost = { ...eventDetails, locationArray, createdAt: serverTimestamp() };
     return addDoc(collection(db, 'events'), eventPost);
   };
+
 
   const [eventDetails, setEventDetails] = useState({
     attendees: [], category: '', createdAt: '', creator: userData.username, creatorId: auth.currentUser.uid, description: '', eventDate: new Date(1598051730000), location: '', spotsAvailable: 0, title: '',
@@ -59,6 +91,9 @@ export default function CreateEventScreen({ navigation }) {
   const showTimepicker = () => {
     showMode('time');
   };
+
+
+
   return (
     <ScrollView>
       {/* User selects title here: */}
@@ -95,8 +130,8 @@ export default function CreateEventScreen({ navigation }) {
           placeholder="Type your postcode here"
           placeholderTextColor="#666666"
           autoCorrect={false}
-          value={eventDetails.location}
-          onChangeText={(txt) => setEventDetails({ ...eventDetails, location: txt })}
+          value={eventDetails.locationArray}
+          onChangeText={(txt) => setEventDetails({ ...eventDetails, locationArray: txt })}
           style={styles.textInput}
 
         />
