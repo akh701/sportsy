@@ -13,7 +13,6 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import SingleEventAttendees from './SingleEventAttendees';
 import { db } from '../../firebase';
 
-
 function SingleEventScreen({ route: { params }, navigation }) {
   const [attendees, setAttendees] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -170,9 +169,9 @@ const styles = StyleSheet.create({
   },
   attendeesContainer: {
     marginTop: 5,
-    margnLeft: 25,
+    marginLeft: 25,
   },
   container: {
-    border: 'solid',
+    // border: 'solid',
   },
 });
