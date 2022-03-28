@@ -24,38 +24,35 @@ export default function CreateEventScreen({ navigation }) {
     loggedInUser, setLoggedInUser, userData, setUserData,
   } = useContext(UserContext);
   const [eventDetails, setEventDetails] = useState({
-    attendees: [], category: '', createdAt: '', creator: userData.username, creatorId: auth.currentUser.uid, description: '', eventDate: '', locationArray: [], spotsAvailable: 0, title: '',
+    attendees: [], category: '', createdAt: '', creator: userData.username, creatorId: auth.currentUser.uid, description: '', eventDate: new Date(1598051730000), locationArray: [], spotsAvailable: 0, title: '',
   });
 
-  const apiString = "https://api.postcodes.io/postcodes"
-      const FetchPostcode = (query) => {
-        return fetch(`${apiString}/${query}`, {
-          method: 'GET',
-          headers: {
-            Accept: 'application/json',
-            'Content-Type': 'application/json'
-          },
+  const apiString = 'https://api.postcodes.io/postcodes';
+  const FetchPostcode = (query) => fetch(`${apiString}/${query}`, {
+    method: 'GET',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
 
-        })
-        .then((res) => {
-          const apiResult = res.json()
-          return apiResult;
-        })
-        .then((data)=> {
-          const eventPostcode = data.result.postcode
-          const latitude = data.result.latitude
-          const longitude = data.result.longitude
-          const region = data.result.nuts
-          const eventLocation = [eventPostcode, latitude, longitude, region]
-          return eventLocation
-        })
-    }
+  })
+    .then((res) => {
+      const apiResult = res.json();
+      return apiResult;
+    })
+    .then((data) => {
+      const eventPostcode = data.result.postcode;
+      const { latitude } = data.result;
+      const { longitude } = data.result;
+      const region = data.result.nuts;
+      const eventLocation = [eventPostcode, latitude, longitude, region];
+      return eventLocation;
+    });
 
   { /* function to handle submit event button click: */ }
 
   const postEvent = async () => {
-    const locationArray = await FetchPostcode(eventDetails.locationArray)
-  
+    const locationArray = await FetchPostcode(eventDetails.locationArray);
 
     if (eventDetails.title === '' || eventDetails.description === '' || eventDetails.locationArray === '' || eventDetails.category === '' || eventDetails.spotsAvailable === '' || eventDetails.eventDate === '') {
       return alert('Please fill out all fields to create an event');
@@ -64,10 +61,9 @@ export default function CreateEventScreen({ navigation }) {
     return addDoc(collection(db, 'events'), eventPost);
   };
 
-
-  const [eventDetails, setEventDetails] = useState({
-    attendees: [], category: '', createdAt: '', creator: userData.username, creatorId: auth.currentUser.uid, description: '', eventDate: new Date(1598051730000), location: '', spotsAvailable: 0, title: '',
-  });
+  // const [eventDetails, setEventDetails] = useState({
+  //   attendees: [], category: '', createdAt: '', creator: userData.username, creatorId: auth.currentUser.uid, description: '', eventDate: new Date(1598051730000), location: '', spotsAvailable: 0, title: '',
+  // });
 
   const [date, setDate] = useState(new Date(1598051730000));
   const [mode, setMode] = useState('date');
@@ -91,8 +87,6 @@ export default function CreateEventScreen({ navigation }) {
   const showTimepicker = () => {
     showMode('time');
   };
-
-
 
   return (
     <ScrollView>
