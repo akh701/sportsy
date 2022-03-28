@@ -65,34 +65,53 @@ function SingleEventScreen({ route: { params }, navigation }) {
   }, [navigation]);
 
   const handlePress = () => {
-    if (params.attendees.indexOf(auth.currentUser.uid) < 0) {
-      if (params.attendees.length < params.spotsAvailable) {
+    if (!params.cancelled) {
+      console.log('hello');
+      if (params.attendees.indexOf(auth.currentUser.uid) < 0) {
+        if (params.attendees.length < params.spotsAvailable) {
+          updateDoc(doc(db, 'events', params.id), {
+            attendees: arrayUnion(auth.currentUser.uid),
+          }).then(() => {
+            params.attendees.push(auth.currentUser.uid);
+            setAttendees(params.attendees);
+            setRefresh((currValue) => currValue + 1);
+          });
+        } else {
+          alert('This event is full');
+        }
+      } else {
         updateDoc(doc(db, 'events', params.id), {
-          attendees: arrayUnion(auth.currentUser.uid),
+          attendees: arrayRemove(auth.currentUser.uid),
         }).then(() => {
-          params.attendees.push(auth.currentUser.uid);
+          params.attendees = params.attendees.filter((id) => id !== auth.currentUser.uid);
           setAttendees(params.attendees);
           setRefresh((currValue) => currValue + 1);
         });
-      } else {
-        alert('This event is full');
       }
+    }
+  };
+  const handleCancel = () => {
+    console.log(params.cancelled);
+    if (params.cancelled === false) {
+      updateDoc(doc(db, 'events', params.id), {
+        cancelled: true,
+      }).then(() => {
+        setRefresh((currValue) => currValue + 1);
+      });
     } else {
       updateDoc(doc(db, 'events', params.id), {
-        attendees: arrayRemove(auth.currentUser.uid),
+        cancelled: false,
       }).then(() => {
-        params.attendees = params.attendees.filter((id) => id !== auth.currentUser.uid);
-        setAttendees(params.attendees);
         setRefresh((currValue) => currValue + 1);
       });
     }
   };
-
   if (loading) { return <Text>Loading...</Text>; }
 
   return (
     <KeyboardAvoidingView style={styles.container} behavior="padding">
       <Text style={styles.SingleEventHeader}>Event Details</Text>
+      {params.cancelled ? <Text style={styles.cancellationMessage}> EVENT HAS BEEN CANCELLED </Text> : null }
       <Text style={styles.EventTitle}>{params.title}</Text>
       <Text style={styles.EventCategory}>{params.category}</Text>
       <Text style={styles.EventCreated}>
@@ -129,10 +148,18 @@ function SingleEventScreen({ route: { params }, navigation }) {
         <TouchableOpacity
           onPress={handlePress}
           style={[styles.button, styles.buttonOutline]}
-          disable
+
         >
           <Text style={styles.buttonOutlineText}>{params.attendees.indexOf(auth.currentUser.uid) >= 0 ? 'Leave Event' : 'Join Event'}</Text>
         </TouchableOpacity>
+        {params.creatorId === auth.currentUser.uid ? (
+          <TouchableOpacity
+            onPress={handleCancel}
+            style={[styles.button, styles.buttonOutline]}
+          >
+            <Text style={styles.buttonOutlineText}>{cancel ? 'Reinstate Event' : 'Cancel Event'}</Text>
+          </TouchableOpacity>
+        ) : null}
       </View>
       <Text style={styles.attendeeLabel}>Currently attending:</Text>
       {/* <SafeAreaView>
@@ -246,5 +273,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     marginTop: 5,
+  },
+  cancellationMessage: {
+    textAlign: 'center',
+    color: 'red',
+    fontSize: 20,
+    marginTop: 5,
+    marginBottom: 5,
+    marginLeft: 20,
   },
 });
