@@ -45,22 +45,23 @@ export default function MyEventsScreen({ navigation }) {
 
   if (isloading) { return <Text>Loading</Text>; }
   return (
-    <ScrollView>
-      <SafeAreaView style={styles.container}>
-        {/* List of events user created */}
-        <View style={styles.eventContainer}>
-          <Text style={styles.textInput}>
-            My Events:
-          </Text>
-          <EventCardComponent data={userCreatedEvents} />
-          {/* List of events user is attending */}
-          <Text style={styles.textInput}>
-            Events I'm Attending:
-          </Text>
-          <EventCardComponent data={userAttendingEvents} />
-        </View>
-      </SafeAreaView>
-    </ScrollView>
+
+    <SafeAreaView style={styles.container}>
+
+      {/* List of events user created */}
+      <View style={styles.eventContainer}>
+        <Text style={styles.textInput}>
+          My Events:
+        </Text>
+        <EventCardComponent data={userCreatedEvents} />
+        {/* List of events user is attending */}
+        <Text style={styles.textInput}>
+          Events I'm Attending:
+        </Text>
+        <EventCardComponent data={userAttendingEvents} />
+      </View>
+
+    </SafeAreaView>
 
   );
 }
@@ -68,11 +69,10 @@ export default function MyEventsScreen({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
     alignItems: 'center',
   },
   eventContainer: {
-    height: '100%',
+    height: '50%',
     width: '75%',
   },
   textInput: {
@@ -80,6 +80,9 @@ const styles = StyleSheet.create({
     // marginTop: Platform.OS === 'ios' ? 0 : -12,
     paddingLeft: 10,
     color: '#333333',
+  },
+  viewTyle: {
+
   },
 
 });

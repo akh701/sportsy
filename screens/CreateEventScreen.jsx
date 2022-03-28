@@ -6,11 +6,13 @@ import {
   StyleSheet,
   ScrollView,
   TouchableOpacity,
+  Button,
 } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import Slider from '@react-native-community/slider';
-import CalendarPicker from 'react-native-calendar-picker';
-import TimePicker from 'react-time-picker';
+import DateTimePicker from '@react-native-community/datetimepicker';
+// import CalendarPicker from 'react-native-calendar-picker';
+// import TimePicker from 'react-time-picker';
 import {
   serverTimestamp, addDoc, collection,
 } from 'firebase/firestore';
@@ -22,7 +24,7 @@ export default function CreateEventScreen({ navigation }) {
     loggedInUser, setLoggedInUser, userData, setUserData,
   } = useContext(UserContext);
   const [eventDetails, setEventDetails] = useState({
-    attendees: [], category: '', createdAt: '', creator: userData.username, creatorId: auth.currentUser.uid, description: '', eventDate: '', eventTime: '', locationArray: [], spotsAvailable: 0, title: '',
+    attendees: [], category: '', createdAt: '', creator: userData.username, creatorId: auth.currentUser.uid, description: '', eventDate: '', locationArray: [], spotsAvailable: 0, title: '',
   });
 
   const apiString = "https://api.postcodes.io/postcodes"
@@ -49,19 +51,47 @@ export default function CreateEventScreen({ navigation }) {
         })
     }
 
-  console.log(new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate()), 'min date ');
-
   { /* function to handle submit event button click: */ }
+
   const postEvent = async () => {
     const locationArray = await FetchPostcode(eventDetails.locationArray)
-    console.log(locationArray)
+  
 
-    if (eventDetails.title === '' || eventDetails.description === '' || eventDetails.locationArray === '' || eventDetails.category === '' || eventDetails.spotsAvailable === '' || eventDetails.eventTime === '' || eventDetails.eventDate === '') {
+    if (eventDetails.title === '' || eventDetails.description === '' || eventDetails.locationArray === '' || eventDetails.category === '' || eventDetails.spotsAvailable === '' || eventDetails.eventDate === '') {
       return alert('Please fill out all fields to create an event');
     }
     const eventPost = { ...eventDetails, locationArray, createdAt: serverTimestamp() };
     return addDoc(collection(db, 'events'), eventPost);
   };
+
+
+  const [eventDetails, setEventDetails] = useState({
+    attendees: [], category: '', createdAt: '', creator: userData.username, creatorId: auth.currentUser.uid, description: '', eventDate: new Date(1598051730000), location: '', spotsAvailable: 0, title: '',
+  });
+
+  const [date, setDate] = useState(new Date(1598051730000));
+  const [mode, setMode] = useState('date');
+  const [show, setShow] = useState(false);
+
+  const onChange = (event, selectedDate) => {
+    const currentDate = selectedDate;
+    setShow(false);
+    setEventDetails({ ...eventDetails, eventDate: currentDate });
+  };
+
+  const showMode = (currentMode) => {
+    setShow(true);
+    setMode(currentMode);
+  };
+
+  const showDatepicker = () => {
+    showMode('date');
+  };
+
+  const showTimepicker = () => {
+    showMode('time');
+  };
+
 
 
   return (
@@ -150,43 +180,35 @@ export default function CreateEventScreen({ navigation }) {
 
           </Text>
         </View>
+      </View>
+      <View>
+        <View>
+          <Button onPress={showDatepicker} title="Select Date" />
+        </View>
+        <View>
+          <Button onPress={showTimepicker} title="Select Time" />
+        </View>
         <Text>
-          Select the time of the event:
+          Selected:
+          {' '}
+          {eventDetails.eventDate.toLocaleString()}
         </Text>
-      </View>
-      {/* User selects time here: */}
-      {' '}
-      <View style={styles.eventDateSelector}>
-        <TimePicker disableClock onChange={(value) => setEventDetails({ ...eventDetails, eventTime: value })} />
-        {/* User selects date here: */}
-      </View>
-      <View style={styles.eventDateSelector}>
-        <Text>
-          Select the date for the event:
-        </Text>
-      </View>
-      <View style={styles.eventDateSelector}>
-        <CalendarPicker
-          startFromMonday
-          allowRangeSelection={false}
-          // minDate={minDate}
-          // maxDate={maxDate}
-          todayBackgroundColor="#f2e6ff"
-          minDate={new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate())}
-          selectedDayColor="#7300e6"
-          selectedDayTextColor="#FFFFFF"
-          onDateChange={(value) => setEventDetails({ ...eventDetails, eventDate: value._d })}
+        {show && (
+        <DateTimePicker
+          testID="dateTimePicker"
+          value={eventDetails.eventDate}
+          mode={mode}
+          is24Hour
+          onChange={onChange}
         />
+        )}
       </View>
       {/* User submits event to database here: */}
 
       <View style={styles.userBtnWrapper}>
-
-        <>
-          <TouchableOpacity style={styles.userBtn} onPress={postEvent}>
-            <Text style={styles.userBtnTxt}>Create Event</Text>
-          </TouchableOpacity>
-        </>
+        <TouchableOpacity style={styles.userBtn} onPress={postEvent}>
+          <Text style={styles.userBtnTxt}>Create Event</Text>
+        </TouchableOpacity>
       </View>
     </ScrollView>
 
@@ -197,6 +219,8 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   commandButton: {
     padding: 15,
@@ -216,7 +240,6 @@ const styles = StyleSheet.create({
     shadowColor: '#333333',
     shadowOffset: { width: -1, height: -3 },
     shadowRadius: 2,
-    shadowOpalocation: 0.4,
     paddingTop: 20,
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,

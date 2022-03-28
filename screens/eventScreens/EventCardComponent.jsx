@@ -1,9 +1,9 @@
 import { NavigationRouteContext, useNavigation } from '@react-navigation/core';
 import React from 'react';
 import {
-  View, Text, StyleSheet, FlatList, SafeAreaView, ScrollView,
+  View, Text, StyleSheet, FlatList, SafeAreaView, ScrollView, TouchableOpacity,
 } from 'react-native';
-import { TouchableOpacity } from 'react-native-web';
+import moment from 'moment';
 
 export default function EventCardComponent(props) {
   const eventDate = (new Intl.DateTimeFormat('en-US', {
@@ -15,6 +15,8 @@ export default function EventCardComponent(props) {
   const navigateToSinglePage = (event) => {
     navigation.navigate('singleEvent', event);
   };
+
+  console.log(props.data[0], 'event date here');
 
   return (
     <FlatList
@@ -28,8 +30,9 @@ export default function EventCardComponent(props) {
           </Text>
           <Text style={styles.item}>{item.title}</Text>
           <Text style={styles.item}>{item.category}</Text>
-          <Text style={styles.item}>{item.eventTime}</Text>
-          <Text style={styles.item}>{eventDate}</Text>
+          {/* <Text style={styles.item}>{new Date(item.eventDate * 1000).toLocaleString()}</Text> */}
+          <Text style={styles.item}>{moment(item.eventDate.toDate().toString()).format('MMMM Do YYYY, h:mm:ss a')}</Text>
+          <Text style={styles.item}>{item.eventCard}</Text>
           <Text style={styles.item}>
             {item.attendees.length}
             /
@@ -42,9 +45,9 @@ export default function EventCardComponent(props) {
           <TouchableOpacity>
             <Text
               onPress={() => { navigateToSinglePage(item); }}
-              style={{ fontSize: 11, fontWeight: 'bold', float: 'right' }}
+              style={{ fontSize: 11, fontWeight: 'bold' }}
             >
-              more...
+              View Event
 
             </Text>
           </TouchableOpacity>

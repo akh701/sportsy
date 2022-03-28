@@ -213,10 +213,10 @@ const styles = StyleSheet.create({
   },
   attendeesContainer: {
     marginTop: 5,
-    margnLeft: 25,
+    marginLeft: 25,
   },
   container: {
-    border: 'solid',
+
   },
   button: {
     backgroundColor: '#63CDAB',
