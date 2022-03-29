@@ -30,7 +30,6 @@ const UserProfileScreen = () => {
 
 if(isloading){ return  <Text>Loading</Text>}
 
-
 //signOut functionality
   const handleSignOut = () => {
     auth

@@ -32,7 +32,6 @@ function SingleEventScreen({ route: { params }, navigation }) {
         const q = doc(db, 'users', id);
         getDoc(q)
           .then((data) => {
-            console.log(data, 'singlevent');
             attendeeUsernames.push(data._document.data.value.mapValue.fields.username);
             counter++;
             return attendeeUsernames;
@@ -183,7 +182,6 @@ const styles = StyleSheet.create({
     marginRight: 25,
   },
   description: {
-    textAlign: 'justify',
     borderWidth: 1,
     borderColor: '#20232a',
     borderRadius: 6,
@@ -192,6 +190,8 @@ const styles = StyleSheet.create({
   descriptionContainer: {
     flex: 1,
     padding: 24,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   spotsTaken: {
     textAlign: 'center',

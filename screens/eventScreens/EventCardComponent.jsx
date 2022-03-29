@@ -16,8 +16,6 @@ export default function EventCardComponent(props) {
     navigation.navigate('singleEvent', event);
   };
 
-  console.log(props.data[0], 'event date here');
-
   return (
     <FlatList
       keyExtractor={(i) => i.id}
