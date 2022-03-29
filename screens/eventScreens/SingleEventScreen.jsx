@@ -2,15 +2,17 @@ import React, { useState, useEffect, useContext } from 'react';
 import {
   View,
   Text,
-  KeyboardAvoidingView,
+  ScrollView,
   StyleSheet,
   TouchableOpacity,
+  Dimensions,
 } from 'react-native';
 import moment from 'moment';
 import {
   getDoc, doc, updateDoc, arrayUnion, arrayRemove,
 } from 'firebase/firestore';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import MapView, { Marker, Circle } from 'react-native-maps';
 import SingleEventAttendees from './SingleEventAttendees';
 import { db, auth } from '../../firebase';
 import { UserContext } from '../../contexts/UserContext';
@@ -22,6 +24,8 @@ function SingleEventScreen({ route: { params }, navigation }) {
   const [refresh, setRefresh] = useState(0);
   const eventCreatedDate = moment(params.createdAt.milliseconds).format('MMMM Do YYYY, h:mm:ss a');
   const eventDate = moment(params.eventDate.seconds * 1000).format('MMMM Do YYYY, h:mm:ss a');
+
+  console.log(params.locationArray);
 
   const requestData = (array) => {
     setLoading(true);
@@ -88,7 +92,7 @@ function SingleEventScreen({ route: { params }, navigation }) {
         });
       }
     } else {
-        alert('You are not able to join a cancelled event')
+      alert('You are not able to join a cancelled event');
     }
   };
 
@@ -113,7 +117,7 @@ function SingleEventScreen({ route: { params }, navigation }) {
   if (loading) { return <Text>Loading...</Text>; }
 
   return (
-    <KeyboardAvoidingView style={styles.container} behavior="padding">
+    <ScrollView style={styles.container}>
       <Text style={styles.SingleEventHeader}>Event Details</Text>
       {params.cancelled ? <Text style={styles.cancellationMessage}> EVENT HAS BEEN CANCELLED </Text> : null }
       <Text style={styles.EventTitle}>{params.title}</Text>
@@ -163,13 +167,36 @@ function SingleEventScreen({ route: { params }, navigation }) {
         ) }
       </View>
       <Text style={styles.attendeeLabel}>Currently attending:</Text>
-      <SafeAreaView>
-        <View style={styles.attendeesContainer}>
-          <SingleEventAttendees attendees={attendees} keyExtractor={(result) => result.stringValue} />
-        </View>
-      </SafeAreaView>
-
-    </KeyboardAvoidingView>
+      <View style={styles.attendeesContainer}>
+        <SingleEventAttendees attendees={attendees} keyExtractor={(result) => result.stringValue} />
+      </View>
+      <View style={styles.mapContainer}>
+        <MapView
+          style={styles.map}
+          initialRegion={{
+            latitude: params.locationArray[1],
+            longitude: params.locationArray[2],
+            latitudeDelta: 0.0922,
+            longitudeDelta: 0.0421,
+          }}
+        >
+          <Marker
+            coordinate={{
+              latitude: params.locationArray[1],
+              longitude: params.locationArray[2],
+            }}
+            pinColor="purple"
+          />
+          <Circle
+            center={{
+              latitude: params.locationArray[1],
+              longitude: params.locationArray[2],
+            }}
+            radius={1000}
+          />
+        </MapView>
+      </View>
+    </ScrollView>
   );
 }
 
@@ -236,7 +263,6 @@ const styles = StyleSheet.create({
     marginLeft: 25,
   },
   container: {
-
   },
   button: {
     backgroundColor: '#63CDAB',
@@ -273,5 +299,14 @@ const styles = StyleSheet.create({
     fontSize: 20,
     marginTop: 5,
     marginBottom: 5,
+  },
+  map: {
+    width: '90%',
+    height: 200,
+  },
+  mapContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 5,
   },
 });
