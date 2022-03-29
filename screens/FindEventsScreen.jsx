@@ -83,12 +83,10 @@ export default function FindEventsScreen({ navigation }) {
           {result.length}
         </Text>
       </View>
-      <ScrollView>
         <EventsList
           result={result}
           setResult={setResult}
         />
-      </ScrollView>
     </View>
   );
 }

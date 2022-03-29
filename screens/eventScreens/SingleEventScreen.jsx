@@ -21,7 +21,7 @@ function SingleEventScreen({ route: { params }, navigation }) {
   const [loading, setLoading] = useState(true);
   const [refresh, setRefresh] = useState(0);
   const eventCreatedDate = moment(params.createdAt.milliseconds).format('MMMM Do YYYY, h:mm:ss a');
-  const eventDate = moment(params.eventDate.seconds * 1000).format('MMMM Do YYYY');
+  const eventDate = moment(params.eventDate.seconds * 1000).format('MMMM Do YYYY, h:mm:ss a');
 
   const requestData = (array) => {
     setLoading(true);
@@ -134,10 +134,7 @@ function SingleEventScreen({ route: { params }, navigation }) {
         This event will take place on
         {' '}
         {eventDate}
-        {' '}
-        at
-        {' '}
-        {params.eventTime}
+        {' .'}
       </Text>
       <Text style={styles.spotsTaken}>
         {params.attendees.length}

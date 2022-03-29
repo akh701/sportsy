@@ -6,7 +6,7 @@ import {
 
 export default function SingleEventAttendees({ attendees }) {
   return (
-    attendees.map((i) => <Text style={styles.attendee} key={i.stringValue}>{i.stringValue}</Text>)
+    attendees.map((user, index) => <Text style={styles.attendee} key={index}>{user.stringValue}</Text>)
   );
 }
 
