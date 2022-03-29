@@ -2,11 +2,12 @@ import React, { useState, useEffect, useContext } from 'react';
 import {
   View,
   Text,
-  KeyboardAvoidingView,
   StyleSheet,
   TouchableOpacity,
   TextInput,
   ScrollView, FlatList,
+  Dimensions,
+
 } from 'react-native';
 import moment from 'moment';
 import {
@@ -15,6 +16,7 @@ import {
   serverTimestamp, addDoc, collection, query, where, getDocs, orderBy, deleteDoc,
 } from 'firebase/firestore';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import MapView, { Marker, Circle } from 'react-native-maps';
 import SingleEventAttendees from './SingleEventAttendees';
 import { db, auth } from '../../firebase';
 import { UserContext } from '../../contexts/UserContext';
@@ -29,8 +31,6 @@ function SingleEventScreen({ route, navigation }) {
     comment: '', eventId: route.params.id, timePosted: serverTimestamp(), username: userData.username,
   });
   const [refresh, setRefresh] = useState(0);
-  const eventCreatedDate = moment(route.params.createdAt.milliseconds).format('MMMM Do YYYY, h:mm:ss a');
-  const eventDate = moment(route.params.eventDate.seconds * 1000).format('MMMM Do YYYY');
   const commentsQuery = query(collection(db, 'comments'), orderBy('timePosted'), where('eventId', '==', route.params.id));
 
   const deleteComment = (id) => {
@@ -48,6 +48,10 @@ function SingleEventScreen({ route, navigation }) {
     addDoc(collection(db, 'comments'), comment).then(() => { getComments(); });
     setComment({ ...comment, comment: 'Your comment has been posted!' });
   };
+
+  const eventCreatedDate = moment(params.createdAt.milliseconds).format('MMMM Do YYYY, h:mm:ss a');
+  const eventDate = moment(params.eventDate.seconds * 1000).format('MMMM Do YYYY, h:mm:ss a');
+
 
   const requestData = (array) => {
     setLoading(true);
@@ -150,67 +154,86 @@ function SingleEventScreen({ route, navigation }) {
   if (loading) { return <Text>Loading...</Text>; }
 
   return (
-    <ScrollView>
-      <KeyboardAvoidingView style={styles.container} behavior="padding">
-        <Text style={styles.SingleEventHeader}>Event Details</Text>
-        {route.params.cancelled ? <Text style={styles.cancellationMessage}> EVENT HAS BEEN CANCELLED </Text> : null }
-        <Text style={styles.EventTitle}>{route.params.title}</Text>
-        <Text style={styles.EventCategory}>{route.params.category}</Text>
-        <Text style={styles.EventCreated}>
-          Event created on
-          {' '}
-          {eventCreatedDate}
-          {' '}
-          and was created by
-          {' '}
-          {route.params.creator}
-        </Text>
-        <View>
-          <Text numberOfLines={10} ellipsizeMode="tail" style={styles.description}>{route.params.description}</Text>
-        </View>
-        <Text style={styles.eventDateAndTime}>
-          This event will take place on
-          {' '}
-          {eventDate}
-          {' '}
-          at
-          {' '}
-          {route.params.eventTime}
-        </Text>
-        <Text style={styles.spotsTaken}>
-          {route.params.attendees.length}
-          {' '}
-          of the
-          {' '}
-          {route.params.spotsAvailable}
-          {' '}
-          available spots at this event have been taken.
-        </Text>
-        <View style={styles.joinLeaveEventBtn}>
-          {route.params.creatorId === auth.currentUser.uid ? (
-            <TouchableOpacity
-              onPress={handleCancel}
-              style={[styles.button, styles.buttonOutline]}
-            >
-              <Text style={styles.buttonOutlineText}>{route.params.cancelled ? 'Reinstate Event' : 'Cancel Event'}</Text>
-            </TouchableOpacity>
-          ) : (
-            <TouchableOpacity
-              onPress={handlePress}
-              style={[styles.button, styles.buttonOutline]}
-            >
-              <Text style={styles.buttonOutlineText}>{route.params.attendees.indexOf(auth.currentUser.uid) >= 0 ? 'Leave Event' : 'Join Event'}</Text>
-            </TouchableOpacity>
-          ) }
-        </View>
-        <Text style={styles.attendeeLabel}>Currently attending:</Text>
-        <SafeAreaView>
-          <View style={styles.attendeesContainer}>
-            <SingleEventAttendees attendees={attendees} keyExtractor={(result) => result.stringValue} />
-          </View>
-        </SafeAreaView>
-
-        {/* POST COMMENTS */}
+    <ScrollView style={styles.container}>
+      <Text style={styles.SingleEventHeader}>Event Details</Text>
+      {params.cancelled ? <Text style={styles.cancellationMessage}> EVENT HAS BEEN CANCELLED </Text> : null }
+      <Text style={styles.EventTitle}>{params.title}</Text>
+      <Text style={styles.EventCategory}>{params.category}</Text>
+      <Text style={styles.EventCreated}>
+        Event created on
+        {' '}
+        {eventCreatedDate}
+        {' '}
+        and was created by
+        {' '}
+        {params.creator}
+      </Text>
+      <View style={styles.descriptionContainer}>
+        <Text numberOfLines={10} ellipsizeMode="tail" style={styles.description}>{params.description}</Text>
+      </View>
+      <Text style={styles.eventDateAndTime}>
+        This event will take place on
+        {' '}
+        {eventDate}
+        {' .'}
+      </Text>
+      <Text style={styles.spotsTaken}>
+        {params.attendees.length}
+        {' '}
+        of the
+        {' '}
+        {params.spotsAvailable}
+        {' '}
+        available spots at this event have been taken.
+      </Text>
+      <View style={styles.joinLeaveEventBtn}>
+        {params.creatorId === auth.currentUser.uid ? (
+          <TouchableOpacity
+            onPress={handleCancel}
+            style={[styles.button, styles.buttonOutline]}
+          >
+            <Text style={styles.buttonOutlineText}>{params.cancelled ? 'Reinstate Event' : 'Cancel Event'}</Text>
+          </TouchableOpacity>
+        ) : (
+          <TouchableOpacity
+            onPress={handlePress}
+            style={[styles.button, styles.buttonOutline]}
+          >
+            <Text style={styles.buttonOutlineText}>{params.attendees.indexOf(auth.currentUser.uid) >= 0 ? 'Leave Event' : 'Join Event'}</Text>
+          </TouchableOpacity>
+        ) }
+      </View>
+      <Text style={styles.attendeeLabel}>Currently attending:</Text>
+      <View style={styles.attendeesContainer}>
+        <SingleEventAttendees attendees={attendees} keyExtractor={(result) => result.stringValue} />
+      </View>
+      <View style={styles.mapContainer}>
+        <MapView
+          style={styles.map}
+          initialRegion={{
+            latitude: params.locationArray[1],
+            longitude: params.locationArray[2],
+            latitudeDelta: 0.0922,
+            longitudeDelta: 0.0421,
+          }}
+        >
+          <Marker
+            coordinate={{
+              latitude: params.locationArray[1],
+              longitude: params.locationArray[2],
+            }}
+            pinColor="purple"
+          />
+          <Circle
+            center={{
+              latitude: params.locationArray[1],
+              longitude: params.locationArray[2],
+            }}
+            radius={1000}
+          />
+        </MapView>
+      </View>
+      {/* POST COMMENTS */}
         <View style={styles.action}>
 
           <TextInput
@@ -280,7 +303,6 @@ function SingleEventScreen({ route, navigation }) {
         />
         {/* <CommentCardComponent data={postedComments} /> */}
 
-      </KeyboardAvoidingView>
     </ScrollView>
   );
 }
@@ -313,7 +335,6 @@ const styles = StyleSheet.create({
     marginRight: 25,
   },
   description: {
-    textAlign: 'justify',
     borderWidth: 1,
     borderColor: '#20232a',
     borderRadius: 6,
@@ -322,6 +343,8 @@ const styles = StyleSheet.create({
   descriptionContainer: {
     flex: 1,
     padding: 24,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   spotsTaken: {
     textAlign: 'center',
@@ -347,7 +370,6 @@ const styles = StyleSheet.create({
     marginLeft: 25,
   },
   container: {
-
   },
   cardOutline: {
     backgroundColor: 'white',
@@ -397,5 +419,14 @@ const styles = StyleSheet.create({
     fontSize: 20,
     marginTop: 5,
     marginBottom: 5,
+  },
+  map: {
+    width: '90%',
+    height: 200,
+  },
+  mapContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 5,
   },
 });

@@ -45,12 +45,14 @@ export default function MyEventsScreen({ navigation }) {
           My Events:
         </Text>
         <EventCardComponent data={userCreatedEvents} />
+      </View>
+      <View style={styles.eventAttending}>
         {/* List of events user is attending */}
-        <Text style={styles.textInput}>
+        <Text style={[styles.textInput, styles.attending]}>
           Events I'm Attending:
         </Text>
         <EventCardComponent data={userAttendingEvents} />
-      </View>
+       </View>
 
     </SafeAreaView>
 
@@ -61,19 +63,29 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center',
+    height: '100%',
+    justifyContent: 'center',
+    marginTop: 10,
   },
   eventContainer: {
     height: '50%',
     width: '75%',
+    borderBottomColor: 'black',
+    borderBottomWidth: 1,
+  },
+  eventAttending: {
+    height: '50%',
+    width: '75%',
   },
   textInput: {
-    flex: 1,
-    // marginTop: Platform.OS === 'ios' ? 0 : -12,
-    paddingLeft: 10,
+    backgroundColor: 'transparent',
+    textAlign: 'center',
+    fontSize: 18,
     color: '#333333',
+    marginTop: '5%',
   },
-  viewTyle: {
-
+  attending: {
+    marginBottom: 5,
   },
 
 });
