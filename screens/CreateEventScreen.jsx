@@ -61,7 +61,7 @@ export default function CreateEventScreen({ navigation }) {
       return alert('Please fill out all fields to create an event');
     }
     const eventPost = { ...eventDetails, locationArray, createdAt: serverTimestamp() };
-    Navigation.navigate('singleEvent', eventPost);
+    Navigation.navigate('My Events');
     return addDoc(collection(db, 'events'), eventPost);
   };
 
