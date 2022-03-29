@@ -207,7 +207,7 @@ function SingleEventScreen({ route, navigation }) {
         <SingleEventAttendees attendees={attendees} keyExtractor={(result) => result.stringValue} />
       </View>
       <View style={styles.mapContainer}>
-        <MapView
+        {/* <MapView
           style={styles.map}
           initialRegion={{
             latitude: route.params.locationArray[1],
@@ -230,7 +230,7 @@ function SingleEventScreen({ route, navigation }) {
             }}
             radius={1000}
           />
-        </MapView>
+        </MapView> */}
       </View>
       {/* POST COMMENTS */}
       <View style={styles.action}>
