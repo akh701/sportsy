@@ -49,9 +49,8 @@ function SingleEventScreen({ route, navigation }) {
     setComment({ ...comment, comment: 'Your comment has been posted!' });
   };
 
-  const eventCreatedDate = moment(params.createdAt.milliseconds).format('MMMM Do YYYY, h:mm:ss a');
-  const eventDate = moment(params.eventDate.seconds * 1000).format('MMMM Do YYYY, h:mm:ss a');
-
+  const eventCreatedDate = moment(route.params.createdAt.milliseconds).format('MMMM Do YYYY, h:mm:ss a');
+  const eventDate = moment(route.params.eventDate.seconds * 1000).format('MMMM Do YYYY, h:mm:ss a');
 
   const requestData = (array) => {
     setLoading(true);
@@ -156,9 +155,9 @@ function SingleEventScreen({ route, navigation }) {
   return (
     <ScrollView style={styles.container}>
       <Text style={styles.SingleEventHeader}>Event Details</Text>
-      {params.cancelled ? <Text style={styles.cancellationMessage}> EVENT HAS BEEN CANCELLED </Text> : null }
-      <Text style={styles.EventTitle}>{params.title}</Text>
-      <Text style={styles.EventCategory}>{params.category}</Text>
+      {route.params.cancelled ? <Text style={styles.cancellationMessage}> EVENT HAS BEEN CANCELLED </Text> : null }
+      <Text style={styles.EventTitle}>{route.params.title}</Text>
+      <Text style={styles.EventCategory}>{route.params.category}</Text>
       <Text style={styles.EventCreated}>
         Event created on
         {' '}
@@ -166,10 +165,10 @@ function SingleEventScreen({ route, navigation }) {
         {' '}
         and was created by
         {' '}
-        {params.creator}
+        {route.params.creator}
       </Text>
       <View style={styles.descriptionContainer}>
-        <Text numberOfLines={10} ellipsizeMode="tail" style={styles.description}>{params.description}</Text>
+        <Text numberOfLines={10} ellipsizeMode="tail" style={styles.description}>{route.params.description}</Text>
       </View>
       <Text style={styles.eventDateAndTime}>
         This event will take place on
@@ -178,28 +177,28 @@ function SingleEventScreen({ route, navigation }) {
         {' .'}
       </Text>
       <Text style={styles.spotsTaken}>
-        {params.attendees.length}
+        {route.params.attendees.length}
         {' '}
         of the
         {' '}
-        {params.spotsAvailable}
+        {route.params.spotsAvailable}
         {' '}
         available spots at this event have been taken.
       </Text>
       <View style={styles.joinLeaveEventBtn}>
-        {params.creatorId === auth.currentUser.uid ? (
+        {route.params.creatorId === auth.currentUser.uid ? (
           <TouchableOpacity
             onPress={handleCancel}
             style={[styles.button, styles.buttonOutline]}
           >
-            <Text style={styles.buttonOutlineText}>{params.cancelled ? 'Reinstate Event' : 'Cancel Event'}</Text>
+            <Text style={styles.buttonOutlineText}>{route.params.cancelled ? 'Reinstate Event' : 'Cancel Event'}</Text>
           </TouchableOpacity>
         ) : (
           <TouchableOpacity
             onPress={handlePress}
             style={[styles.button, styles.buttonOutline]}
           >
-            <Text style={styles.buttonOutlineText}>{params.attendees.indexOf(auth.currentUser.uid) >= 0 ? 'Leave Event' : 'Join Event'}</Text>
+            <Text style={styles.buttonOutlineText}>{route.params.attendees.indexOf(auth.currentUser.uid) >= 0 ? 'Leave Event' : 'Join Event'}</Text>
           </TouchableOpacity>
         ) }
       </View>
@@ -208,83 +207,58 @@ function SingleEventScreen({ route, navigation }) {
         <SingleEventAttendees attendees={attendees} keyExtractor={(result) => result.stringValue} />
       </View>
       <View style={styles.mapContainer}>
-        <MapView
+        {/* <MapView
           style={styles.map}
           initialRegion={{
-            latitude: params.locationArray[1],
-            longitude: params.locationArray[2],
+            latitude: route.params.locationArray[1],
+            longitude: route.params.locationArray[2],
             latitudeDelta: 0.0922,
             longitudeDelta: 0.0421,
           }}
         >
           <Marker
             coordinate={{
-              latitude: params.locationArray[1],
-              longitude: params.locationArray[2],
+              latitude: route.params.locationArray[1],
+              longitude: route.params.locationArray[2],
             }}
             pinColor="purple"
           />
           <Circle
             center={{
-              latitude: params.locationArray[1],
-              longitude: params.locationArray[2],
+              latitude: route.params.locationArray[1],
+              longitude: route.params.locationArray[2],
             }}
             radius={1000}
           />
-        </MapView>
+        </MapView> */}
       </View>
       {/* POST COMMENTS */}
-        <View style={styles.action}>
+      <View style={styles.action}>
 
-          <TextInput
-            placeholder="Type your comment here..."
-            placeholderTextColor="#666666"
-            autoCorrect={false}
-            value={comment.comment}
-            onChangeText={(txt) => setComment({ ...comment, comment: txt })}
-            style={styles.textInput}
-            multiline
-            numberOfLines={4}
-          />
-        </View>
-        <View />
+        <TextInput
+          placeholder="Type your comment here..."
+          placeholderTextColor="#666666"
+          autoCorrect={false}
+          value={comment.comment}
+          onChangeText={(txt) => setComment({ ...comment, comment: txt })}
+          style={styles.textInput}
+          multiline
+          numberOfLines={4}
+        />
+      </View>
+      <View />
 
-        <View style={styles.userBtnWrapper}>
-          <TouchableOpacity style={styles.userBtn} onPress={handleCommentPress}>
-            <Text style={styles.userBtnTxt}>Post Comment</Text>
-          </TouchableOpacity>
-        </View>
-        <FlatList
-          keyExtractor={(i) => i.id}
-          data={postedComments}
-          renderItem={({ item }) => {
-            if (item.username === userData.username) {
-              return (
-                <View style={[styles.eventCard, styles.cardOutline]}>
-                  <Text style={styles.item}>
-                    Comment By
-                    {' '}
-                    {item.username}
-                  </Text>
-
-                  <Text style={styles.item}>{moment(item.timePosted.toDate().toString()).format('MMMM Do YYYY, h:mm:ss a')}</Text>
-                  <Text>{item.comment}</Text>
-
-                  <TouchableOpacity>
-                    <Text
-                      onPress={() => {
-                        deleteComment(item.id);
-                      }}
-                      style={{ fontSize: 11, fontWeight: 'bold' }}
-                    >
-                      Delete Comment
-
-                    </Text>
-                  </TouchableOpacity>
-
-                </View>
-              );
-            } return (
+      <View style={styles.userBtnWrapper}>
+        <TouchableOpacity style={styles.userBtn} onPress={handleCommentPress}>
+          <Text style={styles.userBtnTxt}>Post Comment</Text>
+        </TouchableOpacity>
+      </View>
+      <FlatList
+        keyExtractor={(i) => i.id}
+        data={postedComments}
+        renderItem={({ item }) => {
+          if (item.username === userData.username) {
+            return (
               <View style={[styles.eventCard, styles.cardOutline]}>
                 <Text style={styles.item}>
                   Comment By
@@ -295,13 +269,38 @@ function SingleEventScreen({ route, navigation }) {
                 <Text style={styles.item}>{moment(item.timePosted.toDate().toString()).format('MMMM Do YYYY, h:mm:ss a')}</Text>
                 <Text>{item.comment}</Text>
 
+                <TouchableOpacity>
+                  <Text
+                    onPress={() => {
+                      deleteComment(item.id);
+                    }}
+                    style={{ fontSize: 11, fontWeight: 'bold' }}
+                  >
+                    Delete Comment
+
+                  </Text>
+                </TouchableOpacity>
+
               </View>
             );
-          }}
-          keyExtractor={(item, index) => index}
-          showsVerticalScrollIndicator={false}
-        />
-        {/* <CommentCardComponent data={postedComments} /> */}
+          } return (
+            <View style={[styles.eventCard, styles.cardOutline]}>
+              <Text style={styles.item}>
+                Comment By
+                {' '}
+                {item.username}
+              </Text>
+
+              <Text style={styles.item}>{moment(item.timePosted.toDate().toString()).format('MMMM Do YYYY, h:mm:ss a')}</Text>
+              <Text>{item.comment}</Text>
+
+            </View>
+          );
+        }}
+        keyExtractor={(item, index) => index}
+        showsVerticalScrollIndicator={false}
+      />
+      {/* <CommentCardComponent data={postedComments} /> */}
 
     </ScrollView>
   );
