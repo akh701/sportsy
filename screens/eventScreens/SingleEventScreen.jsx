@@ -25,8 +25,6 @@ function SingleEventScreen({ route: { params }, navigation }) {
   const eventCreatedDate = moment(params.createdAt.milliseconds).format('MMMM Do YYYY, h:mm:ss a');
   const eventDate = moment(params.eventDate.seconds * 1000).format('MMMM Do YYYY, h:mm:ss a');
 
-  console.log(params.locationArray);
-
   const requestData = (array) => {
     setLoading(true);
     const attendeeUsernames = [];
