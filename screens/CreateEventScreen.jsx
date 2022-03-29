@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
   Button,
 } from 'react-native';
+import { NavigationRouteContext, useNavigation } from '@react-navigation/core';
 import { Picker } from '@react-native-picker/picker';
 import Slider from '@react-native-community/slider';
 import DateTimePicker from '@react-native-community/datetimepicker';
@@ -23,9 +24,11 @@ export default function CreateEventScreen({ navigation }) {
   const {
     loggedInUser, setLoggedInUser, userData, setUserData,
   } = useContext(UserContext);
-    const [eventDetails, setEventDetails] = useState({
-    attendees: [], category: '', createdAt: '', creator: userData.username, creatorId: auth.currentUser.uid, description: '', eventDate: '', eventTime: '', location: '', spotsAvailable: 0, title: '', cancelled: false,
+  const [eventDetails, setEventDetails] = useState({
+    attendees: [], category: '', createdAt: '', creator: userData.username, creatorId: auth.currentUser.uid, description: '', eventDate: new Date(1598051730000), location: '', spotsAvailable: 0, title: '', cancelled: false,
   });
+
+  const Navigation = useNavigation();
 
   const apiString = 'https://api.postcodes.io/postcodes';
   const FetchPostcode = (query) => fetch(`${apiString}/${query}`, {
@@ -58,12 +61,9 @@ export default function CreateEventScreen({ navigation }) {
       return alert('Please fill out all fields to create an event');
     }
     const eventPost = { ...eventDetails, locationArray, createdAt: serverTimestamp() };
+    Navigation.navigate('singleEvent', eventPost);
     return addDoc(collection(db, 'events'), eventPost);
   };
-
-  // const [eventDetails, setEventDetails] = useState({
-  //   attendees: [], category: '', createdAt: '', creator: userData.username, creatorId: auth.currentUser.uid, description: '', eventDate: new Date(1598051730000), location: '', spotsAvailable: 0, title: '',
-  // });
 
   const [date, setDate] = useState(new Date(1598051730000));
   const [mode, setMode] = useState('date');
