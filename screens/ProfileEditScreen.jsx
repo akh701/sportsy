@@ -8,9 +8,11 @@ import {
   StyleSheet,
   Alert,
   Keyboard,
+  Image,
 } from 'react-native';
 import { doc, updateDoc } from 'firebase/firestore';
 import { UserContext } from '../contexts/UserContext';
+import GlobalStyles from '../constants/styles/GlobalStyles'
 
 // import ImagePicker from 'react-native-image-crop-picker';
 import { auth, db } from '../firebase';
@@ -69,9 +71,13 @@ function ProfileEditScreen() {
 
   return (
     <KeyboardAvoidingView style={styles.container} behavior="padding">
-      <View style={styles.inputContainer}>
+      <View style={{...styles.inputContainer, ...GlobalStyles.utilMarginTop}}>
         <View style={{ alignItems: 'center' }}>
-          <Text style={{ marginTop: 10, fontSize: 18, fontWeight: 'bold' }}>
+        <Image
+          style={{...styles.userImg, ...GlobalStyles.utilMarginTop10}}
+          source={{uri: loggedInUser.avatar}}
+        />
+          <Text style={{ marginTop: 10, fontSize: 18, fontWeight: 'bold', textTransform: 'capitalize' }}>
             {loggedInUser ? loggedInUser.name : ''}
           </Text>
         </View>
@@ -159,7 +165,7 @@ const styles = StyleSheet.create({
     width: '80%',
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: 40,
+    marginTop: 30,
   },
   button: {
     backgroundColor: '#63CDAB',
@@ -184,5 +190,13 @@ const styles = StyleSheet.create({
     color: '#63CDAB',
     fontWeight: '700',
     fontSize: 16,
+  },
+  userImg: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: 150,
+    width: 150,
+    borderRadius: 75,
+    marginTop:10,
   },
 });

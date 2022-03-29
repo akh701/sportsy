@@ -71,7 +71,7 @@ if(userData !== null){
               <TouchableOpacity style={styles.userBtn} onPress={navigateToEdit}>
                 <Text style={styles.userBtnTxt}>Edit Profile</Text>
               </TouchableOpacity>
-              <TouchableOpacity style={{...styles.userBtn, ...GlobalStyles.warningColor}} onPress={handleSignOut}>
+              <TouchableOpacity style={{...styles.userBtn, ...styles.logoutBtn}} onPress={handleSignOut}>
                 <Text style={styles.userBtnTxt}>Logout</Text>
               </TouchableOpacity>
             </>
@@ -164,12 +164,15 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   userBtn: {
-    borderColor: '#63CDAB',
+    borderColor: '#5BD0AA',
     borderWidth: 2,
     borderRadius: 5,
     paddingVertical: 8,
     paddingHorizontal: 12,
     marginHorizontal: 5,
+  },
+  logoutBtn: {
+    borderColor: '#A9A9A9',
   },
   userBtnTxt: {
     color: '#232A31',
