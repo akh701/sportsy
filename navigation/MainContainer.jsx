@@ -6,6 +6,9 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import { auth } from '../firebase';
 
+//Styles
+import GlobalStyles from '../constants/styles/GlobalStyles'
+
 // Screens
 import LoginScreen from '../screens/LoginScreen';
 import LandingScreen from '../screens/LandingScreen';
@@ -61,14 +64,14 @@ function MainContainer() {
               }
 
               // You can return any component that you like here!
-              return <Ionicons name={iconName} size={size} color={color} />;
+              return <Ionicons style={GlobalStyles.TabIcons} name={iconName} size={size} color={color} />;
             },
           })}
           tabBarOptions={{
-            activeTintColor: 'tomato',
+            activeTintColor: '#5BD0AA',
             inactiveTintColor: 'grey',
-            labelStyle: { paddingBottom: 10, fontSize: 10 },
-            style: { padding: 10, height: 70 },
+            labelStyle: { paddingBottom: 5, fontSize: 10 },
+            style: { padding: 5, height: 80 },
           }}
         >
 
@@ -102,15 +105,15 @@ function MainContainer() {
             }
 
             // You can return any component that you like here!
-            return <Ionicons name={iconName} size={size} color={color} />;
+            return <Ionicons style={GlobalStyles.TabIcons} name={iconName} size={size} color={color} />;
           },
 
         })}
         tabBarOptions={{
-          activeTintColor: 'tomato',
+          activeTintColor: '#5BD0AA',
           inactiveTintColor: 'grey',
-          labelStyle: { paddingBottom: 10, fontSize: 10 },
-          style: { padding: 10, height: 70 },
+          labelStyle: { paddingBottom: 5, fontSize: 10 },
+          style: { padding: 5, height: 80 },
         }}
       >
 

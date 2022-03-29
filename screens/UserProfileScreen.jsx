@@ -6,6 +6,7 @@ import { StyleSheet, Text, TouchableOpacity, View,FlatList,
 import { auth } from '../firebase' //// IMPORT THIS TO CHECK USER AND CHECK auth.currentUser
 import { db } from '../firebase';
 import { UserContext } from '../contexts/UserContext';
+import GlobalStyles from '../constants/styles/GlobalStyles'
 
 const UserProfileScreen = () => {
   const { loggedInUser,setLoggedInUser, userData, setUserData } = useContext(UserContext)
@@ -51,10 +52,10 @@ if(userData !== null){
 
   return (
 
-    <SafeAreaView style={styles.container} >
+    <SafeAreaView style={{...styles.container, ...GlobalStyles.utilMarginTop}} >
 
         <Image
-          style={styles.userImg}
+          style={{...styles.userImg, ...GlobalStyles.utilMarginTop10}}
           source={{uri: userData.avatar}}
         />
         <Text style={styles.userName}>
@@ -62,32 +63,25 @@ if(userData !== null){
         </Text>
 
         <Text style={styles.aboutUser}>
-
-        {userData.name}
+          {userData.locationArray[3]}
         </Text>
         <View style={styles.userBtnWrapper}>
 
             <>
               <TouchableOpacity style={styles.userBtn} onPress={navigateToEdit}>
-                <Text style={styles.userBtnTxt}>Edit</Text>
+                <Text style={styles.userBtnTxt}>Edit Profile</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={{...styles.userBtn, ...GlobalStyles.warningColor}} onPress={handleSignOut}>
+                <Text style={styles.userBtnTxt}>Logout</Text>
               </TouchableOpacity>
             </>
         </View>
 
-        <View style={styles.userInfoWrapper}>
-          <View style={styles.userInfoItem}>
-            <Text style={styles.userInfoTitle}>100</Text>
-            <Text style={styles.userInfoSubTitle}>Events</Text>
-          </View>
-          <View style={styles.userInfoItem}>
-            <Text style={styles.userInfoTitle}>10,000</Text>
-            <Text style={styles.userInfoSubTitle}>Followers</Text>
-          </View>
-          <View style={styles.userInfoItem}>
-            <Text style={styles.userInfoTitle}>100</Text>
-            <Text style={styles.userInfoSubTitle}>Following</Text>
-          </View>
-        </View>
+        <Text style={styles.profileHeader}>
+          Your favourite activities:
+        </Text>
+
+
         <FlatList
         data={[
           {key: userData.preferredSports[0]},
@@ -100,18 +94,10 @@ if(userData !== null){
         keyExtractor={(item, index) => index.toString()}
       />
 
-    <Text>Location: {userData.locationArray[3]}</Text>
+
 
      <Text>Email: {auth.currentUser?.email}</Text>
-        <View style={styles.buttonContainer}>
-     <TouchableOpacity
-       onPress={handleSignOut}
-       style={styles.button}
-     >
-       <Text style={styles.buttonText}>Sign out</Text>
-     </TouchableOpacity>
 
-     </View>
 
     </SafeAreaView>
 
@@ -211,6 +197,9 @@ const styles = StyleSheet.create({
   item: {
     padding: 10,
     fontSize: 14,
-    height: 44,
   },
+  profileHeader: {
+    fontSize: 12,
+    fontWeight: 'bold',
+  }
 })
