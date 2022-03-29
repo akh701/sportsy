@@ -5,23 +5,49 @@ import {
   KeyboardAvoidingView,
   StyleSheet,
   TouchableOpacity,
+  TextInput,
+  ScrollView, FlatList,
 } from 'react-native';
 import moment from 'moment';
 import {
   getDoc, doc, updateDoc, arrayUnion, arrayRemove,
+
+  serverTimestamp, addDoc, collection, query, where, getDocs, orderBy, deleteDoc,
 } from 'firebase/firestore';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import SingleEventAttendees from './SingleEventAttendees';
 import { db, auth } from '../../firebase';
 import { UserContext } from '../../contexts/UserContext';
 
-function SingleEventScreen({ route: { params }, navigation }) {
+function SingleEventScreen({ route, navigation }) {
   const { userData } = useContext(UserContext);
+  const [postedComments, setPostedComments] = useState([]);
   const [attendees, setAttendees] = useState([]);
   const [loading, setLoading] = useState(true);
+  const timePosted = serverTimestamp();
+  const [comment, setComment] = useState({
+    comment: '', eventId: route.params.id, timePosted: serverTimestamp(), username: userData.username,
+  });
   const [refresh, setRefresh] = useState(0);
-  const eventCreatedDate = moment(params.createdAt.milliseconds).format('MMMM Do YYYY, h:mm:ss a');
-  const eventDate = moment(params.eventDate.seconds * 1000).format('MMMM Do YYYY');
+  const eventCreatedDate = moment(route.params.createdAt.milliseconds).format('MMMM Do YYYY, h:mm:ss a');
+  const eventDate = moment(route.params.eventDate.seconds * 1000).format('MMMM Do YYYY');
+  const commentsQuery = query(collection(db, 'comments'), orderBy('timePosted'), where('eventId', '==', route.params.id));
+
+  const deleteComment = (id) => {
+    deleteDoc(doc(db, 'comments', id)).then(() => { getComments(); });
+    // db.collection('comments').doc(id).delete();
+    // deleteDoc(id);
+  };
+
+  const handleCommentPress = () => {
+    if (comment.comment === '') {
+      return alert('You need to enter a comment first you dummy!');
+    }
+
+    setComment({ ...comment, timePosted: serverTimestamp() });
+    addDoc(collection(db, 'comments'), comment).then(() => { getComments(); });
+    setComment({ ...comment, comment: 'Your comment has been posted!' });
+  };
 
   const requestData = (array) => {
     setLoading(true);
@@ -32,7 +58,6 @@ function SingleEventScreen({ route: { params }, navigation }) {
         const q = doc(db, 'users', id);
         getDoc(q)
           .then((data) => {
-            console.log(data, 'singlevent');
             attendeeUsernames.push(data._document.data.value.mapValue.fields.username);
             counter++;
             return attendeeUsernames;
@@ -47,9 +72,20 @@ function SingleEventScreen({ route: { params }, navigation }) {
     }
   };
 
+  function getComments() {
+    getDocs(commentsQuery).then((comments) => {
+      setPostedComments(comments.docs.map((comment) => ({ ...comment.data(), id: comment.id })));
+      setLoading(false);
+    });
+  }
+
   useEffect(() => {
-    requestData(params.attendees);
+    requestData(route.params.attendees);
   }, [refresh]);
+
+  useEffect(() => {
+    getComments();
+  }, []);
 
   useEffect(() => {
     const unsubscribe = navigation.addListener('blur', () => {
@@ -66,46 +102,46 @@ function SingleEventScreen({ route: { params }, navigation }) {
   }, [navigation]);
 
   const handlePress = () => {
-    if (params.cancelled === false) {
-      if (params.attendees.indexOf(auth.currentUser.uid) < 0) {
-        if (params.attendees.length < params.spotsAvailable) {
-          updateDoc(doc(db, 'events', params.id), {
+    if (route.params.cancelled === false) {
+      if (route.params.attendees.indexOf(auth.currentUser.uid) < 0) {
+        if (route.params.attendees.length < route.params.spotsAvailable) {
+          updateDoc(doc(db, 'events', route.params.id), {
             attendees: arrayUnion(auth.currentUser.uid),
           }).then(() => {
-            params.attendees.push(auth.currentUser.uid);
-            setAttendees(params.attendees);
+            route.params.attendees.push(auth.currentUser.uid);
+            setAttendees(route.params.attendees);
             setRefresh((currValue) => currValue + 1);
           });
         } else {
           alert('This event is full');
         }
       } else {
-        updateDoc(doc(db, 'events', params.id), {
+        updateDoc(doc(db, 'events', route.params.id), {
           attendees: arrayRemove(auth.currentUser.uid),
         }).then(() => {
-          params.attendees = params.attendees.filter((id) => id !== auth.currentUser.uid);
-          setAttendees(params.attendees);
+          route.params.attendees = route.params.attendees.filter((id) => id !== auth.currentUser.uid);
+          setAttendees(route.params.attendees);
           setRefresh((currValue) => currValue + 1);
         });
       }
     } else {
-        alert('You are not able to join a cancelled event')
+      alert('You are not able to join a cancelled event');
     }
   };
 
   const handleCancel = () => {
-    if (params.cancelled === false) {
-      updateDoc(doc(db, 'events', params.id), {
+    if (route.params.cancelled === false) {
+      updateDoc(doc(db, 'events', route.params.id), {
         cancelled: true,
       }).then(() => {
-        params.cancelled = true;
+        route.params.cancelled = true;
         setRefresh((currValue) => currValue + 1);
       });
     } else {
-      updateDoc(doc(db, 'events', params.id), {
+      updateDoc(doc(db, 'events', route.params.id), {
         cancelled: false,
       }).then(() => {
-        params.cancelled = false;
+        route.params.cancelled = false;
         setRefresh((currValue) => currValue + 1);
       });
     }
@@ -114,66 +150,138 @@ function SingleEventScreen({ route: { params }, navigation }) {
   if (loading) { return <Text>Loading...</Text>; }
 
   return (
-    <KeyboardAvoidingView style={styles.container} behavior="padding">
-      <Text style={styles.SingleEventHeader}>Event Details</Text>
-      {params.cancelled ? <Text style={styles.cancellationMessage}> EVENT HAS BEEN CANCELLED </Text> : null }
-      <Text style={styles.EventTitle}>{params.title}</Text>
-      <Text style={styles.EventCategory}>{params.category}</Text>
-      <Text style={styles.EventCreated}>
-        Event created on
-        {' '}
-        {eventCreatedDate}
-        {' '}
-        and was created by
-        {' '}
-        {params.creator}
-      </Text>
-      <View style={styles.descriptionContainer}>
-        <Text numberOfLines={10} ellipsizeMode="tail" style={styles.description}>{params.description}</Text>
-      </View>
-      <Text style={styles.eventDateAndTime}>
-        This event will take place on
-        {' '}
-        {eventDate}
-        {' '}
-        at
-        {' '}
-        {params.eventTime}
-      </Text>
-      <Text style={styles.spotsTaken}>
-        {params.attendees.length}
-        {' '}
-        of the
-        {' '}
-        {params.spotsAvailable}
-        {' '}
-        available spots at this event have been taken.
-      </Text>
-      <View style={styles.joinLeaveEventBtn}>
-        {params.creatorId === auth.currentUser.uid ? (
-          <TouchableOpacity
-            onPress={handleCancel}
-            style={[styles.button, styles.buttonOutline]}
-          >
-            <Text style={styles.buttonOutlineText}>{params.cancelled ? 'Reinstate Event' : 'Cancel Event'}</Text>
-          </TouchableOpacity>
-        ) : (
-          <TouchableOpacity
-            onPress={handlePress}
-            style={[styles.button, styles.buttonOutline]}
-          >
-            <Text style={styles.buttonOutlineText}>{params.attendees.indexOf(auth.currentUser.uid) >= 0 ? 'Leave Event' : 'Join Event'}</Text>
-          </TouchableOpacity>
-        ) }
-      </View>
-      <Text style={styles.attendeeLabel}>Currently attending:</Text>
-      <SafeAreaView>
-        <View style={styles.attendeesContainer}>
-          <SingleEventAttendees attendees={attendees} keyExtractor={(result) => result.stringValue} />
+    <ScrollView>
+      <KeyboardAvoidingView style={styles.container} behavior="padding">
+        <Text style={styles.SingleEventHeader}>Event Details</Text>
+        {route.params.cancelled ? <Text style={styles.cancellationMessage}> EVENT HAS BEEN CANCELLED </Text> : null }
+        <Text style={styles.EventTitle}>{route.params.title}</Text>
+        <Text style={styles.EventCategory}>{route.params.category}</Text>
+        <Text style={styles.EventCreated}>
+          Event created on
+          {' '}
+          {eventCreatedDate}
+          {' '}
+          and was created by
+          {' '}
+          {route.params.creator}
+        </Text>
+        <View>
+          <Text numberOfLines={10} ellipsizeMode="tail" style={styles.description}>{route.params.description}</Text>
         </View>
-      </SafeAreaView>
+        <Text style={styles.eventDateAndTime}>
+          This event will take place on
+          {' '}
+          {eventDate}
+          {' '}
+          at
+          {' '}
+          {route.params.eventTime}
+        </Text>
+        <Text style={styles.spotsTaken}>
+          {route.params.attendees.length}
+          {' '}
+          of the
+          {' '}
+          {route.params.spotsAvailable}
+          {' '}
+          available spots at this event have been taken.
+        </Text>
+        <View style={styles.joinLeaveEventBtn}>
+          {route.params.creatorId === auth.currentUser.uid ? (
+            <TouchableOpacity
+              onPress={handleCancel}
+              style={[styles.button, styles.buttonOutline]}
+            >
+              <Text style={styles.buttonOutlineText}>{route.params.cancelled ? 'Reinstate Event' : 'Cancel Event'}</Text>
+            </TouchableOpacity>
+          ) : (
+            <TouchableOpacity
+              onPress={handlePress}
+              style={[styles.button, styles.buttonOutline]}
+            >
+              <Text style={styles.buttonOutlineText}>{route.params.attendees.indexOf(auth.currentUser.uid) >= 0 ? 'Leave Event' : 'Join Event'}</Text>
+            </TouchableOpacity>
+          ) }
+        </View>
+        <Text style={styles.attendeeLabel}>Currently attending:</Text>
+        <SafeAreaView>
+          <View style={styles.attendeesContainer}>
+            <SingleEventAttendees attendees={attendees} keyExtractor={(result) => result.stringValue} />
+          </View>
+        </SafeAreaView>
 
-    </KeyboardAvoidingView>
+        {/* POST COMMENTS */}
+        <View style={styles.action}>
+
+          <TextInput
+            placeholder="Type your comment here..."
+            placeholderTextColor="#666666"
+            autoCorrect={false}
+            value={comment.comment}
+            onChangeText={(txt) => setComment({ ...comment, comment: txt })}
+            style={styles.textInput}
+            multiline
+            numberOfLines={4}
+          />
+        </View>
+        <View />
+
+        <View style={styles.userBtnWrapper}>
+          <TouchableOpacity style={styles.userBtn} onPress={handleCommentPress}>
+            <Text style={styles.userBtnTxt}>Post Comment</Text>
+          </TouchableOpacity>
+        </View>
+        <FlatList
+          keyExtractor={(i) => i.id}
+          data={postedComments}
+          renderItem={({ item }) => {
+            if (item.username === userData.username) {
+              return (
+                <View style={[styles.eventCard, styles.cardOutline]}>
+                  <Text style={styles.item}>
+                    Comment By
+                    {' '}
+                    {item.username}
+                  </Text>
+
+                  <Text style={styles.item}>{moment(item.timePosted.toDate().toString()).format('MMMM Do YYYY, h:mm:ss a')}</Text>
+                  <Text>{item.comment}</Text>
+
+                  <TouchableOpacity>
+                    <Text
+                      onPress={() => {
+                        deleteComment(item.id);
+                      }}
+                      style={{ fontSize: 11, fontWeight: 'bold' }}
+                    >
+                      Delete Comment
+
+                    </Text>
+                  </TouchableOpacity>
+
+                </View>
+              );
+            } return (
+              <View style={[styles.eventCard, styles.cardOutline]}>
+                <Text style={styles.item}>
+                  Comment By
+                  {' '}
+                  {item.username}
+                </Text>
+
+                <Text style={styles.item}>{moment(item.timePosted.toDate().toString()).format('MMMM Do YYYY, h:mm:ss a')}</Text>
+                <Text>{item.comment}</Text>
+
+              </View>
+            );
+          }}
+          keyExtractor={(item, index) => index}
+          showsVerticalScrollIndicator={false}
+        />
+        {/* <CommentCardComponent data={postedComments} /> */}
+
+      </KeyboardAvoidingView>
+    </ScrollView>
   );
 }
 
@@ -240,6 +348,19 @@ const styles = StyleSheet.create({
   },
   container: {
 
+  },
+  cardOutline: {
+    backgroundColor: 'white',
+    marginTop: 5,
+    borderColor: '#63CDAB',
+    borderWidth: 2,
+  },
+  eventCard: {
+    backgroundColor: 'white',
+    paddingHorizontal: 10,
+    paddingVertical: 10,
+    borderRadius: 10,
+    marginBottom: 5,
   },
   button: {
     backgroundColor: '#63CDAB',
