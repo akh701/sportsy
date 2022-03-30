@@ -8,11 +8,13 @@ import {
   StyleSheet,
   Alert,
   Keyboard,
+
   Image, TouchableWithoutFeedback, ScrollView,
 } from 'react-native';
 import { doc, updateDoc } from 'firebase/firestore';
 import { UserContext } from '../contexts/UserContext';
-import GlobalStyles from '../constants/styles/GlobalStyles';
+import GlobalStyles from '../constants/styles/GlobalStyles'
+
 
 // import ImagePicker from 'react-native-image-crop-picker';
 import { auth, db } from '../firebase';
@@ -146,6 +148,8 @@ function ProfileEditScreen() {
         </>
 
       </ScrollView>
+
+   
     </KeyboardAvoidingView>
   );
 }
@@ -204,6 +208,8 @@ const styles = StyleSheet.create({
     height: 150,
     width: 150,
     borderRadius: 75,
-    marginTop: 10,
+
+    marginTop:10,
+
   },
 });

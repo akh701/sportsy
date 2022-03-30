@@ -17,7 +17,7 @@ export default function App() {
     >
       <SafeAreaView>
         <View fixed="top">
-          {/* <HeaderComponent /> */}
+          <HeaderComponent />
         </View>
       </SafeAreaView>
       {/* <GlobalStack /> */}

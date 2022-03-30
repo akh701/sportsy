@@ -21,15 +21,34 @@ const GlobalStyles = StyleSheet.create({
   },
   dangerColor: {
     backgroundColor: '#FF6B74',
+
+  },
+  mutedGrey: {
+    backgroundColor: '#A9A9A9',
+  },
+  btnPrimary: {
+    borderRadius: 5,
+  },
+  btnPrimaryOutline: {
+    borderColor: '#5BD0AA',
   },
   TabIcons: {
     marginTop: 5,
   },
   utilPaddingBottom: {
     paddingBottom: 10,
+
+  },
+
+  },
+  utilMarginBottom5: {
+    marginBottom: 5,
   },
   utilMarginTop: {
     marginTop: 30,
+  },
+  utilMarginTop5: {
+    marginTop: 5,
   },
   utilMarginTop10: {
     marginTop: 10,
