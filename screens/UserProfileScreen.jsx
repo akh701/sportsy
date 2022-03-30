@@ -75,36 +75,12 @@ if(userData !== null){
               </TouchableOpacity>
             </>
         </View>
-
-        {/* <Text style={styles.profileHeader}>
-          Your favourite activities:
-        </Text> */}
-
-
-        {/* <FlatList
-        data={[
-          {key: userData.preferredSports[0]},
-          {key: userData.preferredSports[1]},
-          {key: userData.preferredSports[2]},
-
-        ]}
-
-        renderItem={({item}) => <Text style={styles.item}>{item.key}</Text>}
-        keyExtractor={(item, index) => index.toString()}
-      /> */}
-
-
-
      <Text>Email: {auth.currentUser?.email}</Text>
-
-
     </SafeAreaView>
-
   )
  }
-
 }
-//we are here
+
 export default UserProfileScreen;
 
 const styles = StyleSheet.create({

@@ -5,9 +5,7 @@ import {
   StyleSheet,
   TouchableOpacity,
   TextInput,
-  ScrollView, FlatList,
-  Dimensions,
-  SafeAreaView,
+  ScrollView,
   Image,
   KeyboardAvoidingView,
 } from 'react-native';
@@ -196,10 +194,8 @@ function SingleEventScreen({ route, navigation }) {
               {' '}
               <Text style={styles.boldText}>
                 {eventDate}
-                {' '}
               </Text>
-
-              {' .'}
+              {'.'}
             </Text>
             <Text style={styles.spotsTaken}>
               <Text style={styles.boldText}>Spots: </Text>

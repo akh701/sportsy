@@ -3,18 +3,12 @@ import {
   StyleSheet,
   View,
   Text,
-  Image,
-  StatusBar,
   FlatList,
-  TouchableOpacity,
-  ScrollView,
-  Alert,
 } from 'react-native';
 import {
   collection, getDocs, query, where,
 } from 'firebase/firestore';
-import { confirmPasswordReset } from 'firebase/auth';
-import { auth, db } from '../firebase';
+import { db } from '../firebase';
 
 import Searchbar from './Searchbar';
 import EventsList from './EventsList';
@@ -77,14 +71,6 @@ export default function FindEventsScreen({ navigation }) {
         setReset={setReset}
         style={styles.searchBar}
       />
-
-      <View>
-        <FlatList
-          data={result}
-          renderItem={(result) => <Text>{result.category}</Text>}
-          keyExtractor={(result) => result.id}
-        />
-      </View>
       <View style={styles.textcontainer}>
         <Text style={styles.eventCounter}>
           Number of events -

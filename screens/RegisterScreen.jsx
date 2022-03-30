@@ -18,9 +18,6 @@ export default function RegisterScreen() {
   const [DOB, setDOB] = useState('');
   const [avatar, setAvatar] = useState('https://firebasestorage.googleapis.com/v0/b/sportsy-c79d8.appspot.com/o/sportsyDefaultPhoto.png?alt=media&token=b13b51bc-cd6d-4d2e-b442-a6547a4e2add');
   const [location, setLocation] = useState([]);
-  const [sport1, setSport1] = useState('');
-  const [sport2, setSport2] = useState('');
-  const [sport3, setSport3] = useState('');
 
   const navigation = useNavigation();
 
@@ -46,7 +43,8 @@ export default function RegisterScreen() {
       const region = data.result.nuts;
       const userLocation = [userPostcode, latitude, longitude, region];
       return userLocation;
-    });
+    })
+    .catch((err) => alert(err));
 
   const handleSignUp = async () => {
     const locationArray = await FetchPostcode(location);
