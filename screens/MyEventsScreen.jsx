@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
 import {
-  View, Text, StyleSheet, FlatList, SafeAreaView, ScrollView,
+  View, Text, StyleSheet, FlatList, SafeAreaView, ScrollView, ActivityIndicator,
 } from 'react-native';
 import {
   collection, query, where, getDocs,
@@ -11,7 +11,7 @@ import EventCardComponent from './eventScreens/EventCardComponent';
 export default function MyEventsScreen({ navigation }) {
   const [userCreatedEvents, setUserCreatedEvents] = useState([]);
   const [userAttendingEvents, setUserAttendingEvents] = useState([]);
-  const [isloading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(true);
   const createdEventsQuery = query(collection(db, 'events'), where('creatorId', '==', auth.currentUser.uid));
   const attendingEventsQuery = query(collection(db, 'events'), where('attendees', 'array-contains-any', [auth.currentUser.uid]));
 
@@ -39,7 +39,14 @@ export default function MyEventsScreen({ navigation }) {
     return unsubscribe;
   }, [navigation]);
 
-  if (isloading) { return <Text>Loading</Text>; }
+  if (loading) {
+    return (
+      <View style={[styles.container, styles.horizontal]}>
+        <ActivityIndicator size="large" color="#00ff00" />
+        <Text>Loading...</Text>
+      </View>
+    );
+  }
   return (
 
     <SafeAreaView style={styles.container}>

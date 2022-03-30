@@ -1,5 +1,5 @@
 import {
-  View, Text, ScrollView, SafeAreaView, StyleSheet, FlatList,
+  View, Text, ScrollView, SafeAreaView, StyleSheet, FlatList, ActivityIndicator,
 } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { collection, getDocs } from 'firebase/firestore';
@@ -18,7 +18,14 @@ export default function EventsList({ result, setResult }) {
     });
   }, []);
 
-  if (loading) return <Text style={styles.loading}>Loading...</Text>;
+  if (loading) {
+    return (
+      <View style={[styles.container, styles.horizontal]}>
+        <ActivityIndicator size="large" color="#00ff00" />
+        <Text>Loading...</Text>
+      </View>
+    );
+  }
 
   return (
 
