@@ -35,8 +35,6 @@ function SingleEventScreen({ route, navigation }) {
 
   const deleteComment = (id) => {
     deleteDoc(doc(db, 'comments', id)).then(() => { getComments(); });
-    // db.collection('comments').doc(id).delete();
-    // deleteDoc(id);
   };
 
   const handleCommentPress = () => {
@@ -45,8 +43,11 @@ function SingleEventScreen({ route, navigation }) {
     }
 
     setComment({ ...comment, timePosted: serverTimestamp() });
-    addDoc(collection(db, 'comments'), comment).then(() => { getComments(); });
-    setComment({ ...comment, comment: 'Your comment has been posted!' });
+    addDoc(collection(db, 'comments'), comment).then(() => {
+      getComments();
+      setComment({ ...comment, comment: '' });
+    });
+    return alert('Your comment has been posted');
   };
 
   const eventCreatedDate = moment(route.params.createdAt.milliseconds).format('MMMM Do YYYY, h:mm:ss a');
@@ -88,11 +89,12 @@ function SingleEventScreen({ route, navigation }) {
 
   useEffect(() => {
     getComments();
-  }, []);
+  }, [refresh]);
 
   useEffect(() => {
     const unsubscribe = navigation.addListener('blur', () => {
       setAttendees([]);
+      setPostedComments([]);
     });
     return unsubscribe;
   }, [navigation]);
@@ -153,7 +155,7 @@ function SingleEventScreen({ route, navigation }) {
   if (loading) { return <Text>Loading...</Text>; }
 
   return (
-    <ScrollView style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <Text style={styles.SingleEventHeader}>Event Details</Text>
       {route.params.cancelled ? <Text style={styles.cancellationMessage}> EVENT HAS BEEN CANCELLED </Text> : null }
       <Text style={styles.EventTitle}>{route.params.title}</Text>
@@ -300,9 +302,7 @@ function SingleEventScreen({ route, navigation }) {
         keyExtractor={(item, index) => index}
         showsVerticalScrollIndicator={false}
       />
-
-    </ScrollView>
-
+    </SafeAreaView>
   );
 }
 

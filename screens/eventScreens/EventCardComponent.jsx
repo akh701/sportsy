@@ -17,6 +17,7 @@ export default function EventCardComponent(props) {
   };
 
   return (
+
     <FlatList
       keyExtractor={(i) => i.id}
       data={props.data}
