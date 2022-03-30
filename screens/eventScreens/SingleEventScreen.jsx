@@ -8,6 +8,7 @@ import {
   ScrollView, FlatList,
   Dimensions,
   SafeAreaView,
+  Image,
   KeyboardAvoidingView,
 } from 'react-native';
 import moment from 'moment';
@@ -160,159 +161,179 @@ function SingleEventScreen({ route, navigation }) {
     <KeyboardAvoidingView style={{ flex: 1, flexDirection: 'column', justifyContent: 'center' }} behavior="padding" enabled keyboardVerticalOffset={70}>
       <ScrollView>
         <View style={styles.container}>
-          <Text style={styles.SingleEventHeader}>Event Details</Text>
-          {route.params.cancelled ? <Text style={styles.cancellationMessage}> EVENT HAS BEEN CANCELLED </Text> : null }
+          <View style={styles.EventDetailscontainer}>
+            <Text style={styles.SingleEventHeader}>Event Details</Text>
+            {route.params.cancelled ? <Text style={styles.cancellationMessage}> EVENT HAS BEEN CANCELLED </Text> : null }
 
-          <Text style={styles.EventTitle}>{route.params.title}</Text>
-          <View style={styles.EventHeader}>
-            <Text style={styles.EventCategory}>
-              {route.params.category}
-              {' '}
-            </Text>
-            <Text style={styles.EventHost}>
-              <Text style={styles.boldText}>Host: </Text>
-              {route.params.creator}
-            </Text>
+            <Text style={styles.EventTitle}>{route.params.title}</Text>
 
-          </View>
-
-          <Text style={styles.description}>
-            <Text style={styles.boldText}>What: </Text>
-            {route.params.description}
-          </Text>
-
-          <Text style={styles.eventDateAndTime}>
-            <Text style={styles.boldText}>When: </Text>
-            This event will take place on
-            {' '}
-            <Text style={styles.boldText}>
-              {eventDate}
-              {' '}
-            </Text>
-
-            {' .'}
-          </Text>
-          <Text style={styles.spotsTaken}>
-            <Text style={styles.boldText}>Spots: </Text>
-
-            {route.params.attendees.length}
-            {' '}
-            of the
-            {' '}
-            {route.params.spotsAvailable}
-            {' '}
-            available spots at this event have been taken.
-          </Text>
-          <View style={styles.joinLeaveEventBtn}>
-            {route.params.creatorId === auth.currentUser.uid ? (
-              <TouchableOpacity
-                onPress={handleCancel}
-                style={[styles.button, styles.buttonOutline]}
-              >
-                <Text style={styles.buttonOutlineText}>{route.params.cancelled ? 'Reinstate Event' : 'Cancel Event'}</Text>
-              </TouchableOpacity>
-            ) : (
-              <TouchableOpacity
-                onPress={handlePress}
-                style={[styles.button, styles.buttonOutline]}
-              >
-                <Text style={styles.buttonOutlineText}>{route.params.attendees.indexOf(auth.currentUser.uid) >= 0 ? 'Leave Event' : 'Join Event'}</Text>
-              </TouchableOpacity>
-            ) }
-          </View>
-          <Text style={styles.attendeeLabel}>Currently attending:</Text>
-          <View style={styles.attendeesContainer}>
-            <SingleEventAttendees attendees={attendees} keyExtractor={(result) => result.stringValue} />
-          </View>
-        </View>
-        <View style={styles.mapContainer}>
-          {/* <MapView
-
-          style={styles.map}
-          initialRegion={{
-            latitude: route.params.locationArray[1],
-            longitude: route.params.locationArray[2],
-            latitudeDelta: 0.0922,
-            longitudeDelta: 0.0421,
-          }}
-        >
-          <Marker
-            coordinate={{
-              latitude: route.params.locationArray[1],
-              longitude: route.params.locationArray[2],
-            }}
-            pinColor="purple"
-          />
-          <Circle
-            center={{
-              latitude: route.params.locationArray[1],
-              longitude: route.params.locationArray[2],
-            }}
-            radius={1000}
-          />
-
-        </MapView>  */}
-        </View>
-        {/* POST COMMENTS */}
-        <View style={styles.action}>
-
-          <TextInput
-            placeholder="Type your comment here..."
-            placeholderTextColor="#666666"
-            autoCorrect={false}
-            value={comment.comment}
-            onChangeText={(txt) => setComment({ ...comment, comment: txt })}
-            style={styles.textInput}
-            multiline
-            numberOfLines={4}
-          />
-        </View>
-
-        <View style={styles.userBtnWrapper}>
-          <TouchableOpacity style={styles.userBtn} onPress={handleCommentPress}>
-            <Text style={styles.userBtnTxt}>Post Comment</Text>
-          </TouchableOpacity>
-        </View>
-
-        {postedComments.map((item, index) => {
-          if (item.username === userData.username) {
-            return (
-              <View style={[styles.eventCard, styles.cardOutline]} key={index}>
-                <Text style={styles.item}>
-                  Comment By
-                  {' '}
-                  {item.username}
-                </Text>
-
-                <Text style={styles.item}>{moment(item.timePosted.toDate()).format('MMMM Do YYYY, h:mm:ss a')}</Text>
-                <Text>{item.comment}</Text>
-
-                <TouchableOpacity>
-                  <Text
-                    onPress={() => {
-                      deleteComment(item.id);
-                    }}
-                    style={{ fontSize: 11, fontWeight: 'bold' }}
-                  >
-                    Delete Comment
-
-                  </Text>
-                </TouchableOpacity>
-
-              </View>
-            );
-          } return (
-            <View style={[styles.eventCard, styles.cardOutline]} key={index}>
-              <Text style={styles.item}>
-                Comment By
+            <View style={styles.EventHeader}>
+              <Text style={styles.EventCategory}>
+                {route.params.category}
                 {' '}
-                {item.username}
               </Text>
-              <Text style={styles.item}>{moment(item.timePosted.toDate()).format('MMMM Do YYYY, h:mm:ss a')}</Text>
-              <Text>{item.comment}</Text>
+              <View style={styles.userHostImageContainer}>
+                <Text style={styles.EventHost}>
+                  <Text style={styles.boldText}>Host: </Text>
+                  {route.params.creator}
+                </Text>
+                <Image
+                  style={styles.userImg}
+                  source={{ uri: userData.avatar }}
+                />
+              </View>
+
             </View>
-          );
-        })}
+
+            <Text style={styles.description}>
+              <Text style={styles.boldText}>What: </Text>
+              {route.params.description}
+            </Text>
+
+            <Text style={styles.eventDateAndTime}>
+              <Text style={styles.boldText}>When: </Text>
+              This event will take place on
+              {' '}
+              <Text style={styles.boldText}>
+                {eventDate}
+                {' '}
+              </Text>
+
+              {' .'}
+            </Text>
+            <Text style={styles.spotsTaken}>
+              <Text style={styles.boldText}>Spots: </Text>
+
+              {route.params.attendees.length}
+              {' '}
+              of the
+              {' '}
+              {route.params.spotsAvailable}
+              {' '}
+              available spots at this event have been taken.
+            </Text>
+            <View style={styles.joinLeaveEventBtn}>
+              {route.params.creatorId === auth.currentUser.uid ? (
+                <TouchableOpacity
+                  onPress={handleCancel}
+                  style={[styles.button, styles.cancelButtonOutline]}
+                >
+                  <Text style={styles.cancelButtonOutlineText}>{route.params.cancelled ? 'Reinstate Event' : 'Cancel Event'}</Text>
+                </TouchableOpacity>
+              ) : (
+                <TouchableOpacity
+                  onPress={handlePress}
+                  style={[styles.button, styles.buttonOutline]}
+                >
+                  <Text style={styles.buttonOutlineText}>{route.params.attendees.indexOf(auth.currentUser.uid) >= 0 ? 'Leave Event' : 'Join Event'}</Text>
+                </TouchableOpacity>
+              ) }
+            </View>
+            <Text style={styles.attendeeLabel}>Currently attending:</Text>
+            <View style={styles.attendeesContainer}>
+              <SingleEventAttendees attendees={attendees} keyExtractor={(result) => result.stringValue} />
+            </View>
+          </View>
+          <View style={styles.mapContainer}>
+            <MapView
+
+              style={styles.map}
+              initialRegion={{
+                latitude: route.params.locationArray[1],
+                longitude: route.params.locationArray[2],
+                latitudeDelta: 0.0922,
+                longitudeDelta: 0.0421,
+              }}
+            >
+              <Marker
+                coordinate={{
+                  latitude: route.params.locationArray[1],
+                  longitude: route.params.locationArray[2],
+                }}
+                pinColor="purple"
+              />
+              <Circle
+                center={{
+                  latitude: route.params.locationArray[1],
+                  longitude: route.params.locationArray[2],
+                }}
+                radius={1000}
+              />
+
+            </MapView>
+          </View>
+          {/* POST COMMENTS */}
+          <View style={styles.commentContainer}>
+            <Text style={styles.commentTitle}>Comments</Text>
+
+            <TextInput
+              placeholder="Type your comment here..."
+              placeholderTextColor="#666666"
+              autoCorrect={false}
+              value={comment.comment}
+              onChangeText={(txt) => setComment({ ...comment, comment: txt })}
+              style={styles.textInput}
+              multiline
+              numberOfLines={12}
+            />
+
+            <TouchableOpacity style={styles.userBtn} onPress={handleCommentPress}>
+              <Text style={styles.userBtnTxt}>Post Comment</Text>
+            </TouchableOpacity>
+
+            {postedComments.map((item, index) => {
+              if (item.username === userData.username) {
+                return (
+                  <View style={[styles.eventCard, styles.cardOutline]}>
+                    <View style={styles.commentHeader}>
+                      <Text style={styles.item}>
+                        <Text style={styles.boldText}>Posted By:</Text>
+                        {' '}
+                        {item.username}
+
+                      </Text>
+                      <View style={styles.userImgCommentContainer}>
+                        <Image
+                          style={styles.userImg}
+                          source={{ uri: userData.avatar }}
+                        />
+                      </View>
+                    </View>
+
+                    <Text style={styles.commentBody}>{item.comment}</Text>
+                    <View style={styles.commentCardFooter}>
+                      <Text style={[styles.item, styles.time]}>{moment(item.timePosted.toDate()).format('MMMM Do YYYY, h:mm:ss a')}</Text>
+                      <TouchableOpacity>
+                        <Text
+                          onPress={() => {
+                            deleteComment(item.id);
+                          }}
+                          style={{
+                            fontSize: 11, fontWeight: 'bold', textAlign: 'right', paddingBottom: 0,
+                          }}
+                        >
+                          Delete Comment
+
+                        </Text>
+                      </TouchableOpacity>
+                    </View>
+
+                  </View>
+                );
+              } return (
+                <View style={[styles.eventCard, styles.cardOutline]}>
+                  <Text style={styles.item}>
+                    <Text style={styles.boldText}>Posted By:</Text>
+                    {' '}
+                    {item.username}
+                  </Text>
+                  <Text style={styles.item}>{moment(item.timePosted.toDate()).format('MMMM Do YYYY, h:mm:ss a')}</Text>
+                  <Text>{item.comment}</Text>
+                </View>
+              );
+            })}
+          </View>
+        </View>
       </ScrollView>
     </KeyboardAvoidingView>
   );
@@ -332,6 +353,12 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     padding: 10,
   },
+  commentContainer: {
+    width: '90%',
+    marginTop: 10,
+    backgroundColor: 'white',
+    padding: 10,
+  },
   SingleEventHeader: {
     textAlign: 'center',
     fontSize: 25,
@@ -339,10 +366,18 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     marginTop: 15,
   },
+  commentTitle: {
+    textAlign: 'center',
+    fontSize: 22,
+    fontWeight: 'bold',
+    marginBottom: 10,
+    marginTop: 10,
+  },
   EventHeader: {
+    flex: 1,
     marginBottom: 10,
     flexDirection: 'row',
-    // justifyContent: 'center',
+    justifyContent: 'space-between',
     alignItems: 'center',
     paddingBottom: 10,
     borderBottomColor: 'black',
@@ -353,6 +388,30 @@ const styles = StyleSheet.create({
     fontSize: 20,
     marginBottom: 5,
   },
+  userBtn: {
+    marginBottom: 5,
+    marginTop: 10,
+    backgroundColor: '#63CDAB',
+    width: '100%',
+    padding: 15,
+    borderRadius: 3,
+    alignItems: 'center',
+  },
+  userBtnTxt: {
+    color: 'white',
+    fontWeight: 'bold',
+    fontSize: 16,
+  },
+  textInput: {
+    backgroundColor: 'white',
+    paddingHorizontal: 15,
+    paddingVertical: 10,
+    borderRadius: 3,
+    marginTop: 5,
+    borderWidth: 1,
+    height: 100,
+
+  },
   EventCategory: {
     textAlign: 'center',
     borderWidth: 1,
@@ -361,7 +420,7 @@ const styles = StyleSheet.create({
     paddingVertical: 4,
     paddingHorizontal: 6,
     fontSize: 12,
-    marginRight: '40%',
+    // marginRight: '40%',
   },
   postionRight: {
     textAlign: 'right',
@@ -394,7 +453,6 @@ const styles = StyleSheet.create({
     marginTop: 15,
     marginBottom: 10,
     borderColor: '#5BD0AA',
-    borderWidth: 1,
     borderRadius: 3,
     paddingVertical: 4,
     paddingHorizontal: 6,
@@ -402,7 +460,6 @@ const styles = StyleSheet.create({
     width: '35%',
   },
   attendeesContainer: {
-    borderWidth: 1,
     padding: 5,
 
   },
@@ -410,13 +467,13 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     marginTop: 5,
     borderColor: '#63CDAB',
-    borderWidth: 2,
+    borderWidth: 1,
   },
   eventCard: {
     backgroundColor: 'white',
     paddingHorizontal: 10,
     paddingVertical: 10,
-    borderRadius: 10,
+    borderRadius: 3,
     marginBottom: 5,
   },
   button: {
@@ -437,6 +494,17 @@ const styles = StyleSheet.create({
     marginTop: 5,
     borderColor: '#63CDAB',
     borderWidth: 1,
+  },
+  cancelButtonOutline: {
+    backgroundColor: 'white',
+    marginTop: 5,
+    borderColor: '#FF6B74',
+    borderWidth: 1,
+  },
+  cancelButtonOutlineText: {
+    color: '#FF6B74',
+    fontWeight: '700',
+    fontSize: 16,
   },
   buttonText: {
     color: 'white',
@@ -473,5 +541,40 @@ const styles = StyleSheet.create({
   },
   boldText: {
     fontWeight: 'bold',
+  },
+  item: {
+    // marginTop: 5,
+  },
+  commentCardFooter: {
+    flex: 1,
+    justifyContent: 'space-between',
+    flexDirection: 'row',
+
+  },
+  time: {
+    fontSize: 11,
+  },
+  commentBody: {
+    paddingTop: 5,
+    paddingBottom: 5,
+  },
+  userImg: {
+    height: 25,
+    width: 25,
+    borderRadius: 40,
+  },
+  userImgCommentContainer: {
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+  },
+  commentHeader: {
+    flex: 1,
+    justifyContent: 'space-between',
+    flexDirection: 'row',
+  },
+  userHostImageContainer: {
+    flex: 1,
+    justifyContent: 'flex-end',
+    flexDirection: 'row',
   },
 });

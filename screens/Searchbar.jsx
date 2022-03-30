@@ -48,12 +48,33 @@ export default function Searchbar({
                       : <View style={styles.vwClear} />
                 }
       </View>
-      <View>
-        <Button title="Submit Search" color="#008080" onPress={() => setToggleSubmit(!toggleSubmit)}>Submit</Button>
+      <View style={styles.searchBtnContainer}>
+        <TouchableOpacity style={styles.searchSubbmitBtn}>
+          <Text
+            onPress={() => {
+              setToggleSubmit(!toggleSubmit);
+            }}
+            style={styles.buttonText}
+          >
+            Submit Search
+
+          </Text>
+        </TouchableOpacity>
+
+        {/* <Button title="Submit Search" color="#008080" onPress={() => setToggleSubmit(!toggleSubmit)}>Submit</Button> */}
+        <TouchableOpacity style={styles.searchResetBtn}>
+          <Text
+            onPress={handleReset}
+            style={styles.buttonText}
+          >
+            Reset Results
+
+          </Text>
+        </TouchableOpacity>
 
       </View>
       <View>
-        <Button title="Reset Results" color="#008080" onPress={handleReset}>Submit</Button>
+        {/* <Button title="Reset Results" color="#008080" onPress={handleReset}>Submit</Button> */}
 
       </View>
       {
@@ -90,22 +111,46 @@ const styles = StyleSheet.create({
     flex: 0.2,
     justifyContent: 'center',
     alignItems: 'center',
-    // width: 40,
+    width: 40,
     // backgroundColor: 'red'
-  },
-  icSearch: {
-    height: 18, width: 18,
   },
   searchContainer:
     {
       backgroundColor: 'white',
-      width: '75%',
+      width: '90%',
       height: 40,
       flexDirection: 'row',
       marginBottom: 5,
     },
   container: {
-    height: 80,
+    // height: 80,
     alignItems: 'center',
   },
+  searchBtnContainer: {
+    // flex: 2,
+    // justifyContent: 'space-between',
+    flexDirection: 'row',
+    width: '90%',
+  },
+  searchSubbmitBtn: {
+    backgroundColor: '#63CDAB',
+    width: '49%',
+    padding: 15,
+    borderRadius: 3,
+    alignItems: 'center',
+    marginRight: 5,
+  },
+  searchResetBtn: {
+    backgroundColor: '#FFD800',
+    width: '50%',
+    padding: 15,
+    borderRadius: 3,
+    alignItems: 'center',
+  },
+  buttonText: {
+    color: 'white',
+    fontWeight: '700',
+    fontSize: 16,
+  },
+
 });

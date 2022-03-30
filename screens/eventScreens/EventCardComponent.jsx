@@ -1,12 +1,15 @@
 import { NavigationRouteContext, useNavigation } from '@react-navigation/core';
-import React from 'react';
+import React, { useContext } from 'react';
 import {
-  View, Text, StyleSheet, FlatList, SafeAreaView, ScrollView, TouchableOpacity,
+  View, Text, StyleSheet, FlatList, SafeAreaView, ScrollView, TouchableOpacity, Image,
 } from 'react-native';
 import moment from 'moment';
+import { UserContext } from '../../contexts/UserContext';
 import GlobalStyles from '../../constants/styles/GlobalStyles';
 
 export default function EventCardComponent(props) {
+  const { userData } = useContext(UserContext);
+
   const eventDate = (new Intl.DateTimeFormat('en-US', {
     year: 'numeric', month: '2-digit', day: '2-digit',
   }).format(props.data.eventDate));
@@ -25,11 +28,17 @@ export default function EventCardComponent(props) {
         <View style={[styles.eventCard, styles.cardOutline]}>
           <View style={styles.eventCardHeader}>
             <Text style={styles.item}>{item.title}</Text>
-            <Text style={[styles.item, styles.postionRight]}>
-              Host:
-              {' '}
-              {item.creator}
-            </Text>
+            <View style={styles.userHostImageContainer}>
+              <Text style={[styles.item, styles.postionRight]}>
+                Host:
+                {' '}
+                {item.creator}
+              </Text>
+              <Image
+                style={styles.userImg}
+                source={{ uri: userData.avatar }}
+              />
+            </View>
           </View>
 
           <View
@@ -131,9 +140,12 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     flexDirection: 'row',
     padding: 5,
+    // justifyContent: 'center',
+    alignItems: 'center',
   },
   postionRight: {
     textAlign: 'right',
+    marginRight: 5,
   },
   eventCardFooter: {
     flex: 1,
@@ -164,5 +176,15 @@ const styles = StyleSheet.create({
     fontSize: 11,
     fontWeight: 'bold',
     color: 'white',
+  },
+  userImg: {
+    height: 20,
+    width: 20,
+    borderRadius: 40,
+  },
+  userHostImageContainer: {
+    flex: 1,
+    justifyContent: 'flex-end',
+    flexDirection: 'row',
   },
 });

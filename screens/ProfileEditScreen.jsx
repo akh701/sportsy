@@ -90,10 +90,10 @@ function ProfileEditScreen() {
   };
 
   return (
-    <KeyboardAvoidingView style={styles.container} behavior="padding" enabled keyboardVerticalOffset={70}>
+    <KeyboardAvoidingView style={{ flex: 1, flexDirection: 'column', justifyContent: 'center' }} behavior="padding" enabled keyboardVerticalOffset={70}>
       <ScrollView>
 
-        <>
+        <View style={styles.container}>
           <View style={{ ...styles.inputContainer, ...GlobalStyles.utilMarginTop }}>
             <View style={{ alignItems: 'center' }}>
               <Image
@@ -164,7 +164,7 @@ function ProfileEditScreen() {
               <Text style={styles.buttonOutlineText}>Update</Text>
             </TouchableOpacity>
           </View>
-        </>
+        </View>
 
       </ScrollView>
 

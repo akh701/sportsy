@@ -46,7 +46,7 @@ export default function HomeScreen({ navigation }) {
 
   return (
     <View style={styles.container}>
-      {/* <MapView
+      <MapView
         style={styles.map}
         // initialRegion={{
         //   latitude: 51.50853,
@@ -81,7 +81,7 @@ export default function HomeScreen({ navigation }) {
           </Marker>
         ))}
 
-      </MapView> */}
+      </MapView>
     </View>
   );
 }

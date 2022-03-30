@@ -76,12 +76,12 @@ if(userData !== null){
             </>
         </View>
 
-        <Text style={styles.profileHeader}>
+        {/* <Text style={styles.profileHeader}>
           Your favourite activities:
-        </Text>
+        </Text> */}
 
 
-        <FlatList
+        {/* <FlatList
         data={[
           {key: userData.preferredSports[0]},
           {key: userData.preferredSports[1]},
@@ -91,7 +91,7 @@ if(userData !== null){
 
         renderItem={({item}) => <Text style={styles.item}>{item.key}</Text>}
         keyExtractor={(item, index) => index.toString()}
-      />
+      /> */}
 
 
 
