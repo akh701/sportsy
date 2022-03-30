@@ -7,10 +7,12 @@ import {
   TextInput,
   StyleSheet,
   Alert,
-  Keyboard, TouchableWithoutFeedback, ScrollView,
+  Keyboard,
+  Image, TouchableWithoutFeedback, ScrollView,
 } from 'react-native';
 import { doc, updateDoc } from 'firebase/firestore';
 import { UserContext } from '../contexts/UserContext';
+import GlobalStyles from '../constants/styles/GlobalStyles';
 
 // import ImagePicker from 'react-native-image-crop-picker';
 import { auth, db } from '../firebase';
@@ -66,75 +68,83 @@ function ProfileEditScreen() {
   };
 
   return (
-    <KeyboardAvoidingView style={styles.container} behavior="padding">
-      <ScrollView
-        contentContainerStyle={{ flexGrow: 1 }}
-        keyboardShouldPersistTaps="handled"
-      >
-        <View style={styles.inputContainer}>
+    <KeyboardAvoidingView style={styles.container} behavior="padding" enabled keyboardVerticalOffset={70}>
+      <ScrollView>
 
-          <View style={{ alignItems: 'center' }}>
-            <Text style={{ marginTop: 10, fontSize: 18, fontWeight: 'bold' }}>
-              {loggedInUser ? loggedInUser.name : ''}
-            </Text>
+        <>
+          <View style={{ ...styles.inputContainer, ...GlobalStyles.utilMarginTop }}>
+            <View style={{ alignItems: 'center' }}>
+              <Image
+                style={{ ...styles.userImg, ...GlobalStyles.utilMarginTop10 }}
+                source={{ uri: loggedInUser.avatar }}
+              />
+              <Text style={{
+                marginTop: 10, fontSize: 18, fontWeight: 'bold', textTransform: 'capitalize',
+              }}
+              >
+                {loggedInUser ? loggedInUser.name : ''}
+              </Text>
+            </View>
+
+            <TextInput
+              placeholder="Name"
+              placeholderTextColor="#666666"
+              autoCorrect={false}
+              value={loggedInUser ? loggedInUser.name : ''}
+              onChangeText={(txt) => setLoggedInUser({ ...loggedInUser, name: txt })}
+              style={styles.textInput}
+            />
+
+            <TextInput
+              placeholder="Username"
+              placeholderTextColor="#666666"
+              value={loggedInUser ? loggedInUser.username : ''}
+              onChangeText={(txt) => setLoggedInUser({ ...loggedInUser, username: txt })}
+              autoCorrect={false}
+              style={styles.textInput}
+            />
+
+            <TextInput
+              multiline
+              numberOfLines={3}
+              placeholder="DOB"
+              placeholderTextColor="#666666"
+              value={loggedInUser ? loggedInUser.DOB : ''}
+              onChangeText={(txt) => setLoggedInUser({ ...loggedInUser, DOB: txt })}
+              autoCorrect
+              style={[styles.textInput, { height: 40 }]}
+            />
+
+            <TextInput
+              placeholder="avatar"
+              placeholderTextColor="#666666"
+              keyboardType="number-pad"
+              autoCorrect={false}
+              value={loggedInUser ? loggedInUser.avatar : ''}
+              onChangeText={(txt) => setLoggedInUser({ ...loggedInUser, avatar: txt })}
+              style={styles.textInput}
+            />
+
+            <TextInput
+              placeholder="location"
+              placeholderTextColor="#666666"
+              autoCorrect={false}
+              value={loggedInUser ? loggedInUser.location : ''}
+              onChangeText={(txt) => setLoggedInUser({ ...loggedInUser, location: txt })}
+              style={styles.textInput}
+            />
           </View>
 
-          <TextInput
-            placeholder="Name"
-            placeholderTextColor="#666666"
-            autoCorrect={false}
-            value={loggedInUser ? loggedInUser.name : ''}
-            onChangeText={(txt) => setLoggedInUser({ ...loggedInUser, name: txt })}
-            style={styles.textInput}
-          />
+          <View style={styles.buttonContainer}>
+            <TouchableOpacity
+              onPress={handleUpdate}
+              style={[styles.button, styles.buttonOutline]}
+            >
+              <Text style={styles.buttonOutlineText}>Update</Text>
+            </TouchableOpacity>
+          </View>
+        </>
 
-          <TextInput
-            placeholder="Username"
-            placeholderTextColor="#666666"
-            value={loggedInUser ? loggedInUser.username : ''}
-            onChangeText={(txt) => setLoggedInUser({ ...loggedInUser, username: txt })}
-            autoCorrect={false}
-            style={styles.textInput}
-          />
-
-          <TextInput
-            multiline
-            numberOfLines={3}
-            placeholder="DOB"
-            placeholderTextColor="#666666"
-            value={loggedInUser ? loggedInUser.DOB : ''}
-            onChangeText={(txt) => setLoggedInUser({ ...loggedInUser, DOB: txt })}
-            autoCorrect
-            style={[styles.textInput, { height: 40 }]}
-          />
-
-          <TextInput
-            placeholder="avatar"
-            placeholderTextColor="#666666"
-            autoCorrect={false}
-            value={loggedInUser ? loggedInUser.avatar : ''}
-            onChangeText={(txt) => setLoggedInUser({ ...loggedInUser, avatar: txt })}
-            style={styles.textInput}
-          />
-
-          <TextInput
-            placeholder="location"
-            placeholderTextColor="#666666"
-            autoCorrect={false}
-            value={loggedInUser ? loggedInUser.location : ''}
-            onChangeText={(txt) => setLoggedInUser({ ...loggedInUser, location: txt })}
-            style={styles.textInput}
-          />
-        </View>
-
-        <View style={styles.buttonContainer}>
-          <TouchableOpacity
-            onPress={handleUpdate}
-            style={[styles.button, styles.buttonOutline]}
-          >
-            <Text style={styles.buttonOutlineText}>Update</Text>
-          </TouchableOpacity>
-        </View>
       </ScrollView>
     </KeyboardAvoidingView>
   );
@@ -162,7 +172,7 @@ const styles = StyleSheet.create({
     width: '80%',
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: 40,
+    marginTop: 30,
   },
   button: {
     backgroundColor: '#63CDAB',
@@ -187,5 +197,13 @@ const styles = StyleSheet.create({
     color: '#63CDAB',
     fontWeight: '700',
     fontSize: 16,
+  },
+  userImg: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: 150,
+    width: 150,
+    borderRadius: 75,
+    marginTop: 10,
   },
 });
