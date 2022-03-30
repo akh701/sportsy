@@ -4,6 +4,7 @@ import {
   View, Text, StyleSheet, FlatList, SafeAreaView, ScrollView, TouchableOpacity,
 } from 'react-native';
 import moment from 'moment';
+import GlobalStyles from '../../constants/styles/GlobalStyles';
 
 export default function EventCardComponent(props) {
   const eventDate = (new Intl.DateTimeFormat('en-US', {
@@ -22,33 +23,68 @@ export default function EventCardComponent(props) {
       data={props.data}
       renderItem={({ item }) => (
         <View style={[styles.eventCard, styles.cardOutline]}>
-          <Text style={styles.item}>
-            {item.creator}
-            's event
-          </Text>
-          <Text style={styles.item}>{item.title}</Text>
-          <Text style={styles.item}>{item.category}</Text>
-          {/* <Text style={styles.item}>{new Date(item.eventDate * 1000).toLocaleString()}</Text> */}
-          <Text style={styles.item}>{moment(item.eventDate.toDate().toString()).format('MMMM Do YYYY, h:mm:ss a')}</Text>
-          <Text style={styles.item}>{item.eventCard}</Text>
-          <Text style={styles.item}>
-            {item.attendees.length}
-            /
-            {item.spotsAvailable}
-            {' '}
-            signed up
-          </Text>
-          <Text style={styles.item}>{item.locationArray[0]}</Text>
-          <Text style={styles.item} />
-          <TouchableOpacity>
-            <Text
-              onPress={() => { navigateToSinglePage(item); }}
-              style={{ fontSize: 11, fontWeight: 'bold' }}
-            >
-              View Event
+          <View style={styles.eventCardHeader}>
+            <Text style={styles.item}>{item.title}</Text>
+            <Text style={[styles.item, styles.postionRight]}>
+              Host:
+              {' '}
+              {item.creator}
+            </Text>
+          </View>
+
+          <View
+            style={{
+              borderBottomColor: '#A9A9A9',
+              borderBottomWidth: 1,
+            }}
+          />
+          <View style={styles.eventCardBody}>
+            <Text numberOfLines={1} style={[styles.item, GlobalStyles.utilMarginBottom5, GlobalStyles.utilMarginTop10]}>
+              <Text style={styles.boldText}>What: </Text>
+              {item.description}
+            </Text>
+
+            <Text style={[styles.item, GlobalStyles.utilMarginBottom5, GlobalStyles.utilMarginTop5]}>
+              <Text style={styles.boldText}>When: </Text>
+              {moment(item.eventDate.toDate().toString()).format('MMMM Do YYYY, h:mm:ss a')}
 
             </Text>
-          </TouchableOpacity>
+
+            <Text style={[styles.item, GlobalStyles.utilMarginBottom5, GlobalStyles.utilMarginTop5]}>
+              <Text style={styles.boldText}>Spots: </Text>
+              {item.attendees.length}
+              /
+              {item.spotsAvailable}
+              {' '}
+              signed up
+            </Text>
+            <Text style={[styles.item, GlobalStyles.utilMarginBottom5]}>
+              <Text style={styles.boldText}>Where: </Text>
+              {item.locationArray[0]}
+
+            </Text>
+          </View>
+
+          <View
+            style={{
+              borderBottomColor: '#A9A9A9',
+              borderBottomWidth: 1,
+              marginBottom: 10,
+            }}
+          />
+
+          <View style={styles.eventCardFooter}>
+            <Text style={styles.cardBadge}>{item.category}</Text>
+            <TouchableOpacity style={styles.viewEventButton}>
+              <Text
+                onPress={() => { navigateToSinglePage(item); }}
+                style={styles.viewEventText}
+              >
+                View Event
+
+              </Text>
+            </TouchableOpacity>
+          </View>
 
         </View>
       )}
@@ -64,13 +100,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   item: {
-    padding: 5,
     fontSize: 14,
     height: 20,
   },
   eventContainer: {
     height: '100%',
-    width: '75%',
+    width: '90%',
   },
   cardOutline: {
     backgroundColor: 'white',
@@ -82,7 +117,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     paddingHorizontal: 10,
     paddingVertical: 10,
-    borderRadius: 10,
+    borderRadius: 5,
     marginBottom: 5,
   },
   textInput: {
@@ -91,5 +126,43 @@ const styles = StyleSheet.create({
     paddingLeft: 10,
     color: '#333333',
   },
+  eventCardHeader: {
+    flex: 1,
+    justifyContent: 'space-between',
+    flexDirection: 'row',
+    padding: 5,
+  },
+  postionRight: {
+    textAlign: 'right',
+  },
+  eventCardFooter: {
+    flex: 1,
+    justifyContent: 'space-between',
+    flexDirection: 'row',
+  },
+  boldText: {
+    fontWeight: 'bold',
+  },
+  cardBadge: {
+    borderColor: '#5BD0AA',
+    borderWidth: 1,
+    borderRadius: 3,
+    paddingVertical: 4,
+    paddingHorizontal: 6,
+    fontSize: 11,
+  },
+  viewEventButton: {
+    backgroundColor: '#63CDAB',
+    color: 'white',
+    borderWidth: 0,
+    borderRadius: 3,
 
+  },
+  viewEventText: {
+    paddingVertical: 4,
+    paddingHorizontal: 6,
+    fontSize: 11,
+    fontWeight: 'bold',
+    color: 'white',
+  },
 });

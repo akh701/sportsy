@@ -41,18 +41,18 @@ export default function MyEventsScreen({ navigation }) {
 
       {/* List of events user created */}
       <View style={styles.eventContainer}>
-        <Text style={styles.textInput}>
+        <Text style={[styles.textInput, styles.boldText]}>
           My Events:
         </Text>
         <EventCardComponent data={userCreatedEvents} />
       </View>
       <View style={styles.eventAttending}>
         {/* List of events user is attending */}
-        <Text style={[styles.textInput, styles.attending]}>
+        <Text style={[styles.textInput, styles.attending, styles.boldText]}>
           Events I'm Attending:
         </Text>
         <EventCardComponent data={userAttendingEvents} />
-       </View>
+      </View>
 
     </SafeAreaView>
 
@@ -69,13 +69,13 @@ const styles = StyleSheet.create({
   },
   eventContainer: {
     height: '50%',
-    width: '75%',
+    width: '90%',
     borderBottomColor: 'black',
     borderBottomWidth: 1,
   },
   eventAttending: {
     height: '50%',
-    width: '75%',
+    width: '90%',
   },
   textInput: {
     backgroundColor: 'transparent',
@@ -86,6 +86,9 @@ const styles = StyleSheet.create({
   },
   attending: {
     marginBottom: 5,
+  },
+  boldText: {
+    fontWeight: 'bold',
   },
 
 });
