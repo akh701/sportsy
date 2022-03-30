@@ -3,8 +3,11 @@ import {
   StyleSheet, Text, View, Dimensions, TouchableOpacity,
 } from 'react-native';
 import MapView, { Marker, Callout } from 'react-native-maps';
-import { collection, getDocs } from 'firebase/firestore';
-import { db } from '../firebase';
+import {
+  collection, getDocs, doc, getDoc,
+} from 'firebase/firestore';
+import { db, auth } from '../firebase';
+import { UserContext } from '../contexts/UserContext';
 
 // import Header from './globalScreens/HeaderComponent';
 
@@ -12,8 +15,24 @@ export default function HomeScreen({ navigation }) {
   const [eventsLocation, setEventsLocation] = useState();
   const [loading, setLoading] = useState(true);
   const eventsCollectionRef = collection(db, 'events');
+  const docRef = doc(db, 'users', auth.currentUser.uid);
+  const {
+    loggedInUser, setLoggedInUser, userData, setUserData,
+  } = useContext(UserContext);
 
   // const navigation = useNavigation();
+
+  useEffect(() => {
+    setLoading(true);
+
+    getDoc(docRef).then((userInfo) => {
+      setUserData(userInfo.data());
+      setLoading(false);
+      return userInfo.data();
+    }).then((data) => {
+      setLoggedInUser(data);
+    }).catch((error) => alert(error.message));
+  }, []);
 
   useEffect(() => {
     setLoading(true);

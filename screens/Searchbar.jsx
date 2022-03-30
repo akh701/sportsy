@@ -11,11 +11,12 @@ import {
 import { ScreenStackHeaderConfig } from 'react-native-screens';
 
 export default function Searchbar({
-  setToggleSubmit, style, setSearch, search, toggleSubmit,
+  setToggleSubmit, style, setSearch, search, toggleSubmit, setReset,
 }) {
   const [query, setQuery] = useState('');
   const [error, setError] = useState(null);
 
+  function handleReset() { setReset((prevValue) => prevValue + 1); }
   return (
     <View style={[styles.container, style]}>
       <View style={styles.searchContainer}>
@@ -48,7 +49,12 @@ export default function Searchbar({
                 }
       </View>
       <View>
-        <Button title="Submit search" color="#008080" onPress={() => setToggleSubmit(!toggleSubmit)}>Submit</Button>
+        <Button title="Submit Search" color="#008080" onPress={() => setToggleSubmit(!toggleSubmit)}>Submit</Button>
+
+      </View>
+      <View>
+        <Button title="Reset Results" color="#008080" onPress={handleReset}>Submit</Button>
+
       </View>
       {
                 error

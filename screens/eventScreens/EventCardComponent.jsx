@@ -17,11 +17,12 @@ export default function EventCardComponent(props) {
   };
 
   return (
+
     <FlatList
       keyExtractor={(i) => i.id}
       data={props.data}
-      renderItem={({ item }) => (
-        <View style={[styles.eventCard, styles.cardOutline]}>
+      renderItem={({ item, index }) => (
+        <View style={[styles.eventCard, styles.cardOutline]} key={index}>
           <Text style={styles.item}>
             {item.creator}
             's event
@@ -29,7 +30,7 @@ export default function EventCardComponent(props) {
           <Text style={styles.item}>{item.title}</Text>
           <Text style={styles.item}>{item.category}</Text>
           {/* <Text style={styles.item}>{new Date(item.eventDate * 1000).toLocaleString()}</Text> */}
-          <Text style={styles.item}>{moment(item.eventDate.toDate().toString()).format('MMMM Do YYYY, h:mm:ss a')}</Text>
+          <Text style={styles.item}>{moment(item.eventDate.toDate()).format('MMMM Do YYYY, h:mm:ss a')}</Text>
           <Text style={styles.item}>{item.eventCard}</Text>
           <Text style={styles.item}>
             {item.attendees.length}
@@ -52,7 +53,7 @@ export default function EventCardComponent(props) {
 
         </View>
       )}
-      keyExtractor={(item, index) => index}
+      // keyExtractor={(item, index) => index}
       showsVerticalScrollIndicator={false}
     />
   );

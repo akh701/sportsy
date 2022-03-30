@@ -13,9 +13,10 @@ import {
 import {
   collection, getDocs, query, where,
 } from 'firebase/firestore';
+import { confirmPasswordReset } from 'firebase/auth';
 import { auth, db } from '../firebase';
 
-import Searchbar from '../components/Searchbar';
+import Searchbar from './Searchbar';
 import EventsList from './EventsList';
 
 // import Header from './globalScreens/HeaderComponent';
@@ -24,6 +25,7 @@ const eventsRef = collection(db, 'events');
 
 export default function FindEventsScreen({ navigation }) {
   const [search, setSearch] = useState('');
+  const [reset, setReset] = useState(0);
   const [result, setResult] = useState([]);
   const [toggleSubmit, setToggleSubmit] = useState(false);
 
@@ -35,7 +37,7 @@ export default function FindEventsScreen({ navigation }) {
         .then((data) => {
           const resultsArray = [];
           data.forEach((doc) => {
-            resultsArray.push(doc.data());
+            resultsArray.push({ ...doc.data(), id: doc.id });
           });
           return resultsArray;
         })
@@ -44,6 +46,13 @@ export default function FindEventsScreen({ navigation }) {
         });
     }
   }, [toggleSubmit]);
+
+  useEffect(() => {
+    getDocs(eventsRef).then((data) => {
+      setResult(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
+      setSearch('');
+    });
+  }, [reset]);
 
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
@@ -66,6 +75,7 @@ export default function FindEventsScreen({ navigation }) {
           search={search}
           toggleSubmit={toggleSubmit}
           setToggleSubmit={setToggleSubmit}
+          setReset={setReset}
           style={{ marginTop: '8%' }}
         />
       </View>
@@ -83,10 +93,10 @@ export default function FindEventsScreen({ navigation }) {
           {result.length}
         </Text>
       </View>
-        <EventsList
-          result={result}
-          setResult={setResult}
-        />
+      <EventsList
+        result={result}
+        setResult={setResult}
+      />
     </View>
   );
 }

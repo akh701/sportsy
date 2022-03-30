@@ -35,8 +35,6 @@ function SingleEventScreen({ route, navigation }) {
 
   const deleteComment = (id) => {
     deleteDoc(doc(db, 'comments', id)).then(() => { getComments(); });
-    // db.collection('comments').doc(id).delete();
-    // deleteDoc(id);
   };
 
   const handleCommentPress = () => {
@@ -45,8 +43,11 @@ function SingleEventScreen({ route, navigation }) {
     }
 
     setComment({ ...comment, timePosted: serverTimestamp() });
-    addDoc(collection(db, 'comments'), comment).then(() => { getComments(); });
-    setComment({ ...comment, comment: 'Your comment has been posted!' });
+    addDoc(collection(db, 'comments'), comment).then(() => {
+      getComments();
+      setComment({ ...comment, comment: '' });
+    });
+    return alert('Your comment has been posted');
   };
 
   const eventCreatedDate = moment(route.params.createdAt.milliseconds).format('MMMM Do YYYY, h:mm:ss a');
@@ -88,11 +89,12 @@ function SingleEventScreen({ route, navigation }) {
 
   useEffect(() => {
     getComments();
-  }, []);
+  }, [refresh]);
 
   useEffect(() => {
     const unsubscribe = navigation.addListener('blur', () => {
       setAttendees([]);
+      setPostedComments([]);
     });
     return unsubscribe;
   }, [navigation]);
@@ -207,7 +209,7 @@ function SingleEventScreen({ route, navigation }) {
         <SingleEventAttendees attendees={attendees} keyExtractor={(result) => result.stringValue} />
       </View>
       <View style={styles.mapContainer}>
-        {/* <MapView
+        <MapView
           style={styles.map}
           initialRegion={{
             latitude: route.params.locationArray[1],
@@ -230,7 +232,7 @@ function SingleEventScreen({ route, navigation }) {
             }}
             radius={1000}
           />
-        </MapView> */}
+        </MapView>
       </View>
       {/* POST COMMENTS */}
       <View style={styles.action}>
@@ -266,7 +268,7 @@ function SingleEventScreen({ route, navigation }) {
                   {item.username}
                 </Text>
 
-                <Text style={styles.item}>{moment(item.timePosted.toDate().toString()).format('MMMM Do YYYY, h:mm:ss a')}</Text>
+                <Text style={styles.item}>{moment(item.timePosted.toDate()).format('MMMM Do YYYY, h:mm:ss a')}</Text>
                 <Text>{item.comment}</Text>
 
                 <TouchableOpacity>
@@ -291,7 +293,7 @@ function SingleEventScreen({ route, navigation }) {
                 {item.username}
               </Text>
 
-              <Text style={styles.item}>{moment(item.timePosted.toDate().toString()).format('MMMM Do YYYY, h:mm:ss a')}</Text>
+              <Text style={styles.item}>{moment(item.timePosted.toDate()).format('MMMM Do YYYY, h:mm:ss a')}</Text>
               <Text>{item.comment}</Text>
 
             </View>
@@ -300,8 +302,6 @@ function SingleEventScreen({ route, navigation }) {
         keyExtractor={(item, index) => index}
         showsVerticalScrollIndicator={false}
       />
-      {/* <CommentCardComponent data={postedComments} /> */}
-
     </ScrollView>
   );
 }
