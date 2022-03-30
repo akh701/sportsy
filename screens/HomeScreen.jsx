@@ -27,7 +27,7 @@ export default function HomeScreen({ navigation }) {
 
     getDoc(docRef).then((userInfo) => {
       setUserData(userInfo.data());
-      setLoading(false);
+      // setLoading(false);
       return userInfo.data();
     }).then((data) => {
       setLoggedInUser(data);
