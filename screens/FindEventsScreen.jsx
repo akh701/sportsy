@@ -69,16 +69,15 @@ export default function FindEventsScreen({ navigation }) {
   return (
 
     <View style={styles.container}>
-      <View style={{ height: '20%' }}>
-        <Searchbar
-          setSearch={setSearch}
-          search={search}
-          toggleSubmit={toggleSubmit}
-          setToggleSubmit={setToggleSubmit}
-          setReset={setReset}
-          style={{ marginTop: '8%' }}
-        />
-      </View>
+      <Searchbar
+        setSearch={setSearch}
+        search={search}
+        toggleSubmit={toggleSubmit}
+        setToggleSubmit={setToggleSubmit}
+        setReset={setReset}
+        style={styles.searchBar}
+      />
+
       <View>
         <FlatList
           data={result}
@@ -106,6 +105,9 @@ const styles = StyleSheet.create({
     flex: 1,
     height: '100%',
     width: '100%',
+  },
+  searchBar: {
+    marginTop: '8%',
   },
   noResults: {
     alignItems: 'center',
