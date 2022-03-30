@@ -22,6 +22,15 @@ export default GlobalStyles = StyleSheet.create({
   dangerColor: {
     backgroundColor: '#FF6B74'
   },
+  mutedGrey: {
+    backgroundColor: '#A9A9A9'
+  },
+  btnPrimary: {
+    borderRadius: 5,
+  },
+  btnPrimaryOutline: {
+    borderColor: '#5BD0AA',
+  },
   TabIcons: {
       marginTop: 5
   },
