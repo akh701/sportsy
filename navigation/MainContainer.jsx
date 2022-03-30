@@ -54,15 +54,12 @@ function MainContainer() {
           screenOptions={({ route }) => ({
             tabBarIcon: ({ focused, color, size }) => {
               let iconName;
-
               const rn = route.name;
-
               if (rn === landingName) {
                 iconName = focused ? 'home' : 'home-outline';
               } else if (rn === loginRegisterName) {
                 iconName = focused ? 'log-in' : 'log-in-outline';
               }
-
               // You can return any component that you like here!
               return <Ionicons style={GlobalStyles.TabIcons} name={iconName} size={size} color={color} />;
             },
@@ -79,6 +76,7 @@ function MainContainer() {
               null,
             ],
           })}
+
           // tabBarOptions={{
           //   activeTintColor: '#5BD0AA',
           //   inactiveTintColor: 'grey',

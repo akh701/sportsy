@@ -266,7 +266,7 @@ function SingleEventScreen({ route, navigation }) {
                   {item.username}
                 </Text>
 
-                <Text style={styles.item}>{moment(item.timePosted.toDate().toString()).format('MMMM Do YYYY, h:mm:ss a')}</Text>
+                <Text style={styles.item}>{moment(item.timePosted.toDate()).format('MMMM Do YYYY, h:mm:ss a')}</Text>
                 <Text>{item.comment}</Text>
 
                 <TouchableOpacity>
@@ -291,7 +291,7 @@ function SingleEventScreen({ route, navigation }) {
                 {item.username}
               </Text>
 
-              <Text style={styles.item}>{moment(item.timePosted.toDate().toString()).format('MMMM Do YYYY, h:mm:ss a')}</Text>
+              <Text style={styles.item}>{moment(item.timePosted.toDate()).format('MMMM Do YYYY, h:mm:ss a')}</Text>
               <Text>{item.comment}</Text>
 
             </View>
@@ -300,9 +300,9 @@ function SingleEventScreen({ route, navigation }) {
         keyExtractor={(item, index) => index}
         showsVerticalScrollIndicator={false}
       />
-      {/* <CommentCardComponent data={postedComments} /> */}
 
     </ScrollView>
+
   );
 }
 
