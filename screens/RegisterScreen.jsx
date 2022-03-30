@@ -1,12 +1,13 @@
 import {
-  KeyboardAvoidingView, StyleSheet, Text, TextInput, TouchableOpacity, View,
+  KeyboardAvoidingView, StyleSheet, Button, Text, TextInput, TouchableOpacity, View, Alert,
 } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import React, { useEffect, useState } from 'react';
 import { useNavigation } from '@react-navigation/core';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { setDoc, doc, Timestamp } from 'firebase/firestore';
-import { auth, db } from '../firebase';
+import * as ImagePicker from 'expo-image-picker';
+import { auth, db, storage } from '../firebase';
 
 const items = require('../globalVariables');
 
@@ -18,9 +19,9 @@ export default function RegisterScreen() {
   const [DOB, setDOB] = useState('');
   const [avatar, setAvatar] = useState('https://firebasestorage.googleapis.com/v0/b/sportsy-c79d8.appspot.com/o/sportsyDefaultPhoto.png?alt=media&token=b13b51bc-cd6d-4d2e-b442-a6547a4e2add');
   const [location, setLocation] = useState([]);
-  const [sport1, setSport1] = useState('');
-  const [sport2, setSport2] = useState('');
-  const [sport3, setSport3] = useState('');
+  // const [sport1, setSport1] = useState('');
+  // const [sport2, setSport2] = useState('');
+  // const [sport3, setSport3] = useState('');
 
   const navigation = useNavigation();
 
@@ -53,13 +54,33 @@ export default function RegisterScreen() {
 
     createUserWithEmailAndPassword(auth, email, password)
       .then((userCredentials) => {
-        preferredSports.push(sport1, sport2, sport3);
+        // preferredSports.push(sport1, sport2, sport3);
         const { user } = userCredentials;
         setDoc(doc(db, 'users', user.uid), {
-          name, username, DOB, locationArray, dateJoined: Timestamp.fromDate(new Date()), avatar, preferredSports,
+          name, username, DOB, locationArray, dateJoined: Timestamp.fromDate(new Date()), avatar,
         });
       })
       .catch((error) => alert(error.message));
+  };
+
+  const handlePress = async () => {
+    const result = await ImagePicker.launchImageLibraryAsync();
+
+    if (!result.cancelled) {
+      uploadImage(result.uri, email).then(() => {
+        Alert.alert('Success');
+      }).catch((error) => {
+        Alert.alert(error);
+      });
+    }
+  };
+
+  const uploadImage = async (uri, email) => {
+    const response = await fetch(uri);
+    const blob = await response.blob();
+
+    const ref = storage.ref().child(`images/${email}/avatar`);
+    return ref.put(blob);
   };
 
   return (
@@ -108,6 +129,7 @@ export default function RegisterScreen() {
           onChangeText={(text) => setAvatar(text)}
           style={styles.input}
         />
+        <Button title="Choose imgae.." onPress={handlePress} />
         <TextInput
           placeholder="Post-Code"
           value={location}

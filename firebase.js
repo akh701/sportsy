@@ -2,6 +2,7 @@ import {
   apiKey, authDomain, projectId, storageBucket, messagingSenderId, appId, measurementId,
 } from '@env';
 import { initializeApp } from 'firebase/app';
+import { getStorage } from 'firebase/storage';
 
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import { initializeFirestore } from 'firebase/firestore';
@@ -22,5 +23,6 @@ const auth = getAuth();
 const db = initializeFirestore(app, {
   experimentalForceLongPolling: true,
 });
+const storage = getStorage(app);
 
-export { db, auth };
+export { db, auth, storage };
