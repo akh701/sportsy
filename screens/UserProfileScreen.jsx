@@ -3,8 +3,7 @@ import React,{useState, useEffect, useContext} from 'react'
 import { StyleSheet, Text, TouchableOpacity, View,FlatList,
   SafeAreaView,Image } from 'react-native'
   import { getDoc, doc} from 'firebase/firestore';
-import { auth } from '../firebase' //// IMPORT THIS TO CHECK USER AND CHECK auth.currentUser
-import { db } from '../firebase';
+import { db, auth } from '../firebase';
 import { UserContext } from '../contexts/UserContext';
 import GlobalStyles from '../constants/styles/GlobalStyles'
 

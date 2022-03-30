@@ -6,8 +6,8 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import { auth } from '../firebase';
 
-//Styles
-import GlobalStyles from '../constants/styles/GlobalStyles'
+// Styles
+import GlobalStyles from '../constants/styles/GlobalStyles';
 
 // Screens
 import LoginScreen from '../screens/LoginScreen';
@@ -66,13 +66,26 @@ function MainContainer() {
               // You can return any component that you like here!
               return <Ionicons style={GlobalStyles.TabIcons} name={iconName} size={size} color={color} />;
             },
+            tabBarActiveTintColor: '#5BD0AA',
+            tabBarInactiveTintColor: 'grey',
+            tabBarLabelStyle: {
+              paddingBottom: 5,
+              fontSize: 10,
+            },
+            tabBarStyle: [
+              {
+                display: 'flex',
+              },
+              null,
+            ],
           })}
-          tabBarOptions={{
-            activeTintColor: '#5BD0AA',
-            inactiveTintColor: 'grey',
-            labelStyle: { paddingBottom: 5, fontSize: 10 },
-            style: { padding: 5, height: 80 },
-          }}
+          // tabBarOptions={{
+          //   activeTintColor: '#5BD0AA',
+          //   inactiveTintColor: 'grey',
+          //   labelStyle: { paddingBottom: 5, fontSize: 10 },
+          //   style: { padding: 5, height: 80 },
+          // }}
+
         >
 
           <Tab.Screen name={landingName} component={LandingScreen} options={{ headerShown: false }} />
@@ -107,14 +120,26 @@ function MainContainer() {
             // You can return any component that you like here!
             return <Ionicons style={GlobalStyles.TabIcons} name={iconName} size={size} color={color} />;
           },
+          tabBarActiveTintColor: '#5BD0AA',
+          tabBarInactiveTintColor: 'grey',
+          tabBarLabelStyle: {
+            paddingBottom: 5,
+            fontSize: 10,
+          },
+          tabBarStyle: [
+            {
+              display: 'flex',
+            },
+            null,
+          ],
 
         })}
-        tabBarOptions={{
-          activeTintColor: '#5BD0AA',
-          inactiveTintColor: 'grey',
-          labelStyle: { paddingBottom: 5, fontSize: 10 },
-          style: { padding: 5, height: 80 },
-        }}
+        // tabBarOptions={{
+        //   activeTintColor: '#5BD0AA',
+        //   inactiveTintColor: 'grey',
+        //   labelStyle: { paddingBottom: 5, fontSize: 10 },
+        //   style: { padding: 5, height: 80 },
+        // }}
       >
 
         <Tab.Screen name={homeName} component={HomeScreen} options={{ headerShown: false }} />
