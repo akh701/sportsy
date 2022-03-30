@@ -158,8 +158,8 @@ function SingleEventScreen({ route, navigation }) {
   return (
 
     <KeyboardAvoidingView style={{ flex: 1, flexDirection: 'column', justifyContent: 'center' }} behavior="padding" enabled keyboardVerticalOffset={70}>
-      <ScrollView style={styles.container}>
-        <View style={styles.EventDetailscontainer}>
+      <ScrollView>
+        <View style={styles.container}>
           <Text style={styles.SingleEventHeader}>Event Details</Text>
           {route.params.cancelled ? <Text style={styles.cancellationMessage}> EVENT HAS BEEN CANCELLED </Text> : null }
 
@@ -277,7 +277,7 @@ function SingleEventScreen({ route, navigation }) {
         {postedComments.map((item, index) => {
           if (item.username === userData.username) {
             return (
-              <View style={[styles.eventCard, styles.cardOutline]}>
+              <View style={[styles.eventCard, styles.cardOutline]} key={index}>
                 <Text style={styles.item}>
                   Comment By
                   {' '}
@@ -302,7 +302,7 @@ function SingleEventScreen({ route, navigation }) {
               </View>
             );
           } return (
-            <View style={[styles.eventCard, styles.cardOutline]}>
+            <View style={[styles.eventCard, styles.cardOutline]} key={index}>
               <Text style={styles.item}>
                 Comment By
                 {' '}
