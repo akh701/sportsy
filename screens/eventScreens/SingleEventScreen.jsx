@@ -159,75 +159,75 @@ function SingleEventScreen({ route, navigation }) {
 
     <KeyboardAvoidingView style={{ flex: 1, flexDirection: 'column', justifyContent: 'center' }} behavior="padding" enabled keyboardVerticalOffset={70}>
       <ScrollView style={styles.container}>
-      <View style={styles.EventDetailscontainer}>
-        <Text style={styles.SingleEventHeader}>Event Details</Text>
-        {route.params.cancelled ? <Text style={styles.cancellationMessage}> EVENT HAS BEEN CANCELLED </Text> : null }
+        <View style={styles.EventDetailscontainer}>
+          <Text style={styles.SingleEventHeader}>Event Details</Text>
+          {route.params.cancelled ? <Text style={styles.cancellationMessage}> EVENT HAS BEEN CANCELLED </Text> : null }
 
-        <Text style={styles.EventTitle}>{route.params.title}</Text>
-        <View style={styles.EventHeader}>
-          <Text style={styles.EventCategory}>
-            {route.params.category}
+          <Text style={styles.EventTitle}>{route.params.title}</Text>
+          <View style={styles.EventHeader}>
+            <Text style={styles.EventCategory}>
+              {route.params.category}
+              {' '}
+            </Text>
+            <Text style={styles.EventHost}>
+              <Text style={styles.boldText}>Host: </Text>
+              {route.params.creator}
+            </Text>
+
+          </View>
+
+          <Text style={styles.description}>
+            <Text style={styles.boldText}>What: </Text>
+            {route.params.description}
+          </Text>
+
+          <Text style={styles.eventDateAndTime}>
+            <Text style={styles.boldText}>When: </Text>
+            This event will take place on
             {' '}
+            <Text style={styles.boldText}>
+              {eventDate}
+              {' '}
+            </Text>
+
+            {' .'}
           </Text>
-          <Text style={styles.EventHost}>
-            <Text style={styles.boldText}>Host: </Text>
-            {route.params.creator}
-          </Text>
+          <Text style={styles.spotsTaken}>
+            <Text style={styles.boldText}>Spots: </Text>
 
-        </View>
-
-        <Text style={styles.description}>
-          <Text style={styles.boldText}>What: </Text>
-          {route.params.description}
-        </Text>
-
-        <Text style={styles.eventDateAndTime}>
-          <Text style={styles.boldText}>When: </Text>
-          This event will take place on
-          {' '}
-          <Text style={styles.boldText}>
-            {eventDate}
+            {route.params.attendees.length}
             {' '}
+            of the
+            {' '}
+            {route.params.spotsAvailable}
+            {' '}
+            available spots at this event have been taken.
           </Text>
-
-          {' .'}
-        </Text>
-        <Text style={styles.spotsTaken}>
-          <Text style={styles.boldText}>Spots: </Text>
-
-          {route.params.attendees.length}
-          {' '}
-          of the
-          {' '}
-          {route.params.spotsAvailable}
-          {' '}
-          available spots at this event have been taken.
-        </Text>
-        <View style={styles.joinLeaveEventBtn}>
-          {route.params.creatorId === auth.currentUser.uid ? (
-            <TouchableOpacity
-              onPress={handleCancel}
-              style={[styles.button, styles.buttonOutline]}
-            >
-              <Text style={styles.buttonOutlineText}>{route.params.cancelled ? 'Reinstate Event' : 'Cancel Event'}</Text>
-            </TouchableOpacity>
-          ) : (
-            <TouchableOpacity
-              onPress={handlePress}
-              style={[styles.button, styles.buttonOutline]}
-            >
-              <Text style={styles.buttonOutlineText}>{route.params.attendees.indexOf(auth.currentUser.uid) >= 0 ? 'Leave Event' : 'Join Event'}</Text>
-            </TouchableOpacity>
-          ) }
+          <View style={styles.joinLeaveEventBtn}>
+            {route.params.creatorId === auth.currentUser.uid ? (
+              <TouchableOpacity
+                onPress={handleCancel}
+                style={[styles.button, styles.buttonOutline]}
+              >
+                <Text style={styles.buttonOutlineText}>{route.params.cancelled ? 'Reinstate Event' : 'Cancel Event'}</Text>
+              </TouchableOpacity>
+            ) : (
+              <TouchableOpacity
+                onPress={handlePress}
+                style={[styles.button, styles.buttonOutline]}
+              >
+                <Text style={styles.buttonOutlineText}>{route.params.attendees.indexOf(auth.currentUser.uid) >= 0 ? 'Leave Event' : 'Join Event'}</Text>
+              </TouchableOpacity>
+            ) }
+          </View>
+          <Text style={styles.attendeeLabel}>Currently attending:</Text>
+          <View style={styles.attendeesContainer}>
+            <SingleEventAttendees attendees={attendees} keyExtractor={(result) => result.stringValue} />
+          </View>
         </View>
-        <Text style={styles.attendeeLabel}>Currently attending:</Text>
-        <View style={styles.attendeesContainer}>
-          <SingleEventAttendees attendees={attendees} keyExtractor={(result) => result.stringValue} />
-        </View>
-
         <View style={styles.mapContainer}>
           {/* <MapView
-      
+
           style={styles.map}
           initialRegion={{
             latitude: route.params.locationArray[1],
@@ -251,7 +251,7 @@ function SingleEventScreen({ route, navigation }) {
             radius={1000}
           />
 
-        </MapView> 
+        </MapView>  */}
         </View>
         {/* POST COMMENTS */}
         <View style={styles.action}>
@@ -267,7 +267,6 @@ function SingleEventScreen({ route, navigation }) {
             numberOfLines={4}
           />
         </View>
-    
 
         <View style={styles.userBtnWrapper}>
           <TouchableOpacity style={styles.userBtn} onPress={handleCommentPress}>
@@ -276,7 +275,6 @@ function SingleEventScreen({ route, navigation }) {
         </View>
 
         {postedComments.map((item, index) => {
-
           if (item.username === userData.username) {
             return (
               <View style={[styles.eventCard, styles.cardOutline]}>

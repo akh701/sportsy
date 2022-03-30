@@ -37,9 +37,6 @@ const GlobalStyles = StyleSheet.create({
   },
   utilPaddingBottom: {
     paddingBottom: 10,
-
-  },
-
   },
   utilMarginBottom5: {
     marginBottom: 5,
