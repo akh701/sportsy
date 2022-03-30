@@ -46,7 +46,7 @@ export default function EventCardComponent(props) {
 
             <Text style={[styles.item, GlobalStyles.utilMarginBottom5, GlobalStyles.utilMarginTop5]}>
               <Text style={styles.boldText}>When: </Text>
-              {moment(item.eventDate.toDate().toString()).format('MMMM Do YYYY, h:mm:ss a')}
+              {moment(item.eventDate.toDate()).format('MMMM Do YYYY, h:mm:ss a')}
 
             </Text>
 
@@ -88,7 +88,7 @@ export default function EventCardComponent(props) {
 
         </View>
       )}
-      keyExtractor={(item, index) => index}
+      // keyExtractor={(item, index) => index}
       showsVerticalScrollIndicator={false}
     />
   );

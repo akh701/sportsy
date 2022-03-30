@@ -9,7 +9,6 @@ import {
   Dimensions,
   SafeAreaView,
   KeyboardAvoidingView,
-
 } from 'react-native';
 import moment from 'moment';
 import {
@@ -37,8 +36,6 @@ function SingleEventScreen({ route, navigation }) {
 
   const deleteComment = (id) => {
     deleteDoc(doc(db, 'comments', id)).then(() => { getComments(); });
-    // db.collection('comments').doc(id).delete();
-    // deleteDoc(id);
   };
 
   const handleCommentPress = () => {
@@ -47,8 +44,11 @@ function SingleEventScreen({ route, navigation }) {
     }
 
     setComment({ ...comment, timePosted: serverTimestamp() });
-    addDoc(collection(db, 'comments'), comment).then(() => { getComments(); });
-    setComment({ ...comment, comment: 'Your comment has been posted!' });
+    addDoc(collection(db, 'comments'), comment).then(() => {
+      getComments();
+      setComment({ ...comment, comment: '' });
+    });
+    return alert('Your comment has been posted');
   };
 
   const eventCreatedDate = moment(route.params.createdAt.milliseconds).format('MMMM Do YYYY, h:mm:ss a');
@@ -90,11 +90,12 @@ function SingleEventScreen({ route, navigation }) {
 
   useEffect(() => {
     getComments();
-  }, []);
+  }, [refresh]);
 
   useEffect(() => {
     const unsubscribe = navigation.addListener('blur', () => {
       setAttendees([]);
+      setPostedComments([]);
     });
     return unsubscribe;
   }, [navigation]);
@@ -156,7 +157,8 @@ function SingleEventScreen({ route, navigation }) {
 
   return (
 
-    <SafeAreaView style={styles.container}>
+    <KeyboardAvoidingView style={{ flex: 1, flexDirection: 'column', justifyContent: 'center' }} behavior="padding" enabled keyboardVerticalOffset={70}>
+      <ScrollView style={styles.container}>
       <View style={styles.EventDetailscontainer}>
         <Text style={styles.SingleEventHeader}>Event Details</Text>
         {route.params.cancelled ? <Text style={styles.cancellationMessage}> EVENT HAS BEEN CANCELLED </Text> : null }
@@ -192,6 +194,7 @@ function SingleEventScreen({ route, navigation }) {
         </Text>
         <Text style={styles.spotsTaken}>
           <Text style={styles.boldText}>Spots: </Text>
+
           {route.params.attendees.length}
           {' '}
           of the
@@ -221,9 +224,10 @@ function SingleEventScreen({ route, navigation }) {
         <View style={styles.attendeesContainer}>
           <SingleEventAttendees attendees={attendees} keyExtractor={(result) => result.stringValue} />
         </View>
-      </View>
-      <View style={styles.mapContainer}>
-        <MapView
+
+        <View style={styles.mapContainer}>
+          {/* <MapView
+      
           style={styles.map}
           initialRegion={{
             latitude: route.params.locationArray[1],
@@ -246,34 +250,33 @@ function SingleEventScreen({ route, navigation }) {
             }}
             radius={1000}
           />
-        </MapView>
-      </View>
 
-      {/* POST COMMENTS */}
-      <View style={styles.action}>
+        </MapView> 
+        </View>
+        {/* POST COMMENTS */}
+        <View style={styles.action}>
 
-        <TextInput
-          placeholder="Type your comment here..."
-          placeholderTextColor="#666666"
-          autoCorrect={false}
-          value={comment.comment}
-          onChangeText={(txt) => setComment({ ...comment, comment: txt })}
-          style={styles.textInput}
-          multiline
-          numberOfLines={4}
-        />
-      </View>
+          <TextInput
+            placeholder="Type your comment here..."
+            placeholderTextColor="#666666"
+            autoCorrect={false}
+            value={comment.comment}
+            onChangeText={(txt) => setComment({ ...comment, comment: txt })}
+            style={styles.textInput}
+            multiline
+            numberOfLines={4}
+          />
+        </View>
+    
 
-      <View style={styles.userBtnWrapper}>
-        <TouchableOpacity style={styles.userBtn} onPress={handleCommentPress}>
-          <Text style={styles.userBtnTxt}>Post Comment</Text>
-        </TouchableOpacity>
-      </View>
+        <View style={styles.userBtnWrapper}>
+          <TouchableOpacity style={styles.userBtn} onPress={handleCommentPress}>
+            <Text style={styles.userBtnTxt}>Post Comment</Text>
+          </TouchableOpacity>
+        </View>
 
-      <FlatList
-        keyExtractor={(i) => i.id}
-        data={postedComments}
-        renderItem={({ item }) => {
+        {postedComments.map((item, index) => {
+
           if (item.username === userData.username) {
             return (
               <View style={[styles.eventCard, styles.cardOutline]}>
@@ -283,7 +286,7 @@ function SingleEventScreen({ route, navigation }) {
                   {item.username}
                 </Text>
 
-                <Text style={styles.item}>{moment(item.timePosted.toDate().toString()).format('MMMM Do YYYY, h:mm:ss a')}</Text>
+                <Text style={styles.item}>{moment(item.timePosted.toDate()).format('MMMM Do YYYY, h:mm:ss a')}</Text>
                 <Text>{item.comment}</Text>
 
                 <TouchableOpacity>
@@ -307,21 +310,13 @@ function SingleEventScreen({ route, navigation }) {
                 {' '}
                 {item.username}
               </Text>
-
-              <Text style={styles.item}>{moment(item.timePosted.toDate().toString()).format('MMMM Do YYYY, h:mm:ss a')}</Text>
+              <Text style={styles.item}>{moment(item.timePosted.toDate()).format('MMMM Do YYYY, h:mm:ss a')}</Text>
               <Text>{item.comment}</Text>
-
             </View>
           );
-        }}
-        keyExtractor={(item, index) => index}
-        showsVerticalScrollIndicator={false}
-      />
-
-      {/* <CommentCardComponent data={postedComments} /> */}
-
-    </SafeAreaView>
-
+        })}
+      </ScrollView>
+    </KeyboardAvoidingView>
   );
 }
 

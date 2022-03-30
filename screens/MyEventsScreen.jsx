@@ -16,23 +16,28 @@ export default function MyEventsScreen({ navigation }) {
   const attendingEventsQuery = query(collection(db, 'events'), where('attendees', 'array-contains-any', [auth.currentUser.uid]));
 
   /// USE EFFECT TO GET EVENTS CREATED BY USER
-
   useEffect(() => {
-    setLoading(true);
-    getDocs(createdEventsQuery).then((events) => {
-      setUserCreatedEvents(events.docs.map((event) => ({ ...event.data(), id: event.id })));
-      setLoading(false);
+    const unsubscribe = navigation.addListener('focus', () => {
+      setLoading(true);
+      getDocs(createdEventsQuery).then((data) => {
+        setUserCreatedEvents(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
+        setLoading(false);
+      });
     });
-  }, []);
+    return unsubscribe;
+  }, [navigation]);
 
-  /// USE EFFECT TO GET EVENTS CREATED BY USER
+  /// USE EFFECT TO GET EVENTS USER IS ATTENDING
   useEffect(() => {
-    setLoading(true);
-    getDocs(attendingEventsQuery).then((events) => {
-      setUserAttendingEvents(events.docs.map((event) => ({ ...event.data(), id: event.id })));
-      setLoading(false);
+    const unsubscribe = navigation.addListener('focus', () => {
+      setLoading(true);
+      getDocs(attendingEventsQuery).then((data) => {
+        setUserAttendingEvents(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
+        setLoading(false);
+      });
     });
-  }, []);
+    return unsubscribe;
+  }, [navigation]);
 
   if (isloading) { return <Text>Loading</Text>; }
   return (

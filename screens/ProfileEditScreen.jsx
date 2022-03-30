@@ -8,11 +8,13 @@ import {
   StyleSheet,
   Alert,
   Keyboard,
-  Image,
+
+  Image, TouchableWithoutFeedback, ScrollView,
 } from 'react-native';
 import { doc, updateDoc } from 'firebase/firestore';
 import { UserContext } from '../contexts/UserContext';
 import GlobalStyles from '../constants/styles/GlobalStyles'
+
 
 // import ImagePicker from 'react-native-image-crop-picker';
 import { auth, db } from '../firebase';
@@ -30,38 +32,36 @@ function ProfileEditScreen() {
     },
   ]);
 
-  const apiString = "https://api.postcodes.io/postcodes"
-      const FetchPostcode = (query) => {
-        return fetch(`${apiString}/${query}`, {
-          method: 'GET',
-          headers: {
-            Accept: 'application/json',
-            'Content-Type': 'application/json'
-          },
+  const apiString = 'https://api.postcodes.io/postcodes';
+  const FetchPostcode = (query) => fetch(`${apiString}/${query}`, {
+    method: 'GET',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
 
-        })
-        .then((res) => {
-          const apiResult = res.json()
-          return apiResult;
-        })
-        .then((data)=> {
-          const userPostcode = data.result.postcode
-          const latitude = data.result.latitude
-          const longitude = data.result.longitude
-          const region = data.result.nuts
-          const userLocation = [userPostcode, latitude, longitude, region]
-          return userLocation
-        })
-    }
+  })
+    .then((res) => {
+      const apiResult = res.json();
+      return apiResult;
+    })
+    .then((data) => {
+      const userPostcode = data.result.postcode;
+      const { latitude } = data.result;
+      const { longitude } = data.result;
+      const region = data.result.nuts;
+      const userLocation = [userPostcode, latitude, longitude, region];
+      return userLocation;
+    });
 
   const handleUpdate = async () => {
     const docRef = doc(db, 'users', auth.currentUser.uid);
-    const locationArray = await FetchPostcode(loggedInUser.location)
+    const locationArray = await FetchPostcode(loggedInUser.location);
     const fieldsToUpdate = {
       name: loggedInUser.name,
       username: loggedInUser.username,
       DOB: loggedInUser.DOB,
-      locationArray: locationArray,
+      locationArray,
       avatar: loggedInUser.avatar,
     };
     updateDoc(docRef, fieldsToUpdate).then((data) => {
@@ -70,75 +70,86 @@ function ProfileEditScreen() {
   };
 
   return (
-    <KeyboardAvoidingView style={styles.container} behavior="padding">
-      <View style={{...styles.inputContainer, ...GlobalStyles.utilMarginTop}}>
-        <View style={{ alignItems: 'center' }}>
-        <Image
-          style={{...styles.userImg, ...GlobalStyles.utilMarginTop10}}
-          source={{uri: loggedInUser.avatar}}
-        />
-          <Text style={{ marginTop: 10, fontSize: 18, fontWeight: 'bold', textTransform: 'capitalize' }}>
-            {loggedInUser ? loggedInUser.name : ''}
-          </Text>
-        </View>
+    <KeyboardAvoidingView style={styles.container} behavior="padding" enabled keyboardVerticalOffset={70}>
+      <ScrollView>
 
-        <TextInput
-          placeholder="Name"
-          placeholderTextColor="#666666"
-          autoCorrect={false}
-          value={loggedInUser ? loggedInUser.name : ''}
-          onChangeText={(txt) => setLoggedInUser({ ...loggedInUser, name: txt })}
-          style={styles.textInput}
-        />
+        <>
+          <View style={{ ...styles.inputContainer, ...GlobalStyles.utilMarginTop }}>
+            <View style={{ alignItems: 'center' }}>
+              <Image
+                style={{ ...styles.userImg, ...GlobalStyles.utilMarginTop10 }}
+                source={{ uri: loggedInUser.avatar }}
+              />
+              <Text style={{
+                marginTop: 10, fontSize: 18, fontWeight: 'bold', textTransform: 'capitalize',
+              }}
+              >
+                {loggedInUser ? loggedInUser.name : ''}
+              </Text>
+            </View>
 
-        <TextInput
-          placeholder="Username"
-          placeholderTextColor="#666666"
-          value={loggedInUser ? loggedInUser.username : ''}
-          onChangeText={(txt) => setLoggedInUser({ ...loggedInUser, username: txt })}
-          autoCorrect={false}
-          style={styles.textInput}
-        />
+            <TextInput
+              placeholder="Name"
+              placeholderTextColor="#666666"
+              autoCorrect={false}
+              value={loggedInUser ? loggedInUser.name : ''}
+              onChangeText={(txt) => setLoggedInUser({ ...loggedInUser, name: txt })}
+              style={styles.textInput}
+            />
 
-        <TextInput
-          multiline
-          numberOfLines={3}
-          placeholder="DOB"
-          placeholderTextColor="#666666"
-          value={loggedInUser ? loggedInUser.DOB : ''}
-          onChangeText={(txt) => setLoggedInUser({ ...loggedInUser, DOB: txt })}
-          autoCorrect
-          style={[styles.textInput, { height: 40 }]}
-        />
+            <TextInput
+              placeholder="Username"
+              placeholderTextColor="#666666"
+              value={loggedInUser ? loggedInUser.username : ''}
+              onChangeText={(txt) => setLoggedInUser({ ...loggedInUser, username: txt })}
+              autoCorrect={false}
+              style={styles.textInput}
+            />
 
-        <TextInput
-          placeholder="avatar"
-          placeholderTextColor="#666666"
-          keyboardType="number-pad"
-          autoCorrect={false}
-          value={loggedInUser ? loggedInUser.avatar : ''}
-          onChangeText={(txt) => setLoggedInUser({ ...loggedInUser, avatar: txt })}
-          style={styles.textInput}
-        />
+            <TextInput
+              multiline
+              numberOfLines={3}
+              placeholder="DOB"
+              placeholderTextColor="#666666"
+              value={loggedInUser ? loggedInUser.DOB : ''}
+              onChangeText={(txt) => setLoggedInUser({ ...loggedInUser, DOB: txt })}
+              autoCorrect
+              style={[styles.textInput, { height: 40 }]}
+            />
 
-        <TextInput
-          placeholder="location"
-          placeholderTextColor="#666666"
-          autoCorrect={false}
-          value={loggedInUser ? loggedInUser.location : ''}
-          onChangeText={(txt) => setLoggedInUser({ ...loggedInUser, location: txt })}
-          style={styles.textInput}
-        />
-      </View>
+            <TextInput
+              placeholder="avatar"
+              placeholderTextColor="#666666"
+              keyboardType="number-pad"
+              autoCorrect={false}
+              value={loggedInUser ? loggedInUser.avatar : ''}
+              onChangeText={(txt) => setLoggedInUser({ ...loggedInUser, avatar: txt })}
+              style={styles.textInput}
+            />
 
-      <View style={styles.buttonContainer}>
-        <TouchableOpacity
-          onPress={handleUpdate}
-          style={[styles.button, styles.buttonOutline]}
-        >
-          <Text style={styles.buttonOutlineText}>Update</Text>
-        </TouchableOpacity>
-      </View>
+            <TextInput
+              placeholder="location"
+              placeholderTextColor="#666666"
+              autoCorrect={false}
+              value={loggedInUser ? loggedInUser.location : ''}
+              onChangeText={(txt) => setLoggedInUser({ ...loggedInUser, location: txt })}
+              style={styles.textInput}
+            />
+          </View>
+
+          <View style={styles.buttonContainer}>
+            <TouchableOpacity
+              onPress={handleUpdate}
+              style={[styles.button, styles.buttonOutline]}
+            >
+              <Text style={styles.buttonOutlineText}>Update</Text>
+            </TouchableOpacity>
+          </View>
+        </>
+
+      </ScrollView>
+
+   
     </KeyboardAvoidingView>
   );
 }
@@ -197,6 +208,8 @@ const styles = StyleSheet.create({
     height: 150,
     width: 150,
     borderRadius: 75,
+
     marginTop:10,
+
   },
 });

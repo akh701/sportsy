@@ -1,6 +1,6 @@
 import { StyleSheet } from 'react-native';
 
-export default GlobalStyles = StyleSheet.create({
+const GlobalStyles = StyleSheet.create({
   primaryColor: {
     backgroundColor: '#5BD0AA',
   },
@@ -21,6 +21,7 @@ export default GlobalStyles = StyleSheet.create({
   },
   dangerColor: {
     backgroundColor: '#FF6B74',
+
   },
   mutedGrey: {
     backgroundColor: '#A9A9A9',
@@ -36,6 +37,9 @@ export default GlobalStyles = StyleSheet.create({
   },
   utilPaddingBottom: {
     paddingBottom: 10,
+
+  },
+
   },
   utilMarginBottom5: {
     marginBottom: 5,
@@ -50,3 +54,5 @@ export default GlobalStyles = StyleSheet.create({
     marginTop: 10,
   },
 });
+
+export default GlobalStyles;
