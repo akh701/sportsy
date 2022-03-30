@@ -2,28 +2,28 @@ import { StyleSheet } from 'react-native';
 
 export default GlobalStyles = StyleSheet.create({
   primaryColor: {
-    backgroundColor: '#5BD0AA'
+    backgroundColor: '#5BD0AA',
   },
   primaryColorDark: {
-    backgroundColor: '#115E63'
+    backgroundColor: '#115E63',
   },
   primaryColorLight: {
-    backgroundColor: '#C1FAD7'
+    backgroundColor: '#C1FAD7',
   },
   successColor: {
-    backgroundColor: '#7EC61F'
+    backgroundColor: '#7EC61F',
   },
   infoColor: {
-    backgroundColor: '#7F8AFF'
+    backgroundColor: '#7F8AFF',
   },
   warningColor: {
-    backgroundColor: '#FFD800'
+    backgroundColor: '#FFD800',
   },
   dangerColor: {
-    backgroundColor: '#FF6B74'
+    backgroundColor: '#FF6B74',
   },
   mutedGrey: {
-    backgroundColor: '#A9A9A9'
+    backgroundColor: '#A9A9A9',
   },
   btnPrimary: {
     borderRadius: 5,
@@ -32,15 +32,21 @@ export default GlobalStyles = StyleSheet.create({
     borderColor: '#5BD0AA',
   },
   TabIcons: {
-      marginTop: 5
+    marginTop: 5,
   },
   utilPaddingBottom: {
-      paddingBottom: 10
+    paddingBottom: 10,
+  },
+  utilMarginBottom5: {
+    marginBottom: 5,
   },
   utilMarginTop: {
-    marginTop: 30
+    marginTop: 30,
+  },
+  utilMarginTop5: {
+    marginTop: 5,
   },
   utilMarginTop10: {
-    marginTop: 10
+    marginTop: 10,
   },
 });

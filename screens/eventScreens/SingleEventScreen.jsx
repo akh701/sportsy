@@ -7,6 +7,8 @@ import {
   TextInput,
   ScrollView, FlatList,
   Dimensions,
+  SafeAreaView,
+  KeyboardAvoidingView,
 
 } from 'react-native';
 import moment from 'moment';
@@ -15,7 +17,7 @@ import {
 
   serverTimestamp, addDoc, collection, query, where, getDocs, orderBy, deleteDoc,
 } from 'firebase/firestore';
-import { SafeAreaView } from 'react-native-safe-area-context';
+// import { SafeAreaView } from 'react-native-safe-area-context';
 import MapView, { Marker, Circle } from 'react-native-maps';
 import SingleEventAttendees from './SingleEventAttendees';
 import { db, auth } from '../../firebase';
@@ -153,61 +155,75 @@ function SingleEventScreen({ route, navigation }) {
   if (loading) { return <Text>Loading...</Text>; }
 
   return (
-    <ScrollView style={styles.container}>
-      <Text style={styles.SingleEventHeader}>Event Details</Text>
-      {route.params.cancelled ? <Text style={styles.cancellationMessage}> EVENT HAS BEEN CANCELLED </Text> : null }
-      <Text style={styles.EventTitle}>{route.params.title}</Text>
-      <Text style={styles.EventCategory}>{route.params.category}</Text>
-      <Text style={styles.EventCreated}>
-        Event created on
-        {' '}
-        {eventCreatedDate}
-        {' '}
-        and was created by
-        {' '}
-        {route.params.creator}
-      </Text>
-      <View style={styles.descriptionContainer}>
-        <Text numberOfLines={10} ellipsizeMode="tail" style={styles.description}>{route.params.description}</Text>
-      </View>
-      <Text style={styles.eventDateAndTime}>
-        This event will take place on
-        {' '}
-        {eventDate}
-        {' .'}
-      </Text>
-      <Text style={styles.spotsTaken}>
-        {route.params.attendees.length}
-        {' '}
-        of the
-        {' '}
-        {route.params.spotsAvailable}
-        {' '}
-        available spots at this event have been taken.
-      </Text>
-      <View style={styles.joinLeaveEventBtn}>
-        {route.params.creatorId === auth.currentUser.uid ? (
-          <TouchableOpacity
-            onPress={handleCancel}
-            style={[styles.button, styles.buttonOutline]}
-          >
-            <Text style={styles.buttonOutlineText}>{route.params.cancelled ? 'Reinstate Event' : 'Cancel Event'}</Text>
-          </TouchableOpacity>
-        ) : (
-          <TouchableOpacity
-            onPress={handlePress}
-            style={[styles.button, styles.buttonOutline]}
-          >
-            <Text style={styles.buttonOutlineText}>{route.params.attendees.indexOf(auth.currentUser.uid) >= 0 ? 'Leave Event' : 'Join Event'}</Text>
-          </TouchableOpacity>
-        ) }
-      </View>
-      <Text style={styles.attendeeLabel}>Currently attending:</Text>
-      <View style={styles.attendeesContainer}>
-        <SingleEventAttendees attendees={attendees} keyExtractor={(result) => result.stringValue} />
+
+    <SafeAreaView style={styles.container}>
+      <View style={styles.EventDetailscontainer}>
+        <Text style={styles.SingleEventHeader}>Event Details</Text>
+        {route.params.cancelled ? <Text style={styles.cancellationMessage}> EVENT HAS BEEN CANCELLED </Text> : null }
+
+        <Text style={styles.EventTitle}>{route.params.title}</Text>
+        <View style={styles.EventHeader}>
+          <Text style={styles.EventCategory}>
+            {route.params.category}
+            {' '}
+          </Text>
+          <Text style={styles.EventHost}>
+            <Text style={styles.boldText}>Host: </Text>
+            {route.params.creator}
+          </Text>
+
+        </View>
+
+        <Text style={styles.description}>
+          <Text style={styles.boldText}>What: </Text>
+          {route.params.description}
+        </Text>
+
+        <Text style={styles.eventDateAndTime}>
+          <Text style={styles.boldText}>When: </Text>
+          This event will take place on
+          {' '}
+          <Text style={styles.boldText}>
+            {eventDate}
+            {' '}
+          </Text>
+
+          {' .'}
+        </Text>
+        <Text style={styles.spotsTaken}>
+          <Text style={styles.boldText}>Spots: </Text>
+          {route.params.attendees.length}
+          {' '}
+          of the
+          {' '}
+          {route.params.spotsAvailable}
+          {' '}
+          available spots at this event have been taken.
+        </Text>
+        <View style={styles.joinLeaveEventBtn}>
+          {route.params.creatorId === auth.currentUser.uid ? (
+            <TouchableOpacity
+              onPress={handleCancel}
+              style={[styles.button, styles.buttonOutline]}
+            >
+              <Text style={styles.buttonOutlineText}>{route.params.cancelled ? 'Reinstate Event' : 'Cancel Event'}</Text>
+            </TouchableOpacity>
+          ) : (
+            <TouchableOpacity
+              onPress={handlePress}
+              style={[styles.button, styles.buttonOutline]}
+            >
+              <Text style={styles.buttonOutlineText}>{route.params.attendees.indexOf(auth.currentUser.uid) >= 0 ? 'Leave Event' : 'Join Event'}</Text>
+            </TouchableOpacity>
+          ) }
+        </View>
+        <Text style={styles.attendeeLabel}>Currently attending:</Text>
+        <View style={styles.attendeesContainer}>
+          <SingleEventAttendees attendees={attendees} keyExtractor={(result) => result.stringValue} />
+        </View>
       </View>
       <View style={styles.mapContainer}>
-        {/* <MapView
+        <MapView
           style={styles.map}
           initialRegion={{
             latitude: route.params.locationArray[1],
@@ -230,8 +246,9 @@ function SingleEventScreen({ route, navigation }) {
             }}
             radius={1000}
           />
-        </MapView> */}
+        </MapView>
       </View>
+
       {/* POST COMMENTS */}
       <View style={styles.action}>
 
@@ -246,13 +263,13 @@ function SingleEventScreen({ route, navigation }) {
           numberOfLines={4}
         />
       </View>
-      <View />
 
       <View style={styles.userBtnWrapper}>
         <TouchableOpacity style={styles.userBtn} onPress={handleCommentPress}>
           <Text style={styles.userBtnTxt}>Post Comment</Text>
         </TouchableOpacity>
       </View>
+
       <FlatList
         keyExtractor={(i) => i.id}
         data={postedComments}
@@ -300,15 +317,28 @@ function SingleEventScreen({ route, navigation }) {
         keyExtractor={(item, index) => index}
         showsVerticalScrollIndicator={false}
       />
+
       {/* <CommentCardComponent data={postedComments} /> */}
 
-    </ScrollView>
+    </SafeAreaView>
+
   );
 }
 
 export default SingleEventScreen;
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  EventDetailscontainer: {
+    width: '90%',
+    marginTop: 10,
+    backgroundColor: 'white',
+    padding: 10,
+  },
   SingleEventHeader: {
     textAlign: 'center',
     fontSize: 25,
@@ -316,59 +346,72 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     marginTop: 15,
   },
+  EventHeader: {
+    marginBottom: 10,
+    flexDirection: 'row',
+    // justifyContent: 'center',
+    alignItems: 'center',
+    paddingBottom: 10,
+    borderBottomColor: 'black',
+    borderBottomWidth: 1,
+  },
   EventTitle: {
     textAlign: 'center',
     fontSize: 20,
-    marginBottom: 4,
+    marginBottom: 5,
   },
   EventCategory: {
     textAlign: 'center',
-    fontSize: 12,
-    color: 'blue',
-  },
-  EventCreated: {
-    textAlign: 'center',
-    fontSize: 12,
-    marginBottom: 10,
-    marginLeft: 25,
-    marginRight: 25,
-  },
-  description: {
     borderWidth: 1,
-    borderColor: '#20232a',
-    borderRadius: 6,
-    padding: 3,
+    borderColor: '#5BD0AA',
+    borderRadius: 3,
+    paddingVertical: 4,
+    paddingHorizontal: 6,
+    fontSize: 12,
+    marginRight: '40%',
   },
-  descriptionContainer: {
-    flex: 1,
-    padding: 24,
-    justifyContent: 'center',
-    alignItems: 'center',
+  postionRight: {
+    textAlign: 'right',
+  },
+
+  EventHost: {
+    padding: 5,
   },
   spotsTaken: {
-    textAlign: 'center',
-    marginHorizontal: 35,
+    // textAlign: 'center',
+    // marginHorizontal: 35,
+    padding: 5,
+  },
+  description: {
+    // textAlign: 'center',
+    padding: 5,
   },
   eventDateAndTime: {
-    fontFamily: 'Cochin',
-    fontWeight: 'bold',
-    fontSize: 12,
+    // fontFamily: 'Cochin',
+    // fontWeight: 'bold',
+    // fontSize: 12,
+    // padding: 10,
     marginBottom: 5,
-    textAlign: 'center',
-    marginHorizontal: 10,
+    padding: 5,
+    // textAlign: 'center',
+    // marginHorizontal: 10,
   },
   attendeeLabel: {
-    marginLeft: 25,
+    // marginLeft: 25,
     marginTop: 15,
     marginBottom: 10,
-    fontSize: 10,
-    color: 'blue',
+    borderColor: '#5BD0AA',
+    borderWidth: 1,
+    borderRadius: 3,
+    paddingVertical: 4,
+    paddingHorizontal: 6,
+    fontSize: 12,
+    width: '35%',
   },
   attendeesContainer: {
-    marginTop: 5,
-    marginLeft: 25,
-  },
-  container: {
+    borderWidth: 1,
+    padding: 5,
+
   },
   cardOutline: {
     backgroundColor: 'white',
@@ -387,7 +430,12 @@ const styles = StyleSheet.create({
     backgroundColor: '#63CDAB',
     width: '40%',
     padding: 5,
-    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: '#5BD0AA',
+    borderRadius: 3,
+    paddingVertical: 4,
+    paddingHorizontal: 6,
+    fontSize: 12,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -395,7 +443,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     marginTop: 5,
     borderColor: '#63CDAB',
-    borderWidth: 2,
+    borderWidth: 1,
   },
   buttonText: {
     color: 'white',
@@ -420,12 +468,17 @@ const styles = StyleSheet.create({
     marginBottom: 5,
   },
   map: {
-    width: '90%',
+    width: '100%',
     height: 200,
   },
   mapContainer: {
-    justifyContent: 'center',
-    alignItems: 'center',
+    // justifyContent: 'center',
+    // alignItems: 'center',
+    width: '90%',
     marginTop: 5,
+    // borderWidth: 1,
+  },
+  boldText: {
+    fontWeight: 'bold',
   },
 });

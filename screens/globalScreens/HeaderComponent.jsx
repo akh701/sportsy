@@ -5,21 +5,6 @@ import {
 
 const win = Dimensions.get('window');
 
-const styles = StyleSheet.create({
-  container: {
-
-  },
-  headerLogo: {
-    width: win.width,
-    height: 60,
-    // padding: 150,
-    // top: 0,
-    // left: 0,
-    // borderWidth: 1,
-    // borderRadius: 20,
-  },
-});
-
 function HeaderComponent() {
   // return (
   //   <View><Text style={{ fontSize: 45, fontWeight: 'bold', alignSelf: 'center' }}>Sportsy</Text></View>
@@ -35,3 +20,18 @@ function HeaderComponent() {
 }
 
 export default HeaderComponent;
+
+const styles = StyleSheet.create({
+  container: {
+
+  },
+  headerLogo: {
+    width: win.width,
+    height: 60,
+    // padding: 150,
+    // top: 0,
+    // left: 0,
+    // borderWidth: 1,
+    // borderRadius: 20,
+  },
+});
