@@ -53,19 +53,40 @@ function ProfileEditScreen() {
       return userLocation;
     });
 
-  const handleUpdate = async () => {
+  const handleUpdate = () => {
     const docRef = doc(db, 'users', auth.currentUser.uid);
-    const locationArray = await FetchPostcode(loggedInUser.location);
-    const fieldsToUpdate = {
-      name: loggedInUser.name,
-      username: loggedInUser.username,
-      DOB: loggedInUser.DOB,
-      locationArray,
-      avatar: loggedInUser.avatar,
-    };
-    updateDoc(docRef, fieldsToUpdate).then((data) => {
-      updateSuccessAlert();
-    });
+    // const locationArray = await FetchPostcode(loggedInUser.location);
+    console.log(loggedInUser.location, 'location empty');
+    if (loggedInUser.location === '') {
+      console.log(loggedInUser.location, 'location empty');
+      const fieldsToUpdate = {
+        name: loggedInUser.name,
+        username: loggedInUser.username,
+        DOB: loggedInUser.DOB,
+        locationArray: loggedInUser.locationArray,
+        avatar: loggedInUser.avatar,
+        location: locationArray[0],
+      };
+      updateDoc(docRef, fieldsToUpdate).then((data) => {
+        updateSuccessAlert();
+      })
+        .catch((err) => alert(err));
+    } else {
+      FetchPostcode(loggedInUser.location).then((locationArray) => {
+        const fieldsToUpdate = {
+          name: loggedInUser.name,
+          username: loggedInUser.username,
+          DOB: loggedInUser.DOB,
+          locationArray,
+          location: locationArray[0],
+          avatar: loggedInUser.avatar,
+        };
+        updateDoc(docRef, fieldsToUpdate).then((data) => {
+          updateSuccessAlert();
+        })
+          .catch((err) => alert(err));
+      }).catch((err) => alert('That postcode is not valid.'));
+    }
   };
 
   return (
@@ -117,9 +138,8 @@ function ProfileEditScreen() {
             />
 
             <TextInput
-              placeholder="avatar"
+              placeholder="Avatar URL"
               placeholderTextColor="#666666"
-              keyboardType="number-pad"
               autoCorrect={false}
               value={loggedInUser ? loggedInUser.avatar : ''}
               onChangeText={(txt) => setLoggedInUser({ ...loggedInUser, avatar: txt })}
@@ -127,7 +147,7 @@ function ProfileEditScreen() {
             />
 
             <TextInput
-              placeholder="location"
+              placeholder="Postcode"
               placeholderTextColor="#666666"
               autoCorrect={false}
               value={loggedInUser ? loggedInUser.location : ''}
