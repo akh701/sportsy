@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
 import {
-  View, Text, StyleSheet, SafeAreaView,
+  View, Text, StyleSheet, SafeAreaView, ActivityIndicator,
 } from 'react-native';
 import {
   collection, query, where, getDocs,
