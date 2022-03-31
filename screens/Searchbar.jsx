@@ -1,5 +1,4 @@
-import { sendSignInLinkToEmail } from 'firebase/auth';
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import {
   StyleSheet,
   View,
@@ -8,7 +7,7 @@ import {
   TextInput,
   Button,
 } from 'react-native';
-import { ScreenStackHeaderConfig } from 'react-native-screens';
+import { CheckBox } from '@react-native-community/checkbox';
 
 export default function Searchbar({
   setToggleSubmit, style, setSearch, search, toggleSubmit, setReset,
@@ -48,6 +47,16 @@ export default function Searchbar({
                       : <View style={styles.vwClear} />
                 }
       </View>
+      {/* <View>
+        <View style={styles.checkboxContainer}>
+          <CheckBox
+            value={isCancelled}
+            onValueChange={setIsCancelled}
+            style={styles.checkbox}
+          />
+          <Text style={styles.label}>Exclude cancelled events?</Text>
+        </View>
+      </View> */}
       <View style={styles.searchBtnContainer}>
         <TouchableOpacity style={styles.searchSubbmitBtn}>
           <Text

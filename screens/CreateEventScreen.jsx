@@ -23,10 +23,10 @@ import GlobalStyles from '../constants/styles/GlobalStyles';
 import { UserContext } from '../contexts/UserContext';
 import { auth, db } from '../firebase';
 
-export default function CreateEventScreen({ navigation }) {
+export default function CreateEventScreen() {
   const [modalVisible, setModalVisible] = useState(false);
   const {
-    loggedInUser, setLoggedInUser, userData, setUserData,
+    userData,
   } = useContext(UserContext);
   const [eventDetails, setEventDetails] = useState({
     attendees: [], category: '', createdAt: '', creator: userData.username, creatorId: auth.currentUser.uid, description: '', eventDate: new Date(), location: '', spotsAvailable: 0, title: '', cancelled: false,

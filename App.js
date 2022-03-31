@@ -3,7 +3,6 @@ import React, { useState } from 'react';
 import HeaderComponent from './screens/globalScreens/HeaderComponent';
 import MainContainer from './navigation/MainContainer';
 import { UserContext } from './contexts/UserContext';
-import GlobalStack from './navigation/GlobalStack';
 
 export default function App() {
   LogBox.ignoreAllLogs();
@@ -20,7 +19,6 @@ export default function App() {
           <HeaderComponent />
         </View>
       </SafeAreaView>
-      {/* <GlobalStack /> */}
       <MainContainer />
 
     </UserContext.Provider>
