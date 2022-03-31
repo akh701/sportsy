@@ -16,9 +16,7 @@ export default function HomeScreen({ navigation }) {
   const [loading, setLoading] = useState(true);
   const eventsCollectionRef = collection(db, 'events');
   const docRef = doc(db, 'users', auth.currentUser.uid);
-  const {
-    loggedInUser, setLoggedInUser, userData, setUserData,
-  } = useContext(UserContext);
+  const { setLoggedInUser, setUserData } = useContext(UserContext);
 
   // const navigation = useNavigation();
 
@@ -27,7 +25,6 @@ export default function HomeScreen({ navigation }) {
 
     getDoc(docRef).then((userInfo) => {
       setUserData(userInfo.data());
-      // setLoading(false);
       return userInfo.data();
     }).then((data) => {
       setLoggedInUser(data);
@@ -53,14 +50,8 @@ export default function HomeScreen({ navigation }) {
 
   return (
     <View style={styles.container}>
-      <MapView
+      {/* <MapView
         style={styles.map}
-        // initialRegion={{
-        //   latitude: 51.50853,
-        //   longitude: -0.12574,
-        //   latitudeDelta: 0.0922,
-        //   longitudeDelta: 0.0421,
-        // }}
       >
         { eventsLocation.map((eventLocation, index) => (
           <Marker
@@ -88,7 +79,7 @@ export default function HomeScreen({ navigation }) {
           </Marker>
         ))}
 
-      </MapView>
+      </MapView> */}
     </View>
   );
 }

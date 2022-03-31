@@ -1,7 +1,7 @@
 import { useNavigation } from '@react-navigation/core'
 import React,{useState, useEffect, useContext} from 'react'
-import { StyleSheet, Text, TouchableOpacity, View,FlatList,
-  SafeAreaView,Image } from 'react-native'
+import { StyleSheet, Text, TouchableOpacity, View,
+  SafeAreaView,Image, ActivityIndicator } from 'react-native'
   import { getDoc, doc} from 'firebase/firestore';
 import { db, auth } from '../firebase';
 import { UserContext } from '../contexts/UserContext';
@@ -28,7 +28,14 @@ const UserProfileScreen = () => {
   }, []);
 
 
-if(isloading){ return  <Text>Loading</Text>}
+  if (isloading) {
+    return (
+      <View style={[styles.container, styles.horizontal]}>
+        <ActivityIndicator size="large" color="#00ff00" />
+        <Text>Loading...</Text>
+      </View>
+    );
+  }
 
 //signOut functionality
   const handleSignOut = () => {
@@ -75,36 +82,12 @@ if(userData !== null){
               </TouchableOpacity>
             </>
         </View>
-
-        {/* <Text style={styles.profileHeader}>
-          Your favourite activities:
-        </Text> */}
-
-
-        {/* <FlatList
-        data={[
-          {key: userData.preferredSports[0]},
-          {key: userData.preferredSports[1]},
-          {key: userData.preferredSports[2]},
-
-        ]}
-
-        renderItem={({item}) => <Text style={styles.item}>{item.key}</Text>}
-        keyExtractor={(item, index) => index.toString()}
-      /> */}
-
-
-
      <Text>Email: {auth.currentUser?.email}</Text>
-
-
     </SafeAreaView>
-
   )
  }
-
 }
-//we are here
+
 export default UserProfileScreen;
 
 const styles = StyleSheet.create({

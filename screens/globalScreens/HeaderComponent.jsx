@@ -6,9 +6,6 @@ import {
 const win = Dimensions.get('window');
 
 function HeaderComponent() {
-  // return (
-  //   <View><Text style={{ fontSize: 45, fontWeight: 'bold', alignSelf: 'center' }}>Sportsy</Text></View>
-  // );
   return (
     <View style={styles.container}>
       <Image
@@ -28,10 +25,5 @@ const styles = StyleSheet.create({
   headerLogo: {
     width: win.width,
     height: 70,
-    // padding: 150,
-    // top: 0,
-    // left: 0,
-    // borderWidth: 1,
-    // borderRadius: 20,
   },
 });

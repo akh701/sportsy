@@ -5,9 +5,7 @@ import {
   StyleSheet,
   TouchableOpacity,
   TextInput,
-  ScrollView, FlatList,
-  Dimensions,
-  SafeAreaView,
+  ScrollView,
   Image,
   ActivityIndicator,
   KeyboardAvoidingView,
@@ -25,6 +23,7 @@ import { db, auth } from '../../firebase';
 import { UserContext } from '../../contexts/UserContext';
 
 function SingleEventScreen({ route, navigation }) {
+  const [hostAvatar, setHostAvatar] = useState('');
   const { userData } = useContext(UserContext);
   const [postedComments, setPostedComments] = useState([]);
   const [attendees, setAttendees] = useState([]);
@@ -35,6 +34,7 @@ function SingleEventScreen({ route, navigation }) {
   });
   const [refresh, setRefresh] = useState(0);
   const commentsQuery = query(collection(db, 'comments'), orderBy('timePosted'), where('eventId', '==', route.params.id));
+  const hostAvatarQuery = doc(db, 'users', route.params.creatorId);
 
   const deleteComment = (id) => {
     deleteDoc(doc(db, 'comments', id)).then(() => { getComments(); });
@@ -85,8 +85,16 @@ function SingleEventScreen({ route, navigation }) {
     });
   }
 
+  function getHostAvatar() {
+    getDoc(hostAvatarQuery)
+      .then((data) => {
+        setHostAvatar(data.data().avatar);
+      });
+  }
+
   useEffect(() => {
     requestData(route.params.attendees);
+    getHostAvatar();
   }, [refresh]);
 
   useEffect(() => {
@@ -186,7 +194,7 @@ function SingleEventScreen({ route, navigation }) {
                 </Text>
                 <Image
                   style={styles.userImg}
-                  source={{ uri: userData.avatar }}
+                  source={{ uri: hostAvatar }}
                 />
               </View>
 
@@ -203,10 +211,8 @@ function SingleEventScreen({ route, navigation }) {
               {' '}
               <Text style={styles.boldText}>
                 {eventDate}
-                {' '}
               </Text>
-
-              {' .'}
+              .
             </Text>
             <Text style={styles.spotsTaken}>
               <Text style={styles.boldText}>Spots: </Text>
@@ -291,7 +297,7 @@ function SingleEventScreen({ route, navigation }) {
             {postedComments.map((item, index) => {
               if (item.username === userData.username) {
                 return (
-                  <View style={[styles.eventCard, styles.cardOutline]}>
+                  <View key={index} style={[styles.eventCard, styles.cardOutline]}>
                     <View style={styles.commentHeader}>
                       <Text style={styles.item}>
                         <Text style={styles.boldText}>Posted By:</Text>
@@ -328,7 +334,7 @@ function SingleEventScreen({ route, navigation }) {
                   </View>
                 );
               } return (
-                <View style={[styles.eventCard, styles.cardOutline]}>
+                <View key={index} style={[styles.eventCard, styles.cardOutline]}>
                   <Text style={styles.item}>
                     <Text style={styles.boldText}>Posted By:</Text>
                     {' '}

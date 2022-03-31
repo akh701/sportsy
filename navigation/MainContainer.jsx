@@ -17,7 +17,6 @@ import FindEventsScreen from '../screens/FindEventsScreen';
 import MyEventsScreen from '../screens/MyEventsScreen';
 import CreateEventScreen from '../screens/CreateEventScreen';
 import UserProfileScreen from '../screens/UserProfileScreen';
-import GlobalStack from './GlobalStack';
 import RegisterScreen from '../screens/RegisterScreen';
 import ProfileEditScreen from '../screens/ProfileEditScreen';
 import SingleEventScreen from '../screens/eventScreens/SingleEventScreen';
@@ -76,14 +75,6 @@ function MainContainer() {
               null,
             ],
           })}
-
-          // tabBarOptions={{
-          //   activeTintColor: '#5BD0AA',
-          //   inactiveTintColor: 'grey',
-          //   labelStyle: { paddingBottom: 5, fontSize: 10 },
-          //   style: { padding: 5, height: 80 },
-          // }}
-
         >
 
           <Tab.Screen name={landingName} component={LandingScreen} options={{ headerShown: false }} />
@@ -130,14 +121,7 @@ function MainContainer() {
             },
             null,
           ],
-
         })}
-        // tabBarOptions={{
-        //   activeTintColor: '#5BD0AA',
-        //   inactiveTintColor: 'grey',
-        //   labelStyle: { paddingBottom: 5, fontSize: 10 },
-        //   style: { padding: 5, height: 80 },
-        // }}
       >
 
         <Tab.Screen name={homeName} component={HomeScreen} options={{ headerShown: false }} />
