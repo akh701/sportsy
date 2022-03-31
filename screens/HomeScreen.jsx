@@ -50,7 +50,7 @@ export default function HomeScreen({ navigation }) {
 
   return (
     <View style={styles.container}>
-      {/* <MapView
+      <MapView
         style={styles.map}
       >
         { eventsLocation.map((eventLocation, index) => (
@@ -79,7 +79,7 @@ export default function HomeScreen({ navigation }) {
           </Marker>
         ))}
 
-      </MapView> */}
+      </MapView>
     </View>
   );
 }
