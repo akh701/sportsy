@@ -7,7 +7,6 @@ import {
   TextInput,
   Button,
 } from 'react-native';
-import { CheckBox } from '@react-native-community/checkbox';
 
 export default function Searchbar({
   setToggleSubmit, style, setSearch, search, toggleSubmit, setReset,
@@ -47,16 +46,6 @@ export default function Searchbar({
                       : <View style={styles.vwClear} />
                 }
       </View>
-      {/* <View>
-        <View style={styles.checkboxContainer}>
-          <CheckBox
-            value={isCancelled}
-            onValueChange={setIsCancelled}
-            style={styles.checkbox}
-          />
-          <Text style={styles.label}>Exclude cancelled events?</Text>
-        </View>
-      </View> */}
       <View style={styles.searchBtnContainer}>
         <TouchableOpacity style={styles.searchSubbmitBtn}>
           <Text
@@ -70,7 +59,6 @@ export default function Searchbar({
           </Text>
         </TouchableOpacity>
 
-        {/* <Button title="Submit Search" color="#008080" onPress={() => setToggleSubmit(!toggleSubmit)}>Submit</Button> */}
         <TouchableOpacity style={styles.searchResetBtn}>
           <Text
             onPress={handleReset}
