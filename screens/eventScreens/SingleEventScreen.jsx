@@ -53,7 +53,6 @@ function SingleEventScreen({ route, navigation }) {
     return alert('Your comment has been posted');
   };
 
-  const eventCreatedDate = moment(route.params.createdAt.milliseconds).format('MMMM Do YYYY, h:mm:ss a');
   const eventDate = moment(route.params.eventDate.seconds * 1000).format('MMMM Do YYYY, h:mm:ss a');
 
   const requestData = (array) => {
