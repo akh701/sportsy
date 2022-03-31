@@ -1,5 +1,5 @@
 import {
-  View, Text, ScrollView, SafeAreaView, StyleSheet, FlatList, ActivityIndicator,
+  View, Text, SafeAreaView, StyleSheet, ActivityIndicator,
 } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { collection, getDocs } from 'firebase/firestore';

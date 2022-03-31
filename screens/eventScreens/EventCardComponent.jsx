@@ -1,7 +1,7 @@
 import { NavigationRouteContext, useNavigation } from '@react-navigation/core';
 import React, { useContext } from 'react';
 import {
-  View, Text, StyleSheet, FlatList, SafeAreaView, ScrollView, TouchableOpacity, Image,
+  View, Text, StyleSheet, FlatList, TouchableOpacity, Image,
 } from 'react-native';
 import moment from 'moment';
 import { UserContext } from '../../contexts/UserContext';
@@ -9,10 +9,6 @@ import GlobalStyles from '../../constants/styles/GlobalStyles';
 
 export default function EventCardComponent(props) {
   const { userData } = useContext(UserContext);
-
-  const eventDate = (new Intl.DateTimeFormat('en-US', {
-    year: 'numeric', month: '2-digit', day: '2-digit',
-  }).format(props.data.eventDate));
 
   const navigation = useNavigation();
 
