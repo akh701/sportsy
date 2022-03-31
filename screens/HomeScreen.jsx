@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
 import {
-  StyleSheet, Text, View, Dimensions, TouchableOpacity,
+  StyleSheet, Text, View, Dimensions, TouchableOpacity, ActivityIndicator,
 } from 'react-native';
 import MapView, { Marker, Callout } from 'react-native-maps';
 import {
@@ -40,7 +40,14 @@ export default function HomeScreen({ navigation }) {
     });
   }, []);
 
-  if (loading) return <Text style={styles.loading}>Loading...</Text>;
+  if (loading) {
+    return (
+      <View style={[styles.container, styles.horizontal]}>
+        <ActivityIndicator size="large" color="#00ff00" />
+        <Text>Loading...</Text>
+      </View>
+    );
+  }
 
   return (
     <View style={styles.container}>

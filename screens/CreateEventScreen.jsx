@@ -6,10 +6,11 @@ import {
   StyleSheet,
   ScrollView,
   TouchableOpacity,
-  Button,
   SafeAreaView,
+  Modal,
+  Pressable,
 } from 'react-native';
-import { NavigationRouteContext, useNavigation } from '@react-navigation/core';
+import { useNavigation } from '@react-navigation/core';
 import { Picker } from '@react-native-picker/picker';
 import Slider from '@react-native-community/slider';
 import DateTimePicker from '@react-native-community/datetimepicker';
@@ -23,11 +24,12 @@ import { UserContext } from '../contexts/UserContext';
 import { auth, db } from '../firebase';
 
 export default function CreateEventScreen({ navigation }) {
+  const [modalVisible, setModalVisible] = useState(false);
   const {
     loggedInUser, setLoggedInUser, userData, setUserData,
   } = useContext(UserContext);
   const [eventDetails, setEventDetails] = useState({
-    attendees: [], category: '', createdAt: '', creator: userData.username, creatorId: auth.currentUser.uid, description: '', eventDate: new Date(1598051730000), location: '', spotsAvailable: 0, title: '', cancelled: false,
+    attendees: [], category: '', createdAt: '', creator: userData.username, creatorId: auth.currentUser.uid, description: '', eventDate: new Date(), location: '', spotsAvailable: 0, title: '', cancelled: false,
   });
 
   const Navigation = useNavigation();
@@ -67,27 +69,9 @@ export default function CreateEventScreen({ navigation }) {
     return addDoc(collection(db, 'events'), eventPost);
   };
 
-  const [date, setDate] = useState(new Date(1598051730000));
-  const [mode, setMode] = useState('date');
-  const [show, setShow] = useState(false);
-
   const onChange = (event, selectedDate) => {
     const currentDate = selectedDate;
-    setShow(false);
     setEventDetails({ ...eventDetails, eventDate: currentDate });
-  };
-
-  const showMode = (currentMode) => {
-    setShow(true);
-    setMode(currentMode);
-  };
-
-  const showDatepicker = () => {
-    showMode('date');
-  };
-
-  const showTimepicker = () => {
-    showMode('time');
   };
 
   return (
@@ -132,14 +116,15 @@ export default function CreateEventScreen({ navigation }) {
           />
         </View>
         {/* User enters sport here: */}
-        <View style={styles.eventDateSelector}>
-          <Text style={styles.textInput}>
+        <View style={[styles.eventDateSelector, styles.categoryPicker]}>
+          <Text style={styles.textTitle}>
             Select the sport for the event:
           </Text>
           <Picker
             placeholder="Select Sport"
             selectedValue={eventDetails.category}
             onValueChange={(value) => setEventDetails({ ...eventDetails, category: value })}
+            // style={styles.categoryPicker}
           >
             <Picker.Item label="" value="" />
             <Picker.Item label="Badminton" value="Badminton" />
@@ -168,7 +153,7 @@ export default function CreateEventScreen({ navigation }) {
               maximumTrackTintColor="#d3d3d3"
               thumbTintColor="#b9e4c9"
             />
-            <Text style={styles.textInput}>
+            <Text style={styles.textTitle}>
               Spots Available:
               {' '}
               {eventDetails.spotsAvailable}
@@ -176,27 +161,59 @@ export default function CreateEventScreen({ navigation }) {
             </Text>
           </View>
         </View>
-        <View>
-          <View>
-            <Button style={{ ...GlobalStyles.btnPrimary, ...GlobalStyles.primaryColor }} onPress={showDatepicker} title="Select Date" />
-          </View>
-          <View style={{ ...GlobalStyles.utilMarginTop10 }}>
-            <Button style={{ ...GlobalStyles.btnPrimary, ...GlobalStyles.primaryColor }} onPress={showTimepicker} title="Select Time" />
-          </View>
+
+        {/* -----------------Date Time Picker------------------------------------------ */}
+        <View style={styles.centeredView}>
+          <Modal
+            animationType="slide"
+            transparent
+            visible={modalVisible}
+            onRequestClose={() => {
+              Alert.alert('Modal has been closed.');
+              setModalVisible(!modalVisible);
+            }}
+          >
+
+            <View style={styles.centeredView}>
+              <View style={styles.modalView}>
+
+                <DateTimePicker
+                  testID="dateTimePicker"
+                  value={eventDetails.eventDate}
+                  mode="datetime"
+                  is24Hour
+                  onChange={onChange}
+                  // style={styles.picker}
+                  display="spinner"
+                  // textColor="red"
+                  neutralButtonLabel="clear"
+                  style={{ width: '100%' }}
+                />
+
+                <Pressable
+                  style={[styles.button, styles.buttonClose]}
+                  onPress={() => setModalVisible(!modalVisible)}
+                >
+                  <Text style={styles.textStyle}>Close</Text>
+                </Pressable>
+              </View>
+            </View>
+          </Modal>
+
+          <Pressable
+            style={[styles.button, styles.buttonOpen]}
+            onPress={() => setModalVisible(true)}
+          >
+            <Text style={styles.textStyle}>Select Date and time</Text>
+
+          </Pressable>
+
           <Text style={{ ...GlobalStyles.utilMarginTop10, ...GlobalStyles.utilPaddingBottom }}>
             Selected:
             {' '}
             {eventDetails.eventDate.toLocaleString()}
           </Text>
-          {show && (
-          <DateTimePicker
-            testID="dateTimePicker"
-            value={eventDetails.eventDate}
-            mode={mode}
-            is24Hour
-            onChange={onChange}
-          />
-          )}
+
         </View>
         {/* User submits event to database here: */}
 
@@ -226,27 +243,21 @@ const styles = StyleSheet.create({
   },
   action: {
     flexDirection: 'row',
-    marginTop: 10,
-    marginBottom: 10,
+    marginTop: 2,
+    marginBottom: 2,
     borderBottomWidth: 1,
     borderBottomColor: '#f2f2f2',
-    paddingBottom: 5,
-  },
-  actionError: {
-    flexDirection: 'row',
-    marginTop: 10,
-    borderBottomWidth: 1,
-    borderBottomColor: '#FF0000',
-    paddingBottom: 5,
+    padding: 5,
   },
   textInput: {
-    // marginTop: Platform.OS === 'ios' ? 0 : -12,
     paddingLeft: 10,
     color: '#333333',
-    borderRadius: 10,
+    borderRadius: 3,
     width: '80%',
+    borderWidth: 1,
+    height: 40,
+    borderColor: '#A9A9A9',
   },
-
   userBtnWrapper: {
     flexDirection: 'row',
     justifyContent: 'center',
@@ -254,18 +265,74 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   userBtn: {
-    borderColor: '#2e64e5',
-    borderWidth: 2,
+    width: '60%',
+    elevation: 2,
+    backgroundColor: '#5BD0AA',
+    padding: 15,
     borderRadius: 3,
-    paddingVertical: 8,
-    paddingHorizontal: 12,
-    marginHorizontal: 5,
+    alignItems: 'center',
   },
   eventDateSelector: {
     margin: 20,
     width: '80%',
   },
   userBtnTxt: {
-    color: '#36454F',
+    color: 'white',
+    fontWeight: 'bold',
+  },
+  centeredView: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 22,
+  },
+  modalView: {
+    margin: 20,
+    backgroundColor: 'white',
+    borderRadius: 10,
+    padding: 35,
+    justifyContent: 'center',
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    width: '70%',
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  button: {
+    elevation: 2,
+    backgroundColor: '#63CDAB',
+    width: '100%',
+    padding: 15,
+    borderRadius: 3,
+    alignItems: 'center',
+  },
+  buttonOpen: {
+    backgroundColor: '#A9A9A9',
+  },
+  buttonClose: {
+    backgroundColor: '#5BD0AA',
+  },
+  textStyle: {
+    color: 'white',
+    fontWeight: 'bold',
+    textAlign: 'center',
+  },
+  modalText: {
+    marginBottom: 15,
+    textAlign: 'center',
+  },
+  picker: {
+    width: '100%',
+  },
+  categoryPicker: {
+    borderWidth: 1,
+    borderRadius: 3,
+    borderColor: '#5BD0AA',
+    padding: 10,
   },
 });

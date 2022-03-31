@@ -7,6 +7,7 @@ import {
   TextInput,
   ScrollView,
   Image,
+  ActivityIndicator,
   KeyboardAvoidingView,
 } from 'react-native';
 import moment from 'moment';
@@ -152,7 +153,14 @@ function SingleEventScreen({ route, navigation }) {
     }
   };
 
-  if (loading) { return <Text>Loading...</Text>; }
+  if (loading) {
+    return (
+      <View style={[styles.container, styles.horizontal]}>
+        <ActivityIndicator size="large" color="#00ff00" />
+        <Text>Loading...</Text>
+      </View>
+    );
+  }
 
   return (
 

@@ -51,10 +51,9 @@ export default function RegisterScreen() {
 
     createUserWithEmailAndPassword(auth, email, password)
       .then((userCredentials) => {
-        preferredSports.push(sport1, sport2, sport3);
         const { user } = userCredentials;
         setDoc(doc(db, 'users', user.uid), {
-          name, username, DOB, locationArray, dateJoined: Timestamp.fromDate(new Date()), avatar, preferredSports,
+          name, username, DOB, locationArray, dateJoined: Timestamp.fromDate(new Date()), avatar,
         });
       })
       .catch((error) => alert(error.message));
@@ -100,76 +99,18 @@ export default function RegisterScreen() {
           onChangeText={(text) => setDOB(text)}
           style={styles.input}
         />
-        <TextInput
+        {/* <TextInput
           placeholder="Imge-Url"
           value={avatar}
           onChangeText={(text) => setAvatar(text)}
           style={styles.input}
-        />
+        /> */}
         <TextInput
           placeholder="Post-Code"
           value={location}
           onChangeText={(text) => setLocation(text)}
           style={styles.input}
         />
-
-        {/* <View style={styles.select}>
-          <RNPickerSelect
-            placeholder={{ label: 'Select you favourite sport', value: '' }}
-            onValueChange={(value) => (value === 'Select an item...' ? setSport1('') : setSport1(value))}
-            items={items}
-            style={{
-              inputIOS: {
-                fontSize: 14,
-                paddingVertical: 10,
-                paddingHorizontal: 12,
-                borderWidth: 1,
-                borderColor: '#63CDAB',
-                borderRadius: 8,
-                color: 'black',
-                paddingRight: 30, // to ensure the text is never behind the icon
-              },
-            }}
-          />
-        </View>
-        <View style={styles.select}>
-          <RNPickerSelect
-            placeholder={{ label: 'Select you favourite sport', value: '' }}
-            onValueChange={(value) => (value === 'Select an item...' ? setSport2('') : setSport2(value))}
-            items={items}
-            style={{
-              inputIOS: {
-                fontSize: 14,
-                paddingVertical: 10,
-                paddingHorizontal: 12,
-                borderWidth: 1,
-                borderColor: '#63CDAB',
-                borderRadius: 8,
-                color: 'black',
-                paddingRight: 30, // to ensure the text is never behind the icon
-              },
-            }}
-          />
-        </View>
-        <View style={styles.select}>
-          <RNPickerSelect
-            placeholder={{ label: 'Select you favourite sport', value: '' }}
-            onValueChange={(value) => (value === 'Select an item...' ? setSport3('') : setSport3(value))}
-            items={items}
-            style={{
-              inputIOS: {
-                fontSize: 14,
-                paddingVertical: 10,
-                paddingHorizontal: 12,
-                borderWidth: 1,
-                borderColor: '#63CDAB',
-                borderRadius: 8,
-                color: 'black',
-                paddingRight: 30, // to ensure the text is never behind the icon
-              },
-            }}
-          />
-        </View> */}
       </View>
 
       <View style={styles.buttonContainer}>
