@@ -1,5 +1,4 @@
-import { sendSignInLinkToEmail } from 'firebase/auth';
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import {
   StyleSheet,
   View,
@@ -9,14 +8,12 @@ import {
   Button,
 } from 'react-native';
 import { CheckBox } from '@react-native-community/checkbox';
-import { ScreenStackHeaderConfig } from 'react-native-screens';
 
 export default function Searchbar({
   setToggleSubmit, style, setSearch, search, toggleSubmit, setReset,
 }) {
   const [query, setQuery] = useState('');
   const [error, setError] = useState(null);
-  const [orderBy, setOrderBy] = useState('');
 
   function handleReset() { setReset((prevValue) => prevValue + 1); }
   return (
@@ -50,7 +47,7 @@ export default function Searchbar({
                       : <View style={styles.vwClear} />
                 }
       </View>
-      <View>
+      {/* <View>
         <View style={styles.checkboxContainer}>
           <CheckBox
             value={isCancelled}
@@ -59,7 +56,7 @@ export default function Searchbar({
           />
           <Text style={styles.label}>Exclude cancelled events?</Text>
         </View>
-      </View>
+      </View> */}
       <View style={styles.searchBtnContainer}>
         <TouchableOpacity style={styles.searchSubbmitBtn}>
           <Text

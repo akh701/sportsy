@@ -58,8 +58,6 @@ export default function FindEventsScreen({ navigation }) {
     return unsubscribe;
   }, [navigation]);
 
-  // if(loading) return <View><Text>Loading</Text></View>
-
   return (
 
     <View style={styles.container}>
