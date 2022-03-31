@@ -8,8 +8,7 @@ import {
   StyleSheet,
   Alert,
   Keyboard,
-
-  Image, TouchableWithoutFeedback, ScrollView,
+  Image, ScrollView,
 } from 'react-native';
 import { doc, updateDoc } from 'firebase/firestore';
 import { UserContext } from '../contexts/UserContext';
@@ -51,14 +50,14 @@ function ProfileEditScreen() {
       const region = data.result.nuts;
       const userLocation = [userPostcode, latitude, longitude, region];
       return userLocation;
+    })
+    .catch((err) => {
+      alert(err);
     });
 
   const handleUpdate = () => {
     const docRef = doc(db, 'users', auth.currentUser.uid);
-    // const locationArray = await FetchPostcode(loggedInUser.location);
-    console.log(loggedInUser.location, 'location empty');
     if (loggedInUser.location === '') {
-      console.log(loggedInUser.location, 'location empty');
       const fieldsToUpdate = {
         name: loggedInUser.name,
         username: loggedInUser.username,
@@ -67,7 +66,7 @@ function ProfileEditScreen() {
         avatar: loggedInUser.avatar,
         location: locationArray[0],
       };
-      updateDoc(docRef, fieldsToUpdate).then((data) => {
+      updateDoc(docRef, fieldsToUpdate).then(() => {
         updateSuccessAlert();
       })
         .catch((err) => alert(err));
@@ -81,11 +80,11 @@ function ProfileEditScreen() {
           location: locationArray[0],
           avatar: loggedInUser.avatar,
         };
-        updateDoc(docRef, fieldsToUpdate).then((data) => {
+        updateDoc(docRef, fieldsToUpdate).then(() => {
           updateSuccessAlert();
         })
           .catch((err) => alert(err));
-      }).catch((err) => alert('That postcode is not valid.'));
+      }).catch(() => alert('That postcode is not valid.'));
     }
   };
 

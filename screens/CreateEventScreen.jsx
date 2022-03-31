@@ -258,13 +258,11 @@ const styles = StyleSheet.create({
     height: 40,
     borderColor: '#A9A9A9',
   },
-
   userBtnWrapper: {
     flexDirection: 'row',
     justifyContent: 'center',
     width: '100%',
     marginBottom: 10,
-
   },
   userBtn: {
     width: '60%',

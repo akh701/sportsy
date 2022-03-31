@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
 import {
-  View, Text, StyleSheet, FlatList, SafeAreaView, ScrollView, ActivityIndicator,
+  View, Text, StyleSheet, SafeAreaView,
 } from 'react-native';
 import {
   collection, query, where, getDocs,
@@ -22,7 +22,10 @@ export default function MyEventsScreen({ navigation }) {
       getDocs(createdEventsQuery).then((data) => {
         setUserCreatedEvents(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
         setLoading(false);
-      });
+      })
+        .catch((err) => {
+          alert(err);
+        });
     });
     return unsubscribe;
   }, [navigation]);

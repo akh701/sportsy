@@ -43,7 +43,8 @@ export default function RegisterScreen() {
       const region = data.result.nuts;
       const userLocation = [userPostcode, latitude, longitude, region];
       return userLocation;
-    });
+    })
+    .catch((err) => alert(err));
 
   const handleSignUp = async () => {
     const locationArray = await FetchPostcode(location);
