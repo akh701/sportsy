@@ -8,6 +8,7 @@ import {
   TextInput,
   Button,
 } from 'react-native';
+import { CheckBox } from '@react-native-community/checkbox';
 import { ScreenStackHeaderConfig } from 'react-native-screens';
 
 export default function Searchbar({
@@ -15,6 +16,7 @@ export default function Searchbar({
 }) {
   const [query, setQuery] = useState('');
   const [error, setError] = useState(null);
+  const [orderBy, setOrderBy] = useState('');
 
   function handleReset() { setReset((prevValue) => prevValue + 1); }
   return (
@@ -47,6 +49,16 @@ export default function Searchbar({
                       )
                       : <View style={styles.vwClear} />
                 }
+      </View>
+      <View>
+        <View style={styles.checkboxContainer}>
+          <CheckBox
+            value={isCancelled}
+            onValueChange={setIsCancelled}
+            style={styles.checkbox}
+          />
+          <Text style={styles.label}>Exclude cancelled events?</Text>
+        </View>
       </View>
       <View style={styles.searchBtnContainer}>
         <TouchableOpacity style={styles.searchSubbmitBtn}>
